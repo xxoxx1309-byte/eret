@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER:BS Profile Generator Pro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/Paperlogy-All.woff2');
+
+        body {
+            font-family: 'Paperlogy', sans-serif;
+            background: #0f1015;
+            color: #e2e4e9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        header { text-align: center; margin-bottom: 25px; }
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 6px 0;
+            background: linear-gradient(90deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        header p { font-size: 13px; color: #787a86; margin: 0; }
+
+        .control-panel {
+            background: #171821;
+            border: 1px solid #2f3142;
+            padding: 14px 28px;
+            border-radius: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .control-btn {
+            font-family: 'Paperlogy', sans-serif;
+            font-weight: 700;
+            font-size: 13.5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .bg-btn { background: #262838; color: #e2e4e9; border: 1px solid #3b3e56; }
+        .bg-btn:hover { background: #33364d; border-color: #ff9800; }
+        .download-btn { background: #ff9800; color: #0f1015; }
+        .download-btn:hover { background: #ffa726; transform: translateY(-1px); }
+
+        .canvas-container {
+            position: relative;
+            padding: 12px;
+            background: #171821;
+            border-radius: 16px;
+            border: 1px solid #2f3142;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+        }
+
+        #capture-area {
+            position: relative;
+            width: 800px;
+            height: 450px;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #1a1a24;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        /* 원본 프레임 마스크에 맞춘 이미지 슬롯 좌표 */
+        .image-slot {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px dashed rgba(255, 152, 0, 0.4);
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+        .image-slot:hover {
+            border-color: #ff9800;
+            background-color: rgba(255, 152, 0, 0.1);
+        }
+        .image-slot img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        
+        .slot-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .slot-overlay span {
+            color: #ff9800; font-size: 11px; font-weight: 700;
+            background: rgba(15, 16, 21, 0.85); padding: 4px 8px; border-radius: 4px;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .hide-input { display: none; }
+        .center-circle { border-radius: 50%; }
+
+        /* 배경 이미지 템플릿 맞춤 픽셀 매핑 */
+        .main-char-1 { top: 228px; left: 46px; width: 100px; height: 135px; border-radius: 4px; }
+        .main-char-2 { top: 228px; left: 153px; width: 100px; height: 135px; border-radius: 4px; }
+        .profile-circle { top: 125px; left: 301px; width: 198px; height: 198px; }
+        .favorite-char-1 { top: 271px; left: 547px; width: 100px; height: 138px; border-radius: 4px; }
+        .favorite-char-2 { top: 271px; left: 656px; width: 100px; height: 138px; border-radius: 4px; }
+
+        /* 입력을 위한 공통 래퍼 */
+        .input-wrapper {
+            position: absolute;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .input-wrapper:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 텍스트 인풋 스타일 */
+        .transparent-input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Paperlogy', sans-serif;
+            font-weight: 700;
+            font-size: 13.5px;
+            padding: 2px 6px;
+            box-sizing: border-box;
+            color: #ffffff;
+            text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 4px rgba(0,0,0,1);
+        }
+        .transparent-input:focus {
+            background-color: rgba(15, 16, 21, 0.85);
+            border-radius: 4px;
+            outline: 1px solid #ff9800;
+        }
+        .transparent-input::placeholder { 
+            color: #ffa726; 
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-weight: 700; 
+            font-size: 11px; 
+            opacity: 0.7;
+        }
+
+        /* 티어 선택 드롭다운 커스텀 UI */
+        .tier-select-dropdown {
+            width: 100%;
+            height: 100%;
+            background: rgba(23, 24, 33, 0.9);
+            border: 1px solid #ff9800;
+            border-radius: 4px;
+            color: #ff9800;
+            font-family: 'Paperlogy', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 0 4px;
+            cursor: pointer;
+            outline: none;
+            box-sizing: border-box;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+        .tier-select-dropdown option {
+            background: #171821;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* 내보내기용 미러 레이어 */
+        .capture-text-mirror {
+            display: none;
+            width: 100%;
+            font-family: 'Paperlogy', sans-serif;
+            font-weight: 700;
+            font-size: 13.5px;
+            padding: 2px 6px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            box-sizing: border-box;
+            color: #ffffff;
+            text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 4px rgba(0,0,0,1);
+        }
+
+        .capturing .transparent-input { display: none !important; }
+        .capturing .tier-select-dropdown { display: none !important; }
+        .capturing .capture-text-mirror { display: block !important; }
+
+        /* 토글 버튼 선택지 UI 스타일 */
+        .clickable-box-group {
+            position: absolute;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 4px;
+            border-radius: 6px;
+            border: 1px dashed rgba(255, 152, 0, 0.2);
+        }
+        .clickable-item {
+            font-family: 'Paperlogy', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: all 0.1s ease;
+            user-select: none;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+        .clickable-item:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .clickable-item.active {
+            color: #000000;
+            background-color: #ff9800;
+            font-weight: 800;
+            text-shadow: none;
+            box-shadow: 0 1px 4px rgba(255, 152, 0, 0.4);
+        }
+        
+        .capturing .clickable-box-group { background: transparent !important; border: none !important; padding: 0 !important; }
+        .capturing .clickable-item { display: none !important; }
+        .capturing .clickable-item.active { 
+            display: block !important; 
+            background-color: transparent !important; 
+            color: #ffffff !important;
+            text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000 !important;
+            padding: 0; 
+        }
+
+        /* 원본 폼 구조 일치를 위한 절대 좌표값 보정 */
+        
+        /* [왼쪽 하단] 인게임 컴포넌트 구역 */
+        .pos-ingame-mode { top: 304px; left: 77px; }       /* 모드: 솔로/듀오/스쿼드/코발트 */
+        .pos-ingame-name { top: 334px; left: 77px; width: 145px; height: 24px; } /* 이름 */
+        .pos-ingame-discord { top: 362px; left: 77px; }   /* 디코: 듣기/말하기/전부/사용X */
+        .pos-ingame-tier { top: 391px; left: 77px; width: 110px; height: 22px; } /* 티어 드롭다운 */
+
+        /* [중앙] 상단 트위터 ID 및 중앙 성별/나이, 하단 소개글 구역 */
+        .pos-center-name { top: 231px; left: 335px; width: 130px; height: 26px; justify-content: center; } /* 중앙 트위터 ID */
+        .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: center; }
+        
+        .pos-gender-select { top: 279px; left: 422px; }   /* 성별: 여/남/기타 */
+        .pos-age-select { top: 308px; left: 422px; }      /* 나이: 성인/청소년/기타 */
+        
+        .pos-free-text { top: 358px; left: 295px; width: 220px; height: 64px; align-items: flex-start; } /* 하단 소개글 상자 */
+        .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: left; resize: none; }
+
+        /* [우측 상단] 성향 구역 */
+        .pos-type-tweet { top: 120px; left: 585px; }       /* 트윗: 연성/소비/흔적/일상 */
+        .pos-type-block { top: 150px; left: 585px; }       /* 이별: 블랙/블언블/언팔 */
+        .pos-type-time { top: 180px; left: 585px; width: 150px; height: 24px; } /* 시간 입력창 */
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ETERNAL RETURN PROFILE GENERATOR</h1>
+        <p>박스를 선택하고 텍스트를 입력해 나만의 완성도 높은 카드를 바로 출력하세요.</p>
+    </header>
+    
+    <div class="control-panel">
+        <label for="bg-upload" class="control-btn bg-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            배경 폼 등록
+        </label>
+        <input type="file" id="bg-upload" accept="image/*" class="hide-input">
+        
+        <button class="control-btn download-btn" onclick="downloadImage()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            이미지 다운로드
+        </button>
+    </div>
+
+    <div class="canvas-container">
+        <div id="capture-area">
+            
+            <div class="image-slot main-char-1">
+                <img id="img-main-1" src="#" alt="주캐릭터 1">
+                <div class="slot-overlay"><span>주캐릭터 1</span></div>
+                <input type="file" id="upload-main-1" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-main-1')">
+            </div>
+            <div class="image-slot main-char-2">
+                <img id="img-main-2" src="#" alt="주캐릭터 2">
+                <div class="slot-overlay"><span>주캐릭터 2</span></div>
+                <input type="file" id="upload-main-2" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-main-2')">
+            </div>
+            <div class="image-slot profile-circle center-circle">
+                <img id="img-profile" src="#" alt="프로필">
+                <div class="slot-overlay"><span style="border-radius: 50%;">메인 프로필</span></div>
+                <input type="file" id="upload-profile" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-profile')">
+            </div>
+            <div class="image-slot favorite-char-1">
+                <img id="img-fav-1" src="#" alt="애정캐릭터 1">
+                <div class="slot-overlay"><span>애정캐릭터 1</span></div>
+                <input type="file" id="upload-fav-1" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-fav-1')">
+            </div>
+            <div class="image-slot favorite-char-2">
+                <img id="img-fav-2" src="#" alt="애정캐릭터 2">
+                <div class="slot-overlay"><span>애정캐릭터 2</span></div>
+                <input type="file" id="upload-fav-2" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-fav-2')">
+            </div>
+
+            <div class="clickable-box-group pos-ingame-mode" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">솔로</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">듀오</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">스쿼드</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">코발트</span>
+            </div>
+
+            <div class="input-wrapper pos-ingame-name">
+                <input type="text" class="transparent-input" placeholder="닉네임 입력">
+                <div class="capture-text-mirror"></div>
+            </div>
+
+            <div class="clickable-box-group pos-ingame-discord" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">듣기</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">말하기</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">전부</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">사용X</span>
+            </div>
+
+            <div class="input-wrapper pos-ingame-tier">
+                <select class="tier-select-dropdown" id="tier-dropdown">
+                    <option value="" disabled selected hidden>티어 선택</option>
+                    <option value="아이언">아이언</option>
+                    <option value="브론즈">브론즈</option>
+                    <option value="실버">실버</option>
+                    <option value="골드">골드</option>
+                    <option value="플래티넘">플래티넘</option>
+                    <option value="다이아몬드">다이아몬드</option>
+                    <option value="메테오라이트">메테오라이트</option>
+                    <option value="미스릴">미스릴</option>
+                    <option value="데미갓">데미갓</option>
+                    <option value="이터니티">이터니티</option>
+                </select>
+                <div class="capture-text-mirror" id="tier-mirror"></div>
+            </div>
+
+            <div class="input-wrapper pos-center-name">
+                <input type="text" class="transparent-input" placeholder="트위터 ID">
+                <div class="capture-text-mirror"></div>
+            </div>
+
+            <div class="clickable-box-group pos-gender-select" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">여</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">남</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">기타</span>
+            </div>
+            <div class="clickable-box-group pos-age-select" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">성인</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">청소년</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">기타</span>
+            </div>
+
+            <div class="input-wrapper pos-free-text">
+                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요."></textarea>
+                <div class="capture-text-mirror"></div>
+            </div>
+
+            <div class="clickable-box-group pos-type-tweet" data-type="multi">
+                <span class="clickable-item" onclick="toggleSelect(this)">연성</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">소비</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">흔적</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">일상</span>
+            </div>
+            <div class="clickable-box-group pos-type-block" data-type="multi">
+                <span class="clickable-item" onclick="toggleSelect(this)">블락</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">블언블</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">언팔</span>
+            </div>
+            
+            <div class="input-wrapper pos-type-time">
+                <input type="text" class="transparent-input" placeholder="활동 시간대 입력">
+                <div class="capture-text-mirror"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleSelect(element) {
+            const group = element.closest('.clickable-box-group');
+            const type = group.getAttribute('data-type');
+
+            if (type === 'single') {
+                const items = group.querySelectorAll('.clickable-item');
+                items.forEach(item => {
+                    if(item !== element) item.classList.remove('active');
+                });
+                element.classList.toggle('active');
+            } else {
+                element.classList.toggle('active');
+            }
+        }
+
+        document.getElementById('bg-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('capture-area').style.backgroundImage = `url('${event.target.result}')`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function previewImg(input, imgId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(imgId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    input.closest('.image-slot').querySelector('.slot-overlay').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.querySelectorAll('.image-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                this.querySelector('input[type="file"]').click();
+            });
+        });
+
+        function syncInputsToMirrors() {
+            document.querySelectorAll('.input-wrapper').forEach(wrapper => {
+                const input = wrapper.querySelector('.transparent-input');
+                const mirror = wrapper.querySelector('.capture-text-mirror');
+                if (input && mirror) {
+                    mirror.textContent = input.value ? input.value : "";
+                }
+            });
+            
+            const dropdown = document.getElementById('tier-dropdown');
+            const tierMirror = document.getElementById('tier-mirror');
+            tierMirror.textContent = dropdown.value ? dropdown.value : "";
+        }
+
+        function downloadImage() {
+            const captureArea = document.getElementById('capture-area');
+            const slots = document.querySelectorAll('.image-slot');
+            
+            syncInputsToMirrors();
+            slots.forEach(slot => slot.style.border = 'none');
+            captureArea.classList.add('capturing');
+
+            setTimeout(() => {
+                html2canvas(captureArea, {
+                    scale: 2, 
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                }).then(canvas => {
+                    slots.forEach(slot => slot.style.border = '2px dashed rgba(255, 152, 0, 0.4)');
+                    captureArea.classList.remove('capturing');
+
+                    const imageUrl = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = imageUrl;
+                    link.download = 'eternal_return_card.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }).catch(err => {
+                    console.error("Render fail:", err);
+                    slots.forEach(slot => slot.style.border = '2px dashed rgba(255, 152, 0, 0.4)');
+                    captureArea.classList.remove('capturing');
+                });
+            }, 60);
+        }
+    </script>
+</body>
+</html>
