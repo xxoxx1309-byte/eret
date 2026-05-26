@@ -84,15 +84,16 @@
             overflow: hidden;
         }
 
-        /* 일러스트 레이아웃 틀에 정확히 맞춘 이미지 슬롯 배치 */
+        /* 이미지 슬롯 디자인 정의 */
         .image-slot {
             position: absolute;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.4);
             overflow: hidden;
             cursor: pointer;
             border: 2px dashed rgba(255, 152, 0, 0.4);
             box-sizing: border-box;
             transition: all 0.2s ease;
+            z-index: 2;
         }
         .image-slot:hover {
             border-color: #ff9800;
@@ -107,7 +108,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            z-index: 2;
+            z-index: 3;
         }
         .slot-overlay span {
             color: #ff9800; font-size: 11px; font-weight: 700;
@@ -118,26 +119,12 @@
         .hide-input { display: none; }
         .center-circle { border-radius: 50%; }
 
-        /* [일러스트 프레임 정밀 매핑 좌표] */
-        .main-char-1 { top: 588px; left: 111px; width: 110px; height: 198px; border-radius: 6px; display: none; } /* 기존 엉뚱한 값 비활성화 후 하단 재배치 참고용 */
-        
-        /* 실제 일러스트의 점선 박스 위치 추적 */
-        .main-char-1 { top: 588px; left: 111px; width: 111px; height: 197px; } 
-        
-        /* 일러스트 마스크 좌표 전면 수정 */
-        .main-char-1 { top: 587px; left: 111px; width: 111px; height: 197px; border-radius: 4px; }
-        .main-char-2 { top: 587px; left: 231px; width: 111px; height: 197px; border-radius: 4px; }
-        .profile-circle { top: 417px; left: 389px; width: 224px; height: 224px; }
-        .favorite-char-1 { top: 628px; left: 659px; width: 110px; height: 198px; border-radius: 4px; }
-        .favorite-char-2 { top: 628px; left: 778px; width: 110px; height: 198px; border-radius: 4px; }
-
-        /* 배경 일러스트 크기가 800x450이 아니라 훨씬 큰 원본 파일이 들어왔을 때를 대비해, 
-           스크린샷 기준 비율(800x450 내부 포지셔닝)로 완벽하게 재컴파일한 좌표 적용 */
-        .main-char-1 { top: 254px; left: 111px; width: 110px; height: 140px; }
-        .main-char-2 { top: 254px; left: 231px; width: 110px; height: 140px; }
-        .profile-circle { top: 125px; left: 390px; width: 224px; height: 224px; }
-        .favorite-char-1 { top: 277px; left: 659px; width: 109px; height: 139px; }
-        .favorite-char-2 { top: 277px; left: 778px; width: 109px; height: 139px; }
+        /* [핵심] 800x450 표준 템플릿 마스크 절대좌표 완벽 복구 */
+        .main-char-1 { top: 228px; left: 46px; width: 100px; height: 140px; border-radius: 4px; }
+        .main-char-2 { top: 228px; left: 154px; width: 100px; height: 140px; border-radius: 4px; }
+        .profile-circle { top: 125px; left: 301px; width: 198px; height: 198px; }
+        .favorite-char-1 { top: 261px; left: 547px; width: 100px; height: 140px; border-radius: 4px; }
+        .favorite-char-2 { top: 261px; left: 656px; width: 100px; height: 140px; border-radius: 4px; }
 
         /* 입력을 위한 공통 래퍼 */
         .input-wrapper {
@@ -148,10 +135,11 @@
             border: 1px solid transparent;
             border-radius: 4px;
             transition: all 0.15s ease;
+            z-index: 5;
         }
         .input-wrapper:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 152, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 152, 0, 0.4);
         }
 
         /* 텍스트 인풋 스타일 고정 보정 */
@@ -163,7 +151,7 @@
             outline: none;
             font-family: 'Paperlogy', sans-serif;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 13.5px;
             line-height: 1.4;
             padding: 2px 6px;
             margin: 0;
@@ -181,14 +169,14 @@
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             font-weight: 700; 
             font-size: 11px; 
-            opacity: 0; /* 배경 가이드 텍스트와 겹치므로 입력 전엔 플레이스홀더를 숨김 */
+            opacity: 0.8;
         }
 
         /* 티어 선택 드롭다운 커스텀 UI */
         .tier-select-dropdown {
             width: 100%;
             height: 100%;
-            background: rgba(23, 24, 33, 0.85);
+            background: rgba(23, 24, 33, 0.9);
             border: 1px solid #ff9800;
             border-radius: 4px;
             color: #ff9800;
@@ -213,7 +201,7 @@
             width: 100%;
             font-family: 'Paperlogy', sans-serif;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 13.5px;
             line-height: 1.4;
             padding: 2px 6px;
             margin: 0;
@@ -232,33 +220,37 @@
         .clickable-box-group {
             position: absolute;
             display: flex;
-            gap: 2px;
+            gap: 4px;
             align-items: center;
             box-sizing: border-box;
-            background: transparent;
-            padding: 0;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3px 6px;
+            border-radius: 6px;
+            border: 1px dashed rgba(255, 152, 0, 0.3);
+            z-index: 5;
         }
         .clickable-item {
             font-family: 'Paperlogy', sans-serif;
             font-weight: 700;
             font-size: 11px;
-            color: transparent; /* 평소엔 배경에 그려진 텍스트가 보이도록 투명 처리 */
+            color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
-            padding: 3px 5px;
+            padding: 2px 6px;
             border-radius: 4px;
             transition: all 0.1s ease;
             user-select: none;
-            border: 1px solid transparent;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
         .clickable-item:hover {
-            border-color: rgba(255, 152, 0, 0.5);
-            background-color: rgba(255, 152, 0, 0.1);
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
         }
         .clickable-item.active {
-            color: #000000 !important; /* 활성화 시에만 검은 글씨로 반전 */
-            background-color: #ff9800 !important;
+            color: #000000;
+            background-color: #ff9800;
             font-weight: 800;
-            box-shadow: 0 1px 5px rgba(255, 152, 0, 0.6);
+            text-shadow: none;
+            box-shadow: 0 1px 4px rgba(255, 152, 0, 0.5);
         }
         
         .capturing .clickable-box-group { background: transparent !important; border: none !important; padding: 0 !important; }
@@ -271,43 +263,28 @@
             padding: 0; 
         }
 
-        /* ------------------ 일러스트 맞춤형 완벽 좌표 대수술 ------------------ */
+        /* ------------------ [정밀 보정 컴포넌트 레이아웃 좌표] ------------------ */
 
-        /* [왼쪽 구역: 티어 / 닉네임 / 플레이 성향] */
-        .pos-ingame-tier { top: 180px; left: 104px; width: 147px; height: 26px; } 
-        .pos-ingame-name { top: 218px; left: 140px; width: 110px; height: 22px; } 
-        
-        .pos-ingame-mode { top: 400px; left: 112px; gap: 4px; }
-        .pos-ingame-mode .clickable-item { width: 28px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
+        /* [왼쪽 하단 구역 정렬] */
+        .pos-ingame-tier { top: 385px; left: 46px; width: 145px; height: 26px; } 
+        .pos-ingame-name { top: 345px; left: 46px; width: 208px; height: 26px; } 
+        .pos-ingame-mode { top: 418px; left: 46px; } 
+        .pos-ingame-discord { top: 418px; left: 215px; } 
 
-        .pos-ingame-discord { top: 422px; left: 112px; gap: 4px; }
-        .pos-ingame-discord .clickable-item { width: 28px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
+        /* [중앙 메인 원형 구역 정렬] */
+        .pos-center-name { top: 220px; left: 310px; width: 180px; height: 26px; justify-content: center; } 
+        .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: center; }
+        
+        .pos-gender-select { top: 275px; left: 515px; } 
+        .pos-age-select { top: 308px; left: 515px; } 
+        
+        .pos-free-text { top: 395px; left: 290px; width: 220px; height: 45px; align-items: flex-start; overflow: hidden; } 
+        .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: center; resize: none; }
 
-        /* [중앙 구역: 트위터 ID / 성별 / 나이 / 소개글] */
-        .pos-center-name { top: 247px; left: 450px; width: 105px; height: 20px; } 
-        .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: left; font-size: 11px; }
-        
-        .pos-gender-select { top: 220px; left: 622px; gap: 5px; }
-        .pos-gender-select .clickable-item { width: 14px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
-        
-        .pos-age-select { top: 246px; left: 622px; gap: 4px; }
-        .pos-age-select .clickable-item { width: 24px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
-        .pos-age-select .clickable-item:last-child { width: 24px; }
-        
-        .pos-free-text { top: 424px; left: 395px; width: 215px; height: 20px; align-items: center; } 
-        .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 11px; text-align: left; resize: none; white-space: nowrap; }
-
-        /* [우측 구역: 교류 경향성] */
-        .pos-type-tweet { top: 122px; left: 698px; gap: 4px; } 
-        .pos-type-tweet .clickable-item { width: 24px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
-
-        .pos-type-block { top: 153px; left: 698px; gap: 4px; } 
-        .pos-type-block .clickable-item { width: 33px; height: 16px; padding: 0; text-align: center; line-height: 16px; }
-        .pos-type-block .clickable-item:first-child { width: 24px; }
-        .pos-type-block .clickable-item:last-child { width: 24px; }
-        
-        .pos-type-time { top: 191px; left: 698px; width: 92px; height: 20px; }
-        .pos-type-time .transparent-input, .pos-type-time .capture-text-mirror { font-size: 11px; padding: 0 2px; }
+        /* [우측 상단 성향 구역 정렬] */
+        .pos-type-tweet { top: 120px; left: 547px; } 
+        .pos-type-block { top: 155px; left: 547px; } 
+        .pos-type-time { top: 190px; left: 547px; width: 209px; height: 26px; } 
     </style>
 </head>
 <body>
@@ -359,6 +336,11 @@
                 <input type="file" id="upload-fav-2" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-fav-2')">
             </div>
 
+            <div class="input-wrapper pos-ingame-name">
+                <input type="text" class="transparent-input" placeholder="닉네임 입력">
+                <div class="capture-text-mirror"></div>
+            </div>
+
             <div class="input-wrapper pos-ingame-tier">
                 <select class="tier-select-dropdown" id="tier-dropdown">
                     <option value="" disabled selected hidden>티어 선택</option>
@@ -376,11 +358,6 @@
                 <div class="capture-text-mirror" id="tier-mirror"></div>
             </div>
 
-            <div class="input-wrapper pos-ingame-name">
-                <input type="text" class="transparent-input">
-                <div class="capture-text-mirror"></div>
-            </div>
-
             <div class="clickable-box-group pos-ingame-mode" data-type="single">
                 <span class="clickable-item" onclick="toggleSelect(this)">솔로</span>
                 <span class="clickable-item" onclick="toggleSelect(this)">듀오</span>
@@ -396,7 +373,7 @@
             </div>
 
             <div class="input-wrapper pos-center-name">
-                <input type="text" class="transparent-input">
+                <input type="text" class="transparent-input" placeholder="트위터 ID">
                 <div class="capture-text-mirror"></div>
             </div>
 
@@ -412,7 +389,7 @@
             </div>
 
             <div class="input-wrapper pos-free-text">
-                <input type="text" class="transparent-input">
+                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요." rows="2"></textarea>
                 <div class="capture-text-mirror"></div>
             </div>
 
@@ -429,7 +406,7 @@
             </div>
             
             <div class="input-wrapper pos-type-time">
-                <input type="text" class="transparent-input">
+                <input type="text" class="transparent-input" placeholder="활동 시간대 입력">
                 <div class="capture-text-mirror"></div>
             </div>
 
