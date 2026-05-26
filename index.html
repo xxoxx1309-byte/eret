@@ -119,11 +119,11 @@
         .center-circle { border-radius: 50%; }
 
         /* 배경 이미지 템플릿 맞춤 픽셀 매핑 */
-        .main-char-1 { top: 228px; left: 46px; width: 100px; height: 135px; border-radius: 4px; }
-        .main-char-2 { top: 228px; left: 153px; width: 100px; height: 135px; border-radius: 4px; }
-        .profile-circle { top: 125px; left: 301px; width: 198px; height: 198px; }
-        .favorite-char-1 { top: 271px; left: 547px; width: 100px; height: 138px; border-radius: 4px; }
-        .favorite-char-2 { top: 271px; left: 656px; width: 100px; height: 138px; border-radius: 4px; }
+        .main-char-1 { top: 250px; left: 52px; width: 100px; height: 140px; border-radius: 4px; }
+        .main-char-2 { top: 250px; left: 160px; width: 100px; height: 140px; border-radius: 4px; }
+        .profile-circle { top: 112px; left: 301px; width: 198px; height: 198px; }
+        .favorite-char-1 { top: 275px; left: 541px; width: 100px; height: 140px; border-radius: 4px; }
+        .favorite-char-2 { top: 275px; left: 649px; width: 100px; height: 140px; border-radius: 4px; }
 
         /* 입력을 위한 공통 래퍼 */
         .input-wrapper {
@@ -260,26 +260,28 @@
             padding: 0; 
         }
 
-        /* [왼쪽 하단] 인게임 컴포넌트 구역 */
-        .pos-ingame-mode { top: 304px; left: 77px; }
-        .pos-ingame-name { top: 334px; left: 77px; width: 145px; height: 24px; }
-        .pos-ingame-discord { top: 362px; left: 77px; }
-        .pos-ingame-tier { top: 391px; left: 77px; width: 110px; height: 22px; }
+        /* ------------------ 좌표 전면 수정 및 보정 ------------------ */
 
-        /* [중앙] 상단 트위터 ID 및 중앙 성별/나이, 하단 소개글 구역 */
-        .pos-center-name { top: 231px; left: 335px; width: 130px; height: 26px; justify-content: center; }
+        /* [왼쪽 하단 구역] */
+        .pos-ingame-name { top: 120px; left: 52px; width: 208px; height: 26px; } /* 닉네임 -> 캐릭터 윗공간 배치 */
+        .pos-ingame-mode { top: 396px; left: 52px; width: 208px; justify-content: space-between; } /* 모드 주캐릭터 하단 정렬 */
+        .pos-ingame-discord { top: 422px; left: 52px; width: 208px; justify-content: space-between; } /* 보이스챗 최하단 정렬 */
+        .pos-ingame-tier { top: 90px; left: 52px; width: 120px; height: 24px; } /* 티어선택 닉네임 위로 이동 */
+
+        /* [중앙 메인 구역] */
+        .pos-center-name { top: 220px; left: 310px; width: 180px; height: 26px; justify-content: center; } /* 원 내부 정중앙 */
         .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: center; }
         
-        .pos-gender-select { top: 279px; left: 422px; }
-        .pos-age-select { top: 308px; left: 422px; }
+        .pos-gender-select { top: 285px; left: 512px; } /* 원 우측 하단 */
+        .pos-age-select { top: 315px; left: 512px; } /* 원 우측 하단 2열 */
         
-        .pos-free-text { top: 358px; left: 295px; width: 220px; height: 64px; align-items: flex-start; overflow: hidden; }
-        .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: left; resize: none; }
+        .pos-free-text { top: 375px; left: 290px; width: 220px; height: 50px; align-items: flex-start; overflow: hidden; } /* 원 하단 소개글 */
+        .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: center; resize: none; }
 
-        /* [우측 상단] 성향 구역 */
-        .pos-type-tweet { top: 120px; left: 585px; }
-        .pos-type-block { top: 150px; left: 585px; }
-        .pos-type-time { top: 180px; left: 585px; width: 150px; height: 24px; }
+        /* [우측 상단 및 성향 구역] */
+        .pos-type-tweet { top: 180px; left: 541px; } /* 애정캐 상단 */
+        .pos-type-block { top: 212px; left: 541px; } /* 애정캐 상단 2열 */
+        .pos-type-time { top: 242px; left: 541px; width: 208px; height: 24px; } /* 활동 시간대 */
     </style>
 </head>
 <body>
@@ -331,25 +333,6 @@
                 <input type="file" id="upload-fav-2" accept="image/*" class="hide-input" onchange="previewImg(this, 'img-fav-2')">
             </div>
 
-            <div class="clickable-box-group pos-ingame-mode" data-type="single">
-                <span class="clickable-item" onclick="toggleSelect(this)">솔로</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">듀오</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">스쿼드</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">코발트</span>
-            </div>
-
-            <div class="input-wrapper pos-ingame-name">
-                <input type="text" class="transparent-input" placeholder="닉네임 입력">
-                <div class="capture-text-mirror"></div>
-            </div>
-
-            <div class="clickable-box-group pos-ingame-discord" data-type="single">
-                <span class="clickable-item" onclick="toggleSelect(this)">듣기</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">말하기</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">전부</span>
-                <span class="clickable-item" onclick="toggleSelect(this)">사용X</span>
-            </div>
-
             <div class="input-wrapper pos-ingame-tier">
                 <select class="tier-select-dropdown" id="tier-dropdown">
                     <option value="" disabled selected hidden>티어 선택</option>
@@ -365,6 +348,25 @@
                     <option value="이터니티">이터니티</option>
                 </select>
                 <div class="capture-text-mirror" id="tier-mirror"></div>
+            </div>
+
+            <div class="input-wrapper pos-ingame-name">
+                <input type="text" class="transparent-input" placeholder="닉네임 입력">
+                <div class="capture-text-mirror"></div>
+            </div>
+
+            <div class="clickable-box-group pos-ingame-mode" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">솔로</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">듀오</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">스쿼드</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">코발트</span>
+            </div>
+
+            <div class="clickable-box-group pos-ingame-discord" data-type="single">
+                <span class="clickable-item" onclick="toggleSelect(this)">듣기</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">말하기</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">전부</span>
+                <span class="clickable-item" onclick="toggleSelect(this)">사용X</span>
             </div>
 
             <div class="input-wrapper pos-center-name">
@@ -384,7 +386,7 @@
             </div>
 
             <div class="input-wrapper pos-free-text">
-                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요." rows="3"></textarea>
+                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요." rows="2"></textarea>
                 <div class="capture-text-mirror"></div>
             </div>
 
