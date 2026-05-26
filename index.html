@@ -27,6 +27,7 @@
             margin: 0 0 6px 0;
             background: linear-gradient(90deg, #ff9800, #ff5722);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         header p { font-size: 13px; color: #787a86; margin: 0; }
@@ -106,6 +107,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            z-index: 2;
         }
         .slot-overlay span {
             color: #ff9800; font-size: 11px; font-weight: 700;
@@ -138,7 +140,7 @@
             border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* 텍스트 인풋 스타일 */
+        /* 텍스트 인풋 스타일 고정 보정 */
         .transparent-input {
             width: 100%;
             height: 100%;
@@ -148,7 +150,9 @@
             font-family: 'Paperlogy', sans-serif;
             font-weight: 700;
             font-size: 13.5px;
+            line-height: 1.4;
             padding: 2px 6px;
+            margin: 0;
             box-sizing: border-box;
             color: #ffffff;
             text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 4px rgba(0,0,0,1);
@@ -189,14 +193,16 @@
             font-weight: 600;
         }
 
-        /* 내보내기용 미러 레이어 */
+        /* 내보내기용 미러 레이어 스타일 일치화 */
         .capture-text-mirror {
             display: none;
             width: 100%;
             font-family: 'Paperlogy', sans-serif;
             font-weight: 700;
             font-size: 13.5px;
+            line-height: 1.4;
             padding: 2px 6px;
+            margin: 0;
             white-space: pre-wrap;
             word-break: break-all;
             box-sizing: border-box;
@@ -254,28 +260,26 @@
             padding: 0; 
         }
 
-        /* 원본 폼 구조 일치를 위한 절대 좌표값 보정 */
-        
         /* [왼쪽 하단] 인게임 컴포넌트 구역 */
-        .pos-ingame-mode { top: 304px; left: 77px; }       /* 모드: 솔로/듀오/스쿼드/코발트 */
-        .pos-ingame-name { top: 334px; left: 77px; width: 145px; height: 24px; } /* 이름 */
-        .pos-ingame-discord { top: 362px; left: 77px; }   /* 디코: 듣기/말하기/전부/사용X */
-        .pos-ingame-tier { top: 391px; left: 77px; width: 110px; height: 22px; } /* 티어 드롭다운 */
+        .pos-ingame-mode { top: 304px; left: 77px; }
+        .pos-ingame-name { top: 334px; left: 77px; width: 145px; height: 24px; }
+        .pos-ingame-discord { top: 362px; left: 77px; }
+        .pos-ingame-tier { top: 391px; left: 77px; width: 110px; height: 22px; }
 
         /* [중앙] 상단 트위터 ID 및 중앙 성별/나이, 하단 소개글 구역 */
-        .pos-center-name { top: 231px; left: 335px; width: 130px; height: 26px; justify-content: center; } /* 중앙 트위터 ID */
+        .pos-center-name { top: 231px; left: 335px; width: 130px; height: 26px; justify-content: center; }
         .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: center; }
         
-        .pos-gender-select { top: 279px; left: 422px; }   /* 성별: 여/남/기타 */
-        .pos-age-select { top: 308px; left: 422px; }      /* 나이: 성인/청소년/기타 */
+        .pos-gender-select { top: 279px; left: 422px; }
+        .pos-age-select { top: 308px; left: 422px; }
         
-        .pos-free-text { top: 358px; left: 295px; width: 220px; height: 64px; align-items: flex-start; } /* 하단 소개글 상자 */
+        .pos-free-text { top: 358px; left: 295px; width: 220px; height: 64px; align-items: flex-start; overflow: hidden; }
         .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: left; resize: none; }
 
         /* [우측 상단] 성향 구역 */
-        .pos-type-tweet { top: 120px; left: 585px; }       /* 트윗: 연성/소비/흔적/일상 */
-        .pos-type-block { top: 150px; left: 585px; }       /* 이별: 블랙/블언블/언팔 */
-        .pos-type-time { top: 180px; left: 585px; width: 150px; height: 24px; } /* 시간 입력창 */
+        .pos-type-tweet { top: 120px; left: 585px; }
+        .pos-type-block { top: 150px; left: 585px; }
+        .pos-type-time { top: 180px; left: 585px; width: 150px; height: 24px; }
     </style>
 </head>
 <body>
@@ -380,7 +384,7 @@
             </div>
 
             <div class="input-wrapper pos-free-text">
-                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요."></textarea>
+                <textarea class="transparent-input" placeholder="소개글이나 성향을 자유롭게 입력하세요." rows="3"></textarea>
                 <div class="capture-text-mirror"></div>
             </div>
 
@@ -446,7 +450,8 @@
         }
 
         document.querySelectorAll('.image-slot').forEach(slot => {
-            slot.addEventListener('click', function() {
+            slot.addEventListener('click', function(e) {
+                if (e.target.tagName === 'INPUT') return;
                 this.querySelector('input[type="file"]').click();
             });
         });
