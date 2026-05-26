@@ -119,11 +119,11 @@
         .center-circle { border-radius: 50%; }
 
         /* 배경 이미지 템플릿 맞춤 픽셀 매핑 */
-        .main-char-1 { top: 250px; left: 52px; width: 100px; height: 140px; border-radius: 4px; }
-        .main-char-2 { top: 250px; left: 160px; width: 100px; height: 140px; border-radius: 4px; }
-        .profile-circle { top: 112px; left: 301px; width: 198px; height: 198px; }
-        .favorite-char-1 { top: 275px; left: 541px; width: 100px; height: 140px; border-radius: 4px; }
-        .favorite-char-2 { top: 275px; left: 649px; width: 100px; height: 140px; border-radius: 4px; }
+        .main-char-1 { top: 228px; left: 46px; width: 100px; height: 140px; border-radius: 4px; }
+        .main-char-2 { top: 228px; left: 153px; width: 100px; height: 140px; border-radius: 4px; }
+        .profile-circle { top: 125px; left: 301px; width: 198px; height: 198px; }
+        .favorite-char-1 { top: 261px; left: 547px; width: 100px; height: 140px; border-radius: 4px; }
+        .favorite-char-2 { top: 261px; left: 656px; width: 100px; height: 140px; border-radius: 4px; }
 
         /* 입력을 위한 공통 래퍼 */
         .input-wrapper {
@@ -260,28 +260,28 @@
             padding: 0; 
         }
 
-        /* ------------------ 좌표 전면 수정 및 보정 ------------------ */
+        /* ------------------ 좌표 재수정 및 정밀 보정 ------------------ */
 
-        /* [왼쪽 하단 구역] */
-        .pos-ingame-name { top: 120px; left: 52px; width: 208px; height: 26px; } /* 닉네임 -> 캐릭터 윗공간 배치 */
-        .pos-ingame-mode { top: 396px; left: 52px; width: 208px; justify-content: space-between; } /* 모드 주캐릭터 하단 정렬 */
-        .pos-ingame-discord { top: 422px; left: 52px; width: 208px; justify-content: space-between; } /* 보이스챗 최하단 정렬 */
-        .pos-ingame-tier { top: 90px; left: 52px; width: 120px; height: 24px; } /* 티어선택 닉네임 위로 이동 */
+        /* [왼쪽 하단 인게임 구역] */
+        .pos-ingame-tier { top: 125px; left: 46px; width: 140px; height: 24px; } 
+        .pos-ingame-name { top: 165px; left: 46px; width: 140px; height: 26px; } 
+        .pos-ingame-mode { top: 375px; left: 46px; width: 207px; justify-content: space-between; } 
+        .pos-ingame-discord { top: 405px; left: 46px; width: 207px; justify-content: space-between; } 
 
         /* [중앙 메인 구역] */
-        .pos-center-name { top: 220px; left: 310px; width: 180px; height: 26px; justify-content: center; } /* 원 내부 정중앙 */
+        .pos-center-name { top: 210px; left: 310px; width: 180px; height: 26px; justify-content: center; } 
         .pos-center-name .transparent-input, .pos-center-name .capture-text-mirror { text-align: center; }
         
-        .pos-gender-select { top: 285px; left: 512px; } /* 원 우측 하단 */
-        .pos-age-select { top: 315px; left: 512px; } /* 원 우측 하단 2열 */
+        .pos-gender-select { top: 180px; left: 541px; } 
+        .pos-age-select { top: 212px; left: 541px; } 
         
-        .pos-free-text { top: 375px; left: 290px; width: 220px; height: 50px; align-items: flex-start; overflow: hidden; } /* 원 하단 소개글 */
+        .pos-free-text { top: 395px; left: 290px; width: 220px; height: 45px; align-items: flex-start; overflow: hidden; } 
         .pos-free-text .transparent-input, .pos-free-text .capture-text-mirror { font-weight: 600; font-size: 12px; text-align: center; resize: none; }
 
         /* [우측 상단 및 성향 구역] */
-        .pos-type-tweet { top: 180px; left: 541px; } /* 애정캐 상단 */
-        .pos-type-block { top: 212px; left: 541px; } /* 애정캐 상단 2열 */
-        .pos-type-time { top: 242px; left: 541px; width: 208px; height: 24px; } /* 활동 시간대 */
+        .pos-type-tweet { top: 120px; left: 541px; } 
+        .pos-type-block { top: 150px; left: 541px; } 
+        .pos-type-time { top: 242px; left: 541px; width: 208px; height: 24px; } 
     </style>
 </head>
 <body>
