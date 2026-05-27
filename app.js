@@ -9,13 +9,14 @@ const ratios = {
 
 const state = {
   template: "neon",
+  backgroundMode: "default",
   ratio: "square",
   accent: "#13c8b5",
   subAccent: "#ffcf5a",
   bgStart: "#071011",
   bgEnd: "#173735",
   fontScale: 1,
-  imageDim: 0.12,
+  imageDim: 0.28,
   guide: true,
   background: null,
   mainImage: null,
@@ -28,7 +29,6 @@ const state = {
     tier: "",
     memo: "",
     activityOther: "",
-    fav1: "",
     fav2: "",
     love1: "",
     love2: "",
@@ -63,7 +63,6 @@ function bindInputs() {
     bioInput: ["fields", "bio"],
     memoInput: ["fields", "memo"],
     activityOtherInput: ["fields", "activityOther"],
-    fav1Input: ["fields", "fav1"],
     fav2Input: ["fields", "fav2"],
     love1Input: ["fields", "love1"],
     love2Input: ["fields", "love2"],
@@ -138,6 +137,14 @@ function bindInputs() {
       draw();
     });
   });
+
+  $$("#backgroundModeSegment button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.backgroundMode = button.dataset.bgMode;
+      $$("#backgroundModeSegment button").forEach((item) => item.classList.toggle("active", item === button));
+      draw();
+    });
+  });
 }
 
 function bindChips() {
@@ -174,6 +181,10 @@ function loadImage(event, key) {
     const image = new Image();
     image.onload = () => {
       state[key] = { src: reader.result, image };
+      if (key === "background") {
+        state.backgroundMode = "image";
+        syncBackgroundMode();
+      }
       setUploadName(key, file.name);
       draw();
     };
@@ -205,11 +216,15 @@ function draw() {
   const layout = getCanvasLayout(w, h);
   ctx.clearRect(0, 0, w, h);
 
-  if (state.background?.image) {
+  if (state.backgroundMode === "image" && state.background?.image) {
     drawCoverImage(state.background.image, 0, 0, w, h);
-    drawBackgroundTone(w, h, 0.08);
-    ctx.fillStyle = `rgba(0, 0, 0, ${state.imageDim})`;
+    drawReadableOverlay(w, h);
+    ctx.fillStyle = `rgba(0, 0, 0, ${Math.max(0.18, state.imageDim)})`;
     ctx.fillRect(0, 0, w, h);
+  } else if (state.backgroundMode === "solid") {
+    ctx.fillStyle = state.bgStart;
+    ctx.fillRect(0, 0, w, h);
+    drawBackgroundTone(w, h, 0.05);
   } else {
     drawTemplate(w, h);
   }
@@ -222,31 +237,60 @@ function draw() {
 }
 
 function getCanvasLayout(w, h) {
-  const pad = Math.round(Math.min(w, h) * 0.058);
+  const pad = Math.round(Math.min(w, h) * 0.064);
   const inner = { x: pad, y: pad, w: w - pad * 2, h: h - pad * 2 };
   const isWide = state.ratio === "wide";
   const isPost = state.ratio === "post";
-  const content = isPost
-    ? { x: pad, y: pad + h * 0.07, w: inner.w, title: pad + h * 0.08 }
-    : { x: pad + inner.w * 0.03, y: pad + h * 0.12, w: isWide ? inner.w * 0.42 : inner.w * 0.46, title: pad + h * 0.13 };
-  const mainImage = isWide
-    ? { x: pad + inner.w * 0.64, y: pad + inner.h * 0.16, w: inner.w * 0.31, h: inner.h * 0.5 }
-    : isPost
-      ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.35, w: inner.w * 0.84, h: inner.h * 0.24 }
-      : { x: pad + inner.w * 0.6, y: pad + inner.h * 0.14, w: inner.w * 0.34, h: inner.h * 0.38 };
-  const profileSize = Math.round(Math.min(w, h) * (isWide ? 0.15 : isPost ? 0.17 : 0.16));
-  const profileImage = isWide
-    ? { x: pad + inner.w * 0.49, y: pad + inner.h * 0.34, size: profileSize }
-    : isPost
-      ? { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.6, size: profileSize }
-      : { x: pad + inner.w * 0.5 - profileSize / 2, y: pad + inner.h * 0.39, size: profileSize };
-  const stat = isPost
-    ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.7, w: inner.w * 0.84 }
-    : { x: content.x, y: pad + inner.h * (isWide ? 0.54 : 0.56), w: content.w };
-  const memo = isPost
-    ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.83, w: inner.w * 0.84, h: inner.h * 0.1 }
-    : { x: mainImage.x, y: pad + inner.h * (isWide ? 0.7 : 0.58), w: mainImage.w, h: inner.h * (isWide ? 0.18 : 0.2) };
-  return { pad, inner, content, mainImage, profileImage, stat, memo };
+  if (isWide) {
+    return {
+      pad,
+      inner,
+      content: { x: pad + inner.w * 0.04, title: pad + inner.h * 0.17, w: inner.w * 0.4 },
+      mainImage: { x: pad + inner.w * 0.64, y: pad + inner.h * 0.16, w: inner.w * 0.31, h: inner.h * 0.44 },
+      profileImage: { x: pad + inner.w * 0.49, y: pad + inner.h * 0.31, size: Math.round(inner.w * 0.12) },
+      stat: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.5, w: inner.w * 0.42 },
+      memo: { x: pad + inner.w * 0.64, y: pad + inner.h * 0.66, w: inner.w * 0.31, h: inner.h * 0.15 },
+      slots: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.82, w: inner.w * 0.91, columns: 4 },
+    };
+  }
+  if (isPost) {
+    const profileSize = Math.round(inner.w * 0.19);
+    return {
+      pad,
+      inner,
+      content: { x: pad + inner.w * 0.06, title: pad + inner.h * 0.12, w: inner.w * 0.78 },
+      mainImage: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.36, w: inner.w * 0.76, h: inner.h * 0.22 },
+      profileImage: { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.59, size: profileSize },
+      stat: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.65, w: inner.w * 0.72 },
+      memo: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.84, w: inner.w * 0.72, h: inner.h * 0.08 },
+      slots: { x: pad + inner.w * 0.06, y: pad + inner.h * 0.91, w: inner.w * 0.88, columns: 2 },
+    };
+  }
+  return {
+    pad,
+    inner,
+    content: { x: pad + inner.w * 0.04, title: pad + inner.h * 0.18, w: inner.w * 0.42 },
+    mainImage: { x: pad + inner.w * 0.58, y: pad + inner.h * 0.18, w: inner.w * 0.34, h: inner.h * 0.36 },
+    profileImage: { x: pad + inner.w * 0.47, y: pad + inner.h * 0.39, size: Math.round(inner.w * 0.17) },
+    stat: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.57, w: inner.w * 0.43 },
+    memo: { x: pad + inner.w * 0.58, y: pad + inner.h * 0.59, w: inner.w * 0.34, h: inner.h * 0.16 },
+    slots: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.84, w: inner.w * 0.88, columns: 4 },
+  };
+}
+
+function drawReadableOverlay(w, h) {
+  const left = ctx.createLinearGradient(0, 0, w, 0);
+  left.addColorStop(0, "rgba(0,0,0,0.48)");
+  left.addColorStop(0.48, "rgba(0,0,0,0.18)");
+  left.addColorStop(1, "rgba(0,0,0,0.1)");
+  ctx.fillStyle = left;
+  ctx.fillRect(0, 0, w, h);
+
+  const bottom = ctx.createLinearGradient(0, h * 0.42, 0, h);
+  bottom.addColorStop(0, "rgba(0,0,0,0)");
+  bottom.addColorStop(1, "rgba(0,0,0,0.48)");
+  ctx.fillStyle = bottom;
+  ctx.fillRect(0, 0, w, h);
 }
 
 function drawTemplate(w, h) {
@@ -369,6 +413,7 @@ function drawContent(w, h, layout) {
   const titleY = layout.content.title;
   const scale = state.fontScale;
 
+  drawGlassPanel(pad - 22, titleY - 56 * scale, leftW + 44, 236 * scale, 14, 0.34);
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = state.subAccent;
@@ -383,26 +428,12 @@ function drawContent(w, h, layout) {
   ctx.font = `${Math.round(36 * scale)}px Rajdhani, sans-serif`;
   if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + 130 * scale);
 
-  const infoY = titleY + (state.fields.nickname ? 190 : 116) * scale;
-  drawInfoBlock("MAIN", state.fields.mainCharacter, pad, infoY, leftW);
-  drawWrappedText(state.fields.bio, pad, infoY + 102 * scale, leftW, 34 * scale, 2, "#eef5f4");
+  const bioY = titleY + (state.fields.nickname ? 162 : 106) * scale;
+  drawWrappedText(state.fields.bio, pad, bioY, leftW, 34 * scale, 2, "#eef5f4");
 
   drawStatRows(layout.stat.x, layout.stat.y, layout.stat.w);
   drawCharacterSlots(w, h, layout);
   drawMemo(layout.memo);
-}
-
-function drawInfoBlock(label, value, x, y, width) {
-  const scale = state.fontScale;
-  ctx.fillStyle = colorWithAlpha(state.accent, 0.18);
-  roundedRect(x, y, width, 70 * scale, 12);
-  ctx.fill();
-  ctx.fillStyle = state.accent;
-  ctx.font = `700 ${Math.round(22 * scale)}px Rajdhani, sans-serif`;
-  ctx.fillText(label, x + 20, y + 29 * scale);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `${Math.round(34 * scale)}px Paperlogy, sans-serif`;
-  if (value) fitText(value, x + 20, y + 58 * scale, width - 40, 34 * scale);
 }
 
 function drawStatRows(x, y, width) {
@@ -414,14 +445,14 @@ function drawStatRows(x, y, width) {
     ["INFO", [...state.chips.gender, ...state.chips.age, ...activityValues()]],
     ["BYE", state.chips.bye],
   ];
-  const baseRowH = Math.max(54, canvas.height * 0.039);
+  const baseRowH = state.ratio === "post" ? Math.max(42, canvas.height * 0.028) : Math.max(54, canvas.height * 0.039);
   let cursorY = y;
   rows.forEach(([label, values]) => {
     const pillAreaW = width * 0.74;
     const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
     const rowH = Math.max(baseRowH, layout.height + 18);
     const yy = cursorY;
-    ctx.fillStyle = "rgba(0,0,0,0.26)";
+    ctx.fillStyle = "rgba(0,0,0,0.46)";
     roundedRect(x, yy, width, rowH, 10);
     ctx.fill();
     ctx.fillStyle = state.subAccent;
@@ -474,7 +505,7 @@ function drawPills(layout, x, y, width) {
     row.forEach((item) => {
       const pillW = item.width * scale;
       const yy = y + rowIndex * (layout.pillH + layout.gap);
-      ctx.fillStyle = colorWithAlpha(state.accent, 0.22);
+      ctx.fillStyle = colorWithAlpha(state.accent, 0.36);
       roundedRect(cursor, yy, pillW, layout.pillH, 8);
       ctx.fill();
       ctx.fillStyle = "#ffffff";
@@ -492,27 +523,24 @@ function rowWidth(row, gap) {
 
 function drawCharacterSlots(w, h, layout) {
   const labels = [
-    ["주캐릭터 1", state.fields.fav1],
+    ["주 실험체", state.fields.mainCharacter],
     ["주캐릭터 2", state.fields.fav2],
     ["애정캐릭터 1", state.fields.love1],
     ["애정캐릭터 2", state.fields.love2],
   ];
-  const pad = layout.pad;
-  const areaW = w - pad * 2;
   const gap = Math.max(10, Math.min(w, h) * 0.01);
-  const columns = state.ratio === "post" || areaW / 4 < 255 ? 2 : 4;
+  const columns = layout.slots.columns;
   const rows = Math.ceil(labels.length / columns);
-  const slotW = (areaW - gap * (columns - 1)) / columns;
-  const slotH = Math.max(82, Math.min(128, h * (rows > 1 ? 0.066 : 0.084)));
-  const totalH = rows * slotH + (rows - 1) * gap;
-  const y = h - pad - totalH;
+  const slotW = (layout.slots.w - gap * (columns - 1)) / columns;
+  const slotH = state.ratio === "post" ? Math.max(64, Math.min(76, h * 0.048)) : Math.max(82, Math.min(128, h * (rows > 1 ? 0.066 : 0.084)));
+  const y = layout.slots.y;
 
   labels.forEach(([label, value], index) => {
     const col = index % columns;
     const row = Math.floor(index / columns);
-    const x = pad + col * (slotW + gap);
+    const x = layout.slots.x + col * (slotW + gap);
     const yy = y + row * (slotH + gap);
-    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.fillStyle = "rgba(0,0,0,0.38)";
     roundedRect(x, yy, slotW, slotH, 12);
     ctx.fill();
     ctx.strokeStyle = index < 2 ? state.accent : state.subAccent;
@@ -530,14 +558,21 @@ function drawCharacterSlots(w, h, layout) {
 }
 
 function drawMemo(box) {
+  if (!state.fields.memo) return;
   const { x, y, w: boxW, h: boxH } = box;
-  ctx.fillStyle = "rgba(0,0,0,0.34)";
+  ctx.fillStyle = "rgba(0,0,0,0.46)";
   roundedRect(x, y, boxW, boxH, 14);
   ctx.fill();
   ctx.fillStyle = state.subAccent;
   ctx.font = `700 ${Math.round(22 * state.fontScale)}px Rajdhani, sans-serif`;
   ctx.fillText("MEMO", x + 22, y + 36);
   drawWrappedText(state.fields.memo, x + 22, y + 78, boxW - 44, 30 * state.fontScale, 4, "#ffffff");
+}
+
+function drawGlassPanel(x, y, w, h, r, alpha) {
+  ctx.fillStyle = `rgba(0,0,0,${alpha})`;
+  roundedRect(x, y, w, h, r);
+  ctx.fill();
 }
 
 function drawGuide(w, h) {
@@ -667,6 +702,7 @@ function serializeState() {
 
 async function applySerializedState(data) {
   const nextFields = { ...state.fields, ...(data.fields || {}) };
+  if (!nextFields.mainCharacter && data.fields?.fav1) nextFields.mainCharacter = data.fields.fav1;
   const nextChips = { ...state.chips, ...(data.chips || {}) };
   Object.assign(state, data, { fields: nextFields, chips: nextChips });
   state.background = data.background ? await makeImage(data.background) : null;
@@ -687,7 +723,6 @@ function syncControls() {
   $("#bioInput").value = state.fields.bio;
   $("#memoInput").value = state.fields.memo;
   $("#activityOtherInput").value = state.fields.activityOther;
-  $("#fav1Input").value = state.fields.fav1;
   $("#fav2Input").value = state.fields.fav2;
   $("#love1Input").value = state.fields.love1;
   $("#love2Input").value = state.fields.love2;
@@ -702,9 +737,16 @@ function syncControls() {
   document.documentElement.style.setProperty("--accent", state.accent);
   document.documentElement.style.setProperty("--sub", state.subAccent);
   $$("#ratioSegment button").forEach((button) => button.classList.toggle("active", button.dataset.ratio === state.ratio));
+  syncBackgroundMode();
   $$(".chips").forEach((group) => {
     const key = group.dataset.key;
     group.querySelectorAll("button").forEach((button) => button.classList.toggle("active", state.chips[key]?.includes(button.textContent)));
+  });
+}
+
+function syncBackgroundMode() {
+  $$("#backgroundModeSegment button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.bgMode === state.backgroundMode);
   });
 }
 
@@ -727,6 +769,7 @@ function randomizeTone() {
 
 function resetState() {
   state.background = null;
+  state.backgroundMode = "default";
   state.mainImage = null;
   state.profileImage = null;
   setUploadName("background", "선택 안 함");
@@ -734,6 +777,7 @@ function resetState() {
   setUploadName("profileImage", "선택 안 함");
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
+  state.imageDim = 0.28;
   state.fields.nickname = "";
   state.fields.handle = "";
   state.fields.mainCharacter = "";
@@ -741,7 +785,6 @@ function resetState() {
   state.fields.tier = "";
   state.fields.memo = "";
   state.fields.activityOther = "";
-  state.fields.fav1 = "";
   state.fields.fav2 = "";
   state.fields.love1 = "";
   state.fields.love2 = "";
