@@ -38,11 +38,10 @@
             <i data-lucide="layout-template"></i>
             <h2>폼</h2>
           </div>
-          <div class="template-grid" id="templateGrid"></div>
-          <label class="upload-row" for="backgroundInput">
+          <button class="upload-row" type="button" data-file-target="backgroundInput">
             <span>배경 폼 등록</span>
-            <strong id="backgroundFileName">파일 선택</strong>
-          </label>
+            <strong id="backgroundFileName">선택 안 함</strong>
+          </button>
           <input class="file-input" id="backgroundInput" type="file" accept="image/*" />
           <div class="segmented" id="ratioSegment">
             <button data-ratio="square" class="active">1:1</button>
@@ -60,15 +59,15 @@
           <label>X 아이디<input id="handleInput" type="text" maxlength="24" placeholder="@username" /></label>
           <label>주 실험체<input id="mainCharacterInput" type="text" maxlength="18" placeholder="예: 아야 / 헤이즈" /></label>
           <label>한 줄 소개<textarea id="bioInput" maxlength="72" rows="3" placeholder="같이 게임할 친구를 찾고 있어요."></textarea></label>
-          <label class="upload-row" for="mainImageInput">
+          <button class="upload-row" type="button" data-file-target="mainImageInput">
             <span>메인 이미지</span>
-            <strong id="mainImageFileName">파일 선택</strong>
-          </label>
+            <strong id="mainImageFileName">선택 안 함</strong>
+          </button>
           <input class="file-input" id="mainImageInput" type="file" accept="image/*" />
-          <label class="upload-row" for="profileImageInput">
+          <button class="upload-row" type="button" data-file-target="profileImageInput">
             <span>가운데 프로필 사진</span>
-            <strong id="profileImageFileName">파일 선택</strong>
-          </label>
+            <strong id="profileImageFileName">선택 안 함</strong>
+          </button>
           <input class="file-input" id="profileImageInput" type="file" accept="image/*" />
         </section>
 
