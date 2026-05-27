@@ -76,11 +76,12 @@
           </div>
           <label>티어
             <select id="tierSelect">
+              <option selected value="">선택 안 함</option>
               <option>언랭크</option>
               <option>아이언</option>
               <option>브론즈</option>
               <option>실버</option>
-              <option selected>골드</option>
+              <option>골드</option>
               <option>플래티넘</option>
               <option>다이아몬드</option>
               <option>메테오라이트</option>
@@ -92,19 +93,19 @@
           <div class="chip-field">
             <span>선호 모드</span>
             <div class="chips multi" data-key="modes">
-              <button class="active">일반</button><button>랭크</button><button>코발트</button><button>내전</button>
+              <button>일반</button><button>랭크</button><button>코발트</button><button>내전</button>
             </div>
           </div>
           <div class="chip-field">
             <span>디스코드</span>
             <div class="chips single" data-key="voice">
-              <button>듣기</button><button>말하기</button><button class="active">전부</button><button>미사용</button>
+              <button>듣기</button><button>말하기</button><button>전부</button><button>미사용</button>
             </div>
           </div>
           <div class="chip-field">
             <span>성향</span>
             <div class="chips multi" data-key="traits">
-              <button class="active">즐겜</button><button>빡겜</button><button>랭크</button><button>일겜</button><button>초보환영</button><button>디코</button>
+              <button>즐겜</button><button>빡겜</button><button>랭크</button><button>일겜</button><button>초보환영</button><button>디코</button>
             </div>
           </div>
         </section>
@@ -133,26 +134,26 @@
           <div class="chip-field">
             <span>성별</span>
             <div class="chips single" data-key="gender">
-              <button>여</button><button>남</button><button class="active">기타</button>
+              <button>여</button><button>남</button><button>기타</button>
             </div>
           </div>
           <div class="chip-field">
             <span>나이</span>
             <div class="chips single" data-key="age">
-              <button class="active">성인</button><button>청소년</button><button>기타</button>
+              <button>성인</button><button>청소년</button><button>기타</button>
             </div>
           </div>
           <div class="chip-field">
             <span>활동</span>
             <div class="chips multi" data-key="activity">
-              <button>연성</button><button class="active">소비</button><button class="active">흔적</button><button>일상</button><button>기타</button>
+              <button>연성</button><button>소비</button><button>흔적</button><button>일상</button><button>기타</button>
             </div>
           </div>
           <label>활동 기타<input id="activityOtherInput" type="text" maxlength="16" placeholder="예: 대회 관전" /></label>
           <div class="chip-field">
             <span>이별</span>
             <div class="chips single" data-key="bye">
-              <button>블락</button><button class="active">블언블</button><button>언팔</button>
+              <button>블락</button><button>블언블</button><button>언팔</button>
             </div>
           </div>
           <label>메모<textarea id="memoInput" maxlength="96" rows="4" placeholder="접속 시간, 좋아하는 플레이, 지뢰 요소 등을 적어보세요."></textarea></label>
