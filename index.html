@@ -39,10 +39,11 @@
             <h2>폼</h2>
           </div>
           <div class="template-grid" id="templateGrid"></div>
-          <label class="upload-row">
+          <label class="upload-row" for="backgroundInput">
             <span>배경 폼 등록</span>
-            <input id="backgroundInput" type="file" accept="image/*" />
+            <strong id="backgroundFileName">파일 선택</strong>
           </label>
+          <input class="file-input" id="backgroundInput" type="file" accept="image/*" />
           <div class="segmented" id="ratioSegment">
             <button data-ratio="square" class="active">1:1</button>
             <button data-ratio="wide">16:9</button>
@@ -59,14 +60,16 @@
           <label>X 아이디<input id="handleInput" type="text" maxlength="24" placeholder="@username" /></label>
           <label>주 실험체<input id="mainCharacterInput" type="text" maxlength="18" placeholder="예: 아야 / 헤이즈" /></label>
           <label>한 줄 소개<textarea id="bioInput" maxlength="72" rows="3" placeholder="같이 게임할 친구를 찾고 있어요."></textarea></label>
-          <label class="upload-row">
+          <label class="upload-row" for="mainImageInput">
             <span>메인 이미지</span>
-            <input id="mainImageInput" type="file" accept="image/*" />
+            <strong id="mainImageFileName">파일 선택</strong>
           </label>
-          <label class="upload-row">
+          <input class="file-input" id="mainImageInput" type="file" accept="image/*" />
+          <label class="upload-row" for="profileImageInput">
             <span>가운데 프로필 사진</span>
-            <input id="profileImageInput" type="file" accept="image/*" />
+            <strong id="profileImageFileName">파일 선택</strong>
           </label>
+          <input class="file-input" id="profileImageInput" type="file" accept="image/*" />
         </section>
 
         <section class="control-group">
