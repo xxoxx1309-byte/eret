@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260528-ui2" />
+    <link rel="stylesheet" href="style.css?v=20260528-layout3" />
   </head>
   <body>
     <header class="topbar">
@@ -43,6 +43,11 @@
             <strong id="backgroundFileName">선택 안 함</strong>
           </button>
           <input class="file-input" id="backgroundInput" type="file" accept="image/*" />
+          <div class="segmented" id="backgroundModeSegment">
+            <button data-bg-mode="default" class="active">기본</button>
+            <button data-bg-mode="solid">단색</button>
+            <button data-bg-mode="image">이미지</button>
+          </div>
           <div class="segmented" id="ratioSegment">
             <button data-ratio="square" class="active">1:1</button>
             <button data-ratio="wide">16:9</button>
@@ -57,7 +62,6 @@
           </div>
           <label>닉네임<input id="nicknameInput" type="text" maxlength="20" placeholder="예: 루미아의 친구" /></label>
           <label>X 아이디<input id="handleInput" type="text" maxlength="24" placeholder="@username" /></label>
-          <label>주 실험체<input id="mainCharacterInput" type="text" maxlength="18" placeholder="예: 아야 / 헤이즈" /></label>
           <label>한 줄 소개<textarea id="bioInput" maxlength="72" rows="3" placeholder="같이 게임할 친구를 찾고 있어요."></textarea></label>
           <div class="upload-pair">
             <button class="upload-row" type="button" data-file-target="mainImageInput">
@@ -173,7 +177,7 @@
           <label>배경 시작 색상<input id="bgStartInput" type="color" value="#071011" /></label>
           <label>배경 끝 색상<input id="bgEndInput" type="color" value="#173735" /></label>
           <label>글자 크기<input id="fontScaleInput" type="range" min="85" max="120" value="100" /></label>
-          <label>이미지 밝기<input id="imageDimInput" type="range" min="0" max="55" value="12" /></label>
+          <label>이미지 어둡게<input id="imageDimInput" type="range" min="0" max="65" value="28" /></label>
         </section>
 
         <section class="control-group">
@@ -181,7 +185,7 @@
             <i data-lucide="images"></i>
             <h2>캐릭터 슬롯</h2>
           </div>
-          <label>주캐릭터 1<input id="fav1Input" type="text" maxlength="14" placeholder="예: 쇼이치" /></label>
+          <label>주 실험체<input id="mainCharacterInput" type="text" maxlength="14" placeholder="예: 아야 / 헤이즈" /></label>
           <label>주캐릭터 2<input id="fav2Input" type="text" maxlength="14" placeholder="예: 레녹스" /></label>
           <label>애정캐릭터 1<input id="love1Input" type="text" maxlength="14" placeholder="예: 엠마" /></label>
           <label>애정캐릭터 2<input id="love2Input" type="text" maxlength="14" placeholder="예: 리오" /></label>
@@ -190,6 +194,6 @@
     </main>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="app.js?v=20260528-ui2"></script>
+    <script src="app.js?v=20260528-layout3"></script>
   </body>
 </html>
