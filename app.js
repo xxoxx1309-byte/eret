@@ -285,11 +285,11 @@ function getCanvasLayout(w, h) {
   return {
     pad,
     inner,
-    content: { x: pad + inner.w * 0.09, title: pad + inner.h * 0.11, w: inner.w * 0.7, h: inner.h * 0.19 },
-    profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.32, w: inner.w * 0.64, h: inner.h * 0.27 },
-    stat: { x: pad + inner.w * 0.1, y: pad + inner.h * 0.68, w: inner.w * 0.8, columns: 2 },
-    memo: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.925, w: inner.w * 0.68, h: inner.h * 0.055 },
-    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.805, w: inner.w * 0.68, h: inner.h * 0.105 },
+    content: { x: pad + inner.w * 0.12, title: pad + inner.h * 0.125, w: inner.w * 0.58, h: inner.h * 0.13 },
+    profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.31, w: inner.w * 0.64, h: inner.h * 0.27 },
+    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.625, w: inner.w * 0.76, columns: 2 },
+    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.91, w: inner.w * 0.64, h: inner.h * 0.052 },
+    slots: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.765, w: inner.w * 0.64, h: inner.h * 0.118 },
   };
 }
 
@@ -454,21 +454,33 @@ function drawContent(w, h, layout) {
   const leftW = layout.content.w;
   const titleY = layout.content.title;
   const scale = state.fontScale;
+  const hasName = Boolean(state.fields.nickname.trim());
+  const hasHandle = Boolean(state.fields.handle.trim());
+  const hasBio = Boolean(state.fields.bio.trim());
+  const panelTop = titleY - 46 * scale;
+  const panelH = Math.max(
+    86 * scale,
+    (hasName ? 160 : hasHandle ? 118 : 82) * scale + (hasBio ? 56 * scale : 0)
+  );
 
-  drawGlassPanel(pad - 22, titleY - 56 * scale, leftW + 44, layout.content.h, 14, 0.36);
+  drawGlassPanel(pad - 22, panelTop, leftW + 44, panelH, 16, 0.38);
+  ctx.strokeStyle = colorWithAlpha(state.accent, 0.16);
+  ctx.lineWidth = 1;
+  roundedStroke(pad - 22, panelTop, leftW + 44, panelH, 16);
+
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = state.subAccent;
-  setCanvasFont(34 * scale, 700);
-  fitText(catchphraseText(), pad, titleY, leftW, 34 * scale, 14);
+  setCanvasFont(32 * scale, 700);
+  fitText(catchphraseText(), pad, titleY, leftW, 32 * scale, 14);
 
   ctx.fillStyle = "#ffffff";
-  setCanvasFont(72 * scale, 700);
-  if (state.fields.nickname) fitText(state.fields.nickname, pad, titleY + 78 * scale, leftW, 72 * scale);
+  setCanvasFont(68 * scale, 800);
+  if (state.fields.nickname) fitText(state.fields.nickname, pad, titleY + 76 * scale, leftW, 68 * scale);
 
   ctx.fillStyle = state.accent;
   setCanvasFont(36 * scale, 600);
-  if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + 130 * scale);
+  if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + (hasName ? 128 : 58) * scale);
 
   const bioY = titleY + (state.fields.nickname ? 162 : 106) * scale;
   drawWrappedText(state.fields.bio, pad, bioY, leftW, 34 * scale, 2, "#eef5f4");
@@ -496,7 +508,7 @@ function drawStatRows(x, y, width) {
   const gap = 8;
   const columnGap = 10;
   const columnW = (width - columnGap * (columns - 1)) / columns;
-  const baseRowH = Math.max(42, canvas.height * 0.027);
+  const baseRowH = Math.max(46, canvas.height * 0.03);
 
   rows.forEach(([label, values], index) => {
     const col = index % columns;
@@ -505,9 +517,12 @@ function drawStatRows(x, y, width) {
     const yy = y + row * (baseRowH + gap);
     const pillAreaW = columnW * (columns > 1 ? 0.66 : 0.74);
     const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
-    ctx.fillStyle = "rgba(0,0,0,0.46)";
-    roundedRect(xx, yy, columnW, baseRowH, 10);
+    ctx.fillStyle = "rgba(0,0,0,0.48)";
+    roundedRect(xx, yy, columnW, baseRowH, 12);
     ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.lineWidth = 1;
+    roundedStroke(xx, yy, columnW, baseRowH, 12);
     ctx.fillStyle = state.subAccent;
     setCanvasFont((columns > 1 ? 18 : 22) * state.fontScale, 700);
     ctx.fillText(label, xx + 16, yy + baseRowH * 0.62);
@@ -589,20 +604,20 @@ function rowWidth(row, gap) {
 
 function drawCharacterSlots(w, h, layout) {
   const { x, y, w: boxW, h: boxH } = layout.slots;
-  drawGlassPanel(x, y, boxW, boxH, 16, 0.42);
+  drawGlassPanel(x, y, boxW, boxH, 18, 0.46);
   ctx.strokeStyle = colorWithAlpha(state.accent, 0.72);
   ctx.lineWidth = 2;
-  roundedStroke(x, y, boxW, boxH, 16);
+  roundedStroke(x, y, boxW, boxH, 18);
 
   ctx.textAlign = "left";
   ctx.textBaseline = "top";
   ctx.fillStyle = state.subAccent;
-  setCanvasFont(18 * state.fontScale, 700);
+  setCanvasFont(18 * state.fontScale, 800);
   ctx.fillText("CHARACTERS", x + 18, y + 15);
 
   const mainValues = characterDisplayValues("main");
   const loveValues = characterDisplayValues("love");
-  const sectionGap = Math.max(10, boxH * 0.08);
+  const sectionGap = Math.max(8, boxH * 0.06);
   const sectionY = y + Math.max(42, boxH * 0.28);
   const sectionH = (boxH - (sectionY - y) - sectionGap - 16) / 2;
   drawCharacterLine("주캐", mainValues, x + 18, sectionY, boxW - 36, sectionH, state.accent);
@@ -615,16 +630,19 @@ function characterDisplayValues(type) {
 }
 
 function drawCharacterLine(label, values, x, y, width, height, accent) {
-  ctx.fillStyle = colorWithAlpha(accent, 0.2);
-  roundedRect(x, y, width, height, 10);
+  ctx.fillStyle = colorWithAlpha(accent, 0.24);
+  roundedRect(x, y, width, height, 12);
   ctx.fill();
+  ctx.strokeStyle = colorWithAlpha(accent, 0.16);
+  ctx.lineWidth = 1;
+  roundedStroke(x, y, width, height, 12);
 
   ctx.fillStyle = accent;
-  setCanvasFont(Math.min(18, height * 0.32) * state.fontScale, 700);
-  ctx.fillText(label, x + 16, y + Math.max(9, height * 0.2));
+  setCanvasFont(Math.min(18, height * 0.34) * state.fontScale, 800);
+  ctx.fillText(label, x + 16, y + Math.max(10, height * 0.22));
 
   const text = values.length ? values.join(", ") : "선택 안 함";
-  const labelW = Math.min(width * 0.22, 86);
+  const labelW = Math.min(width * 0.2, 92);
   const textX = x + labelW;
   const textW = width - labelW - 18;
   ctx.fillStyle = "#ffffff";
