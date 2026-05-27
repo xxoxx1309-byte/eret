@@ -110,7 +110,7 @@ h2 {
 }
 
 .file-action input,
-.upload-row input {
+.file-input {
   display: none;
 }
 
@@ -199,6 +199,22 @@ input[type="range"] {
   color: var(--text);
   background: rgba(19, 200, 181, 0.06);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.upload-row strong {
+  max-width: 46%;
+  overflow: hidden;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .template-grid {
