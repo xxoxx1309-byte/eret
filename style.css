@@ -1,3 +1,145 @@
+@import url("https://cdn.jsdelivr.net/gh/MonadABXY/mona-font/web/mona.css");
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paperozi";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ChosunIlboMyungjo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MitmiFont";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2") format("woff2");
+  font-weight: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
   --bg: #101314;
@@ -25,7 +167,7 @@ body {
     linear-gradient(225deg, rgba(255, 207, 90, 0.08), transparent 24%),
     var(--bg);
   color: var(--text);
-  font-family: "Paperlogy", system-ui, sans-serif;
+  font-family: "Paperozi", system-ui, sans-serif;
 }
 
 button,
@@ -56,7 +198,7 @@ button {
 .eyebrow {
   margin: 0 0 3px;
   color: var(--accent);
-  font-family: Rajdhani, sans-serif;
+  font-family: "Paperozi", system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -128,13 +270,19 @@ svg {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(260px, 300px) minmax(380px, 1fr) minmax(260px, 300px);
+  grid-template-columns: minmax(248px, 300px) minmax(360px, 1fr) minmax(248px, 300px);
   gap: 16px;
   padding: 16px;
   align-items: start;
+  min-width: 0;
+}
+
+.workspace > * {
+  min-width: 0;
 }
 
 .panel {
+  min-width: 0;
   border: 1px solid var(--line);
   background: rgba(25, 29, 31, 0.9);
   border-radius: var(--radius);
@@ -242,6 +390,20 @@ input[type="range"] {
   margin-top: 10px;
 }
 
+.character-picker {
+  display: grid;
+  gap: 16px;
+}
+
+.character-block {
+  display: grid;
+  gap: 10px;
+}
+
+.character-block > label {
+  margin: 0;
+}
+
 .segmented,
 .chips {
   display: flex;
@@ -283,6 +445,8 @@ input[type="range"] {
 
 .canvas-shell {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
@@ -294,13 +458,15 @@ input[type="range"] {
   background-size: 24px 24px;
   background-position: 0 0, 0 12px, 12px -12px, -12px 0;
   overflow: hidden;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px;
 }
 
 canvas {
-  width: min(100%, 74vh);
+  min-width: 0;
+  width: 100%;
   max-width: 100%;
   height: auto;
   display: block;
@@ -315,23 +481,6 @@ canvas {
   flex-wrap: wrap;
 }
 
-.toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  min-height: 40px;
-  padding: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel-2);
-  color: var(--text);
-}
-
-.toggle input {
-  accent-color: var(--accent);
-}
-
 @media (max-width: 1120px) {
   .workspace {
     grid-template-columns: 1fr 1fr;
@@ -341,6 +490,7 @@ canvas {
     grid-column: 1 / -1;
     order: -1;
   }
+
 }
 
 @media (max-width: 720px) {
@@ -353,7 +503,12 @@ canvas {
   }
 
   .top-actions {
+    width: 100%;
     justify-content: flex-start;
+  }
+
+  .primary-button {
+    flex: 1 1 160px;
   }
 
   h1 {
@@ -372,14 +527,20 @@ canvas {
 
   .stage {
     order: -1;
-  }
-
-  canvas {
     width: 100%;
+    max-width: calc(100vw - 20px);
   }
 
   .control-group {
     padding: 16px;
+  }
+
+  .canvas-shell {
+    padding: 8px;
+  }
+
+  .canvas-shell canvas {
+    width: calc(100vw - 38px);
   }
 
   .segmented button,
