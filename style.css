@@ -19,6 +19,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     linear-gradient(135deg, rgba(19, 200, 181, 0.09), transparent 28%),
     linear-gradient(225deg, rgba(255, 207, 90, 0.08), transparent 24%),
@@ -127,7 +128,7 @@ svg {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(250px, 320px) minmax(360px, 1fr) minmax(250px, 320px);
+  grid-template-columns: minmax(260px, 300px) minmax(380px, 1fr) minmax(260px, 300px);
   gap: 16px;
   padding: 16px;
   align-items: start;
@@ -146,7 +147,7 @@ svg {
 }
 
 .control-group {
-  padding: 16px;
+  padding: 18px;
   background: var(--panel);
 }
 
@@ -198,31 +199,47 @@ input[type="range"] {
 
 .upload-row {
   width: 100%;
-  min-height: 42px;
-  padding: 10px 11px;
-  border: 1px dashed color-mix(in srgb, var(--accent), var(--line) 60%);
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   color: var(--text);
-  background: rgba(19, 200, 181, 0.06);
+  background: #111516;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 10px 0;
+  margin: 10px 0 0;
   font: inherit;
   text-align: left;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.upload-row:hover {
+  border-color: color-mix(in srgb, var(--accent), white 10%);
+  background: color-mix(in srgb, var(--accent), #111516 92%);
 }
 
 .upload-row strong {
-  max-width: 46%;
+  max-width: 52%;
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 6px;
   overflow: hidden;
-  color: var(--accent);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent), #111516 82%);
   font-size: 12px;
   font-weight: 700;
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.upload-pair {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .segmented,
@@ -330,14 +347,22 @@ canvas {
   .topbar {
     align-items: flex-start;
     flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+    position: static;
   }
 
   .top-actions {
     justify-content: flex-start;
   }
 
+  h1 {
+    font-size: 30px;
+  }
+
   .workspace {
     grid-template-columns: 1fr;
+    gap: 12px;
     padding: 10px;
   }
 
@@ -351,5 +376,14 @@ canvas {
 
   canvas {
     width: 100%;
+  }
+
+  .control-group {
+    padding: 16px;
+  }
+
+  .segmented button,
+  .chips button {
+    min-height: 38px;
   }
 }
