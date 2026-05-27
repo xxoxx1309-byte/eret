@@ -32,7 +32,6 @@ const state = {
   fontScale: 1,
   imageDim: 0.28,
   background: null,
-  mainImage: null,
   profileImage: null,
   fields: {
     nickname: "",
@@ -132,7 +131,6 @@ function bindInputs() {
   });
 
   $("#backgroundInput").addEventListener("change", (event) => loadImage(event, "background"));
-  $("#mainImageInput").addEventListener("change", (event) => loadImage(event, "mainImage"));
   $("#profileImageInput").addEventListener("change", (event) => loadImage(event, "profileImage"));
   $$("[data-file-target]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -251,7 +249,6 @@ function loadImage(event, key) {
 function setUploadName(key, name) {
   const idMap = {
     background: "backgroundFileName",
-    mainImage: "mainImageFileName",
     profileImage: "profileImageFileName",
   };
   const target = document.getElementById(idMap[key]);
@@ -278,7 +275,6 @@ function draw() {
   }
 
   drawFrame(w, h, layout);
-  drawMainImage(layout.mainImage);
   drawProfileImage(layout.profileImage);
   drawContent(w, h, layout);
 }
@@ -286,13 +282,11 @@ function draw() {
 function getCanvasLayout(w, h) {
   const pad = Math.round(Math.min(w, h) * 0.064);
   const inner = { x: pad, y: pad, w: w - pad * 2, h: h - pad * 2 };
-  const profileSize = Math.round(inner.w * 0.18);
   return {
     pad,
     inner,
     content: { x: pad + inner.w * 0.09, title: pad + inner.h * 0.11, w: inner.w * 0.7, h: inner.h * 0.19 },
-    mainImage: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.31, w: inner.w * 0.72, h: inner.h * 0.23 },
-    profileImage: { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.535, size: profileSize },
+    profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.32, w: inner.w * 0.64, h: inner.h * 0.27 },
     stat: { x: pad + inner.w * 0.1, y: pad + inner.h * 0.68, w: inner.w * 0.8, columns: 2 },
     memo: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.925, w: inner.w * 0.68, h: inner.h * 0.055 },
     slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.805, w: inner.w * 0.68, h: inner.h * 0.105 },
@@ -422,63 +416,36 @@ function drawFrame(w, h, layout) {
   ctx.restore();
 }
 
-function drawMainImage(box) {
-  const { x, y, w: boxW, h: boxH } = box;
+function drawProfileImage(box) {
+  const x = Math.round(box.x);
+  const y = Math.round(box.y);
+  const boxW = Math.round(box.w);
+  const boxH = Math.round(box.h);
   ctx.save();
-  roundedRect(x, y, boxW, boxH, 22);
+  roundedRect(x, y, boxW, boxH, 28);
   ctx.clip();
-  if (state.mainImage?.image) {
-    drawCoverImage(state.mainImage.image, x, y, boxW, boxH);
-    ctx.fillStyle = "rgba(0,0,0,0.12)";
+  if (state.profileImage?.image) {
+    drawCoverImage(state.profileImage.image, x, y, boxW, boxH);
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
     ctx.fillRect(x, y, boxW, boxH);
   } else {
     ctx.fillStyle = "rgba(12, 17, 18, 0.34)";
     ctx.fillRect(x, y, boxW, boxH);
-    ctx.fillStyle = "rgba(255,255,255,0.72)";
-    setCanvasFont(24 * state.fontScale);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("MAIN IMAGE", x + boxW / 2, y + boxH / 2);
-  }
-  ctx.restore();
-
-  ctx.strokeStyle = state.subAccent;
-  ctx.lineWidth = 4;
-  roundedStroke(x, y, boxW, boxH, 22);
-}
-
-function drawProfileImage(box) {
-  const size = box.size;
-  const x = Math.round(box.x);
-  const y = Math.round(box.y);
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
-  ctx.clip();
-  if (state.profileImage?.image) {
-    drawCoverImage(state.profileImage.image, x, y, size, size);
-  } else {
-    ctx.fillStyle = "rgba(12, 17, 18, 0.7)";
-    ctx.fillRect(x, y, size, size);
     ctx.fillStyle = "rgba(255,255,255,0.78)";
-    setCanvasFont(size * 0.1, 700);
+    setCanvasFont(Math.min(28, boxH * 0.12) * state.fontScale, 700);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("PROFILE", x + size / 2, y + size / 2);
+    ctx.fillText("MAIN PROFILE", x + boxW / 2, y + boxH / 2);
   }
   ctx.restore();
 
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(x + size / 2, y + size / 2, size / 2 + 8, 0, Math.PI * 2);
-  ctx.strokeStyle = state.accent;
-  ctx.lineWidth = Math.max(5, size * 0.04);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(x + size / 2, y + size / 2, size / 2 + 18, 0, Math.PI * 2);
-  ctx.strokeStyle = colorWithAlpha(state.subAccent, 0.45);
+  ctx.strokeStyle = state.subAccent;
+  ctx.lineWidth = Math.max(4, boxW * 0.006);
+  roundedStroke(x, y, boxW, boxH, 28);
+  ctx.strokeStyle = colorWithAlpha(state.accent, 0.7);
   ctx.lineWidth = 2;
-  ctx.stroke();
+  roundedStroke(x + 10, y + 10, boxW - 20, boxH - 20, 22);
   ctx.restore();
 }
 
@@ -960,10 +927,8 @@ function hslToRgb(h, s, l) {
 function resetState() {
   state.background = null;
   state.backgroundMode = "default";
-  state.mainImage = null;
   state.profileImage = null;
   setUploadName("background", "선택 안 함");
-  setUploadName("mainImage", "선택 안 함");
   setUploadName("profileImage", "선택 안 함");
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
