@@ -7,12 +7,6 @@ const ratios = {
   post: [1200, 1500],
 };
 
-const templates = [
-  { id: "neon", name: "네온", swatch: "swatch-neon" },
-  { id: "clean", name: "클린", swatch: "swatch-clean" },
-  { id: "signal", name: "시그널", swatch: "swatch-signal" },
-];
-
 const state = {
   template: "neon",
   ratio: "square",
@@ -54,30 +48,11 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 function init() {
-  renderTemplates();
   bindInputs();
   bindChips();
   resizeCanvas();
   draw();
   if (window.lucide) window.lucide.createIcons();
-}
-
-function renderTemplates() {
-  const grid = $("#templateGrid");
-  grid.innerHTML = "";
-  templates.forEach((template) => {
-    const button = document.createElement("button");
-    button.className = `template-card ${template.swatch}`;
-    button.dataset.template = template.id;
-    button.innerHTML = `<span>${template.name}</span>`;
-    button.addEventListener("click", () => {
-      state.template = template.id;
-      renderTemplates();
-      draw();
-    });
-    if (state.template === template.id) button.classList.add("active");
-    grid.appendChild(button);
-  });
 }
 
 function bindInputs() {
@@ -144,6 +119,11 @@ function bindInputs() {
   $("#backgroundInput").addEventListener("change", (event) => loadImage(event, "background"));
   $("#mainImageInput").addEventListener("change", (event) => loadImage(event, "mainImage"));
   $("#profileImageInput").addEventListener("change", (event) => loadImage(event, "profileImage"));
+  $$("[data-file-target]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.getElementById(button.dataset.fileTarget)?.click();
+    });
+  });
   $("#downloadBtn").addEventListener("click", downloadPng);
   $("#saveJsonBtn").addEventListener("click", saveJson);
   $("#loadJsonInput").addEventListener("change", loadJson);
@@ -216,7 +196,7 @@ function setUploadName(key, name) {
     profileImage: "profileImageFileName",
   };
   const target = document.getElementById(idMap[key]);
-  if (target) target.textContent = name || "파일 선택";
+  if (target) target.textContent = name || "선택 안 함";
 }
 
 function draw() {
@@ -694,10 +674,9 @@ async function applySerializedState(data) {
   state.profileImage = data.profileImage ? await makeImage(data.profileImage) : null;
   syncControls();
   resizeCanvas();
-  renderTemplates();
-  setUploadName("background", state.background ? "불러온 배경" : "파일 선택");
-  setUploadName("mainImage", state.mainImage ? "불러온 메인" : "파일 선택");
-  setUploadName("profileImage", state.profileImage ? "불러온 프로필" : "파일 선택");
+  setUploadName("background", state.background ? "불러온 배경" : "선택 안 함");
+  setUploadName("mainImage", state.mainImage ? "불러온 메인" : "선택 안 함");
+  setUploadName("profileImage", state.profileImage ? "불러온 프로필" : "선택 안 함");
   draw();
 }
 
@@ -750,9 +729,9 @@ function resetState() {
   state.background = null;
   state.mainImage = null;
   state.profileImage = null;
-  setUploadName("background", "파일 선택");
-  setUploadName("mainImage", "파일 선택");
-  setUploadName("profileImage", "파일 선택");
+  setUploadName("background", "선택 안 함");
+  setUploadName("mainImage", "선택 안 함");
+  setUploadName("profileImage", "선택 안 함");
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
   state.fields.nickname = "";
