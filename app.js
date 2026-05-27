@@ -188,16 +188,35 @@ function resizeCanvas() {
 function loadImage(event, key) {
   const file = event.target.files?.[0];
   if (!file) return;
+  setUploadName(key, "읽는 중...");
   const reader = new FileReader();
   reader.onload = () => {
     const image = new Image();
     image.onload = () => {
       state[key] = { src: reader.result, image };
+      setUploadName(key, file.name);
       draw();
+    };
+    image.onerror = () => {
+      setUploadName(key, "불러오기 실패");
     };
     image.src = reader.result;
   };
+  reader.onerror = () => {
+    setUploadName(key, "파일 읽기 실패");
+  };
   reader.readAsDataURL(file);
+  event.target.value = "";
+}
+
+function setUploadName(key, name) {
+  const idMap = {
+    background: "backgroundFileName",
+    mainImage: "mainImageFileName",
+    profileImage: "profileImageFileName",
+  };
+  const target = document.getElementById(idMap[key]);
+  if (target) target.textContent = name || "파일 선택";
 }
 
 function draw() {
@@ -676,6 +695,9 @@ async function applySerializedState(data) {
   syncControls();
   resizeCanvas();
   renderTemplates();
+  setUploadName("background", state.background ? "불러온 배경" : "파일 선택");
+  setUploadName("mainImage", state.mainImage ? "불러온 메인" : "파일 선택");
+  setUploadName("profileImage", state.profileImage ? "불러온 프로필" : "파일 선택");
   draw();
 }
 
@@ -728,6 +750,9 @@ function resetState() {
   state.background = null;
   state.mainImage = null;
   state.profileImage = null;
+  setUploadName("background", "파일 선택");
+  setUploadName("mainImage", "파일 선택");
+  setUploadName("profileImage", "파일 선택");
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
   state.fields.nickname = "";
