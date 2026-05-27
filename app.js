@@ -671,10 +671,23 @@ function drawMemo(box) {
   ctx.fillStyle = "rgba(0,0,0,0.46)";
   roundedRect(x, y, boxW, boxH, 14);
   ctx.fill();
+
+  const labelX = x + 22;
+  const centerY = y + boxH / 2;
+  const labelSize = Math.min(22, boxH * 0.32) * state.fontScale;
+  const textSize = Math.min(24, boxH * 0.36) * state.fontScale;
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
   ctx.fillStyle = state.subAccent;
-  setCanvasFont(22 * state.fontScale, 700);
-  ctx.fillText("MEMO", x + 22, y + 36);
-  drawWrappedText(state.fields.memo, x + 22, y + 78, boxW - 44, 30 * state.fontScale, 4, "#ffffff");
+  setCanvasFont(labelSize, 700);
+  ctx.fillText("MEMO", labelX, centerY);
+
+  const textX = x + Math.min(130, boxW * 0.18);
+  ctx.fillStyle = "#ffffff";
+  setCanvasFont(textSize, 600);
+  fitText(state.fields.memo, textX, centerY, boxW - (textX - x) - 24, textSize, 14);
+  ctx.textBaseline = "alphabetic";
 }
 
 function drawGlassPanel(x, y, w, h, r, alpha) {
