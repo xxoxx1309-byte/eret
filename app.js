@@ -27,26 +27,26 @@ const state = {
   mainImage: null,
   profileImage: null,
   fields: {
-    nickname: "루미아의 친구",
-    handle: "@eternal_return",
-    mainCharacter: "아야 / 헤이즈",
-    bio: "같이 오래 게임할 트친을 찾고 있어요.",
-    tier: "골드",
-    memo: "평일 저녁, 주말 접속. 실수해도 웃고 넘기는 분위기를 좋아해요.",
+    nickname: "",
+    handle: "",
+    mainCharacter: "",
+    bio: "",
+    tier: "",
+    memo: "",
     activityOther: "",
-    fav1: "쇼이치",
-    fav2: "레녹스",
-    love1: "엠마",
-    love2: "리오",
+    fav1: "",
+    fav2: "",
+    love1: "",
+    love2: "",
   },
   chips: {
-    modes: ["일반"],
-    voice: ["전부"],
-    traits: ["즐겜"],
-    gender: ["기타"],
-    age: ["성인"],
-    activity: ["소비", "흔적"],
-    bye: ["블언블"],
+    modes: [],
+    voice: [],
+    traits: [],
+    gender: [],
+    age: [],
+    activity: [],
+    bye: [],
   },
 };
 
@@ -203,22 +203,51 @@ function loadImage(event, key) {
 function draw() {
   const w = canvas.width;
   const h = canvas.height;
+  const layout = getCanvasLayout(w, h);
   ctx.clearRect(0, 0, w, h);
 
   if (state.background?.image) {
     drawCoverImage(state.background.image, 0, 0, w, h);
-    drawBackgroundTone(w, h, 0.22);
+    drawBackgroundTone(w, h, 0.08);
     ctx.fillStyle = `rgba(0, 0, 0, ${state.imageDim})`;
     ctx.fillRect(0, 0, w, h);
   } else {
     drawTemplate(w, h);
   }
 
-  drawFrame(w, h);
-  drawMainImage(w, h);
-  drawProfileImage(w, h);
-  drawContent(w, h);
+  drawFrame(w, h, layout);
+  drawMainImage(layout.mainImage);
+  drawProfileImage(layout.profileImage);
+  drawContent(w, h, layout);
   if (state.guide) drawGuide(w, h);
+}
+
+function getCanvasLayout(w, h) {
+  const pad = Math.round(Math.min(w, h) * 0.058);
+  const inner = { x: pad, y: pad, w: w - pad * 2, h: h - pad * 2 };
+  const isWide = state.ratio === "wide";
+  const isPost = state.ratio === "post";
+  const content = isPost
+    ? { x: pad, y: pad + h * 0.07, w: inner.w, title: pad + h * 0.08 }
+    : { x: pad + inner.w * 0.03, y: pad + h * 0.12, w: isWide ? inner.w * 0.42 : inner.w * 0.46, title: pad + h * 0.13 };
+  const mainImage = isWide
+    ? { x: pad + inner.w * 0.64, y: pad + inner.h * 0.16, w: inner.w * 0.31, h: inner.h * 0.5 }
+    : isPost
+      ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.35, w: inner.w * 0.84, h: inner.h * 0.24 }
+      : { x: pad + inner.w * 0.6, y: pad + inner.h * 0.14, w: inner.w * 0.34, h: inner.h * 0.38 };
+  const profileSize = Math.round(Math.min(w, h) * (isWide ? 0.15 : isPost ? 0.17 : 0.16));
+  const profileImage = isWide
+    ? { x: pad + inner.w * 0.49, y: pad + inner.h * 0.34, size: profileSize }
+    : isPost
+      ? { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.6, size: profileSize }
+      : { x: pad + inner.w * 0.5 - profileSize / 2, y: pad + inner.h * 0.39, size: profileSize };
+  const stat = isPost
+    ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.7, w: inner.w * 0.84 }
+    : { x: content.x, y: pad + inner.h * (isWide ? 0.54 : 0.56), w: content.w };
+  const memo = isPost
+    ? { x: pad + inner.w * 0.08, y: pad + inner.h * 0.83, w: inner.w * 0.84, h: inner.h * 0.1 }
+    : { x: mainImage.x, y: pad + inner.h * (isWide ? 0.7 : 0.58), w: mainImage.w, h: inner.h * (isWide ? 0.18 : 0.2) };
+  return { pad, inner, content, mainImage, profileImage, stat, memo };
 }
 
 function drawTemplate(w, h) {
@@ -238,7 +267,7 @@ function drawTemplate(w, h) {
   }
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, w, h);
-  drawBackgroundTone(w, h, 0.14);
+  drawBackgroundTone(w, h, 0.06);
 
   ctx.save();
   ctx.globalAlpha = 0.16;
@@ -263,8 +292,8 @@ function drawBackgroundTone(w, h, alpha) {
   ctx.fillRect(0, 0, w, h);
 }
 
-function drawFrame(w, h) {
-  const pad = Math.round(Math.min(w, h) * 0.045);
+function drawFrame(w, h, layout) {
+  const pad = Math.round(layout.pad * 0.78);
   ctx.save();
   ctx.strokeStyle = state.accent;
   ctx.lineWidth = Math.max(4, w * 0.005);
@@ -275,13 +304,8 @@ function drawFrame(w, h) {
   ctx.restore();
 }
 
-function drawMainImage(w, h) {
-  const pad = Math.round(Math.min(w, h) * 0.07);
-  const boxW = w * (state.ratio === "wide" ? 0.34 : 0.38);
-  const boxH = h * (state.ratio === "wide" ? 0.66 : 0.42);
-  const x = w - pad - boxW;
-  const y = pad + h * 0.1;
-
+function drawMainImage(box) {
+  const { x, y, w: boxW, h: boxH } = box;
   ctx.save();
   roundedRect(x, y, boxW, boxH, 22);
   ctx.clip();
@@ -290,14 +314,12 @@ function drawMainImage(w, h) {
     ctx.fillStyle = "rgba(0,0,0,0.12)";
     ctx.fillRect(x, y, boxW, boxH);
   } else {
-    const gradient = ctx.createLinearGradient(x, y, x + boxW, y + boxH);
-    gradient.addColorStop(0, colorWithAlpha(state.accent, 0.58));
-    gradient.addColorStop(1, "rgba(255,255,255,0.08)");
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = "rgba(12, 17, 18, 0.34)";
     ctx.fillRect(x, y, boxW, boxH);
     ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.font = `${Math.round(28 * state.fontScale)}px Paperlogy, sans-serif`;
+    ctx.font = `${Math.round(24 * state.fontScale)}px Paperlogy, sans-serif`;
     ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillText("MAIN IMAGE", x + boxW / 2, y + boxH / 2);
   }
   ctx.restore();
@@ -307,11 +329,10 @@ function drawMainImage(w, h) {
   roundedStroke(x, y, boxW, boxH, 22);
 }
 
-function drawProfileImage(w, h) {
-  const size = Math.round(Math.min(w, h) * (state.ratio === "wide" ? 0.18 : 0.2));
-  const x = Math.round(w / 2 - size / 2);
-  const y = Math.round(h / 2 - size / 2);
-
+function drawProfileImage(box) {
+  const size = box.size;
+  const x = Math.round(box.x);
+  const y = Math.round(box.y);
   ctx.save();
   ctx.beginPath();
   ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
@@ -319,15 +340,10 @@ function drawProfileImage(w, h) {
   if (state.profileImage?.image) {
     drawCoverImage(state.profileImage.image, x, y, size, size);
   } else {
-    const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
-    gradient.addColorStop(0, colorWithAlpha(state.subAccent, 0.82));
-    gradient.addColorStop(1, colorWithAlpha(state.accent, 0.72));
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = "rgba(12, 17, 18, 0.7)";
     ctx.fillRect(x, y, size, size);
-    ctx.fillStyle = "rgba(0,0,0,0.52)";
-    ctx.fillRect(x, y, size, size);
-    ctx.fillStyle = "rgba(255,255,255,0.86)";
-    ctx.font = `700 ${Math.round(size * 0.12)}px Paperlogy, sans-serif`;
+    ctx.fillStyle = "rgba(255,255,255,0.78)";
+    ctx.font = `700 ${Math.round(size * 0.1)}px Paperlogy, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("PROFILE", x + size / 2, y + size / 2);
@@ -337,21 +353,21 @@ function drawProfileImage(w, h) {
   ctx.save();
   ctx.beginPath();
   ctx.arc(x + size / 2, y + size / 2, size / 2 + 8, 0, Math.PI * 2);
-  ctx.strokeStyle = state.subAccent;
+  ctx.strokeStyle = state.accent;
   ctx.lineWidth = Math.max(5, size * 0.04);
   ctx.stroke();
   ctx.beginPath();
   ctx.arc(x + size / 2, y + size / 2, size / 2 + 18, 0, Math.PI * 2);
-  ctx.strokeStyle = colorWithAlpha(state.accent, 0.55);
+  ctx.strokeStyle = colorWithAlpha(state.subAccent, 0.45);
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.restore();
 }
 
-function drawContent(w, h) {
-  const pad = Math.round(Math.min(w, h) * 0.07);
-  const leftW = w * (state.ratio === "wide" ? 0.5 : 0.48);
-  const titleY = pad + h * 0.12;
+function drawContent(w, h, layout) {
+  const pad = layout.content.x;
+  const leftW = layout.content.w;
+  const titleY = layout.content.title;
   const scale = state.fontScale;
 
   ctx.textAlign = "left";
@@ -362,19 +378,19 @@ function drawContent(w, h) {
 
   ctx.fillStyle = "#ffffff";
   ctx.font = `700 ${Math.round(72 * scale)}px Paperlogy, sans-serif`;
-  fitText(state.fields.nickname || "닉네임", pad, titleY + 78 * scale, leftW, 72 * scale);
+  if (state.fields.nickname) fitText(state.fields.nickname, pad, titleY + 78 * scale, leftW, 72 * scale);
 
   ctx.fillStyle = state.accent;
   ctx.font = `${Math.round(36 * scale)}px Rajdhani, sans-serif`;
-  ctx.fillText(state.fields.handle || "@username", pad, titleY + 130 * scale);
+  if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + 130 * scale);
 
-  drawInfoBlock("MAIN", state.fields.mainCharacter, pad, titleY + 190 * scale, leftW);
-  drawWrappedText(state.fields.bio, pad, titleY + 292 * scale, leftW, 34 * scale, 2, "#eef5f4");
+  const infoY = titleY + (state.fields.nickname ? 190 : 116) * scale;
+  drawInfoBlock("MAIN", state.fields.mainCharacter, pad, infoY, leftW);
+  drawWrappedText(state.fields.bio, pad, infoY + 102 * scale, leftW, 34 * scale, 2, "#eef5f4");
 
-  const chipY = h * (state.ratio === "wide" ? 0.55 : 0.58);
-  drawStatRows(pad, chipY, leftW);
-  drawCharacterSlots(w, h, pad);
-  drawMemo(w, h, pad);
+  drawStatRows(layout.stat.x, layout.stat.y, layout.stat.w);
+  drawCharacterSlots(w, h, layout);
+  drawMemo(layout.memo);
 }
 
 function drawInfoBlock(label, value, x, y, width) {
@@ -387,7 +403,7 @@ function drawInfoBlock(label, value, x, y, width) {
   ctx.fillText(label, x + 20, y + 29 * scale);
   ctx.fillStyle = "#ffffff";
   ctx.font = `${Math.round(34 * scale)}px Paperlogy, sans-serif`;
-  fitText(value || "주 실험체", x + 20, y + 58 * scale, width - 40, 34 * scale);
+  if (value) fitText(value, x + 20, y + 58 * scale, width - 40, 34 * scale);
 }
 
 function drawStatRows(x, y, width) {
@@ -401,7 +417,7 @@ function drawStatRows(x, y, width) {
   ];
   const baseRowH = Math.max(54, canvas.height * 0.039);
   let cursorY = y;
-  rows.forEach(([label, values], index) => {
+  rows.forEach(([label, values]) => {
     const pillAreaW = width * 0.74;
     const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
     const rowH = Math.max(baseRowH, layout.height + 18);
@@ -454,7 +470,8 @@ function drawPills(layout, x, y, width) {
     const available = width - Math.max(0, row.length - 1) * layout.gap;
     const naturalWidth = row.reduce((sum, item) => sum + item.width, 0);
     const scale = naturalWidth > available ? available / naturalWidth : 1;
-    let cursor = x + Math.max(0, (width - rowWidth(row, layout.gap) * scale) / 2);
+    const visibleWidth = naturalWidth * scale + Math.max(0, row.length - 1) * layout.gap;
+    let cursor = x + Math.max(0, (width - visibleWidth) / 2);
     row.forEach((item) => {
       const pillW = item.width * scale;
       const yy = y + rowIndex * (layout.pillH + layout.gap);
@@ -474,13 +491,14 @@ function rowWidth(row, gap) {
   return row.reduce((sum, item) => sum + item.width, 0) + Math.max(0, row.length - 1) * gap;
 }
 
-function drawCharacterSlots(w, h, pad) {
+function drawCharacterSlots(w, h, layout) {
   const labels = [
     ["주캐릭터 1", state.fields.fav1],
     ["주캐릭터 2", state.fields.fav2],
     ["애정캐릭터 1", state.fields.love1],
     ["애정캐릭터 2", state.fields.love2],
   ];
+  const pad = layout.pad;
   const areaW = w - pad * 2;
   const gap = Math.max(10, Math.min(w, h) * 0.01);
   const columns = state.ratio === "post" || areaW / 4 < 255 ? 2 : 4;
@@ -504,17 +522,16 @@ function drawCharacterSlots(w, h, pad) {
     ctx.fillStyle = "rgba(255,255,255,0.72)";
     ctx.font = `700 ${Math.round(Math.min(18, slotH * 0.2) * state.fontScale)}px Rajdhani, sans-serif`;
     ctx.fillText(label.toUpperCase(), x + 16, yy + Math.max(25, slotH * 0.3));
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `${Math.round(Math.min(32, slotH * 0.32) * state.fontScale)}px Paperlogy, sans-serif`;
-    fitText(value || "-", x + 16, yy + slotH - Math.max(20, slotH * 0.22), slotW - 32, Math.min(32, slotH * 0.32) * state.fontScale);
+    if (value) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `${Math.round(Math.min(32, slotH * 0.32) * state.fontScale)}px Paperlogy, sans-serif`;
+      fitText(value, x + 16, yy + slotH - Math.max(20, slotH * 0.22), slotW - 32, Math.min(32, slotH * 0.32) * state.fontScale);
+    }
   });
 }
 
-function drawMemo(w, h, pad) {
-  const boxW = w * (state.ratio === "wide" ? 0.34 : 0.38);
-  const boxH = h * (state.ratio === "wide" ? 0.24 : 0.22);
-  const x = w - pad - boxW;
-  const y = h - pad - boxH - Math.max(120, h * 0.1);
+function drawMemo(box) {
+  const { x, y, w: boxW, h: boxH } = box;
   ctx.fillStyle = "rgba(0,0,0,0.34)";
   roundedRect(x, y, boxW, boxH, 14);
   ctx.fill();
@@ -713,24 +730,25 @@ function resetState() {
   state.profileImage = null;
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
-  state.fields.nickname = "루미아의 친구";
-  state.fields.handle = "@eternal_return";
-  state.fields.mainCharacter = "아야 / 헤이즈";
-  state.fields.bio = "같이 오래 게임할 트친을 찾고 있어요.";
-  state.fields.memo = "평일 저녁, 주말 접속. 실수해도 웃고 넘기는 분위기를 좋아해요.";
+  state.fields.nickname = "";
+  state.fields.handle = "";
+  state.fields.mainCharacter = "";
+  state.fields.bio = "";
+  state.fields.tier = "";
+  state.fields.memo = "";
   state.fields.activityOther = "";
-  state.fields.fav1 = "쇼이치";
-  state.fields.fav2 = "레녹스";
-  state.fields.love1 = "엠마";
-  state.fields.love2 = "리오";
+  state.fields.fav1 = "";
+  state.fields.fav2 = "";
+  state.fields.love1 = "";
+  state.fields.love2 = "";
   state.chips = {
-    modes: ["일반"],
-    voice: ["전부"],
-    traits: ["즐겜"],
-    gender: ["기타"],
-    age: ["성인"],
-    activity: ["소비", "흔적"],
-    bye: ["블언블"],
+    modes: [],
+    voice: [],
+    traits: [],
+    gender: [],
+    age: [],
+    activity: [],
+    bye: [],
   };
   syncControls();
   draw();
