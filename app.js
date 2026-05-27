@@ -1,37 +1,51 @@
 const canvas = document.getElementById("profileCanvas");
 const ctx = canvas.getContext("2d");
 
-const ratios = {
-  square: [1400, 1400],
-  wide: [1600, 900],
-  post: [1200, 1500],
-};
+const CANVAS_SIZE = [1200, 1500];
+
+const ETERNAL_RETURN_CHARACTERS = [
+  "가넷", "나딘", "나타폰", "니아", "니키", "다니엘", "다르코", "데비&마를렌", "띠아", "라우라", "레녹스", "레니", "레온", "로지",
+  "루크", "르노어", "리 다이린", "리오", "마르티나", "마이", "마커스", "매그너스", "미르카", "바냐", "바바라", "버니스", "블레어", "비앙카",
+  "비형", "샬럿", "셀린", "쇼우", "쇼이치", "수아", "슈린", "시셀라", "실비아", "아델라", "아드리아나", "아디나", "아르다", "아비게일",
+  "아야", "아이솔", "아이작", "알렉스", "알론소", "얀", "에스텔", "에이든", "에키온", "엘레나", "엠마", "요한", "윌리엄", "유민",
+  "유스티나", "유키", "이렘", "이바", "이슈트반", "이안", "일레븐", "자히르", "재키", "제니", "츠바메", "카밀로", "카티야", "칼라",
+  "캐시", "케네스", "코렐라인", "크레이버", "클로에", "키아라", "타지아", "테오도르", "펜리르", "펠릭스", "프리야", "피오라", "피올로", "하트",
+  "헤이즈", "헨리", "현우", "혜진", "히스이",
+];
+
+const CANVAS_FONTS = [
+  { value: "Paperozi", label: "페이퍼 로지" },
+  { value: "Pretendard", label: "프리텐다드" },
+  { value: "ChosunIlboMyungjo", label: "조선일보명조체" },
+  { value: "Mona12", label: "Mona12" },
+  { value: "MitmiFont", label: "밑미 폰트" },
+];
 
 const state = {
   template: "neon",
   backgroundMode: "default",
-  ratio: "square",
   accent: "#13c8b5",
   subAccent: "#ffcf5a",
   bgStart: "#071011",
   bgEnd: "#173735",
+  canvasFont: "Paperozi",
   fontScale: 1,
   imageDim: 0.28,
-  guide: true,
   background: null,
   mainImage: null,
   profileImage: null,
   fields: {
     nickname: "",
     handle: "",
-    mainCharacter: "",
+    catchphrase: "",
     bio: "",
     tier: "",
     memo: "",
     activityOther: "",
-    fav2: "",
-    love1: "",
-    love2: "",
+  },
+  characters: {
+    mainText: "",
+    loveText: "",
   },
   chips: {
     modes: [],
@@ -47,25 +61,26 @@ const state = {
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-function init() {
+async function init() {
   bindInputs();
   bindChips();
   resizeCanvas();
+  await loadCanvasFont();
   draw();
+  document.fonts?.ready?.then(draw);
   if (window.lucide) window.lucide.createIcons();
 }
 
 function bindInputs() {
+  populateCanvasFontSelect();
+
   const textMap = {
     nicknameInput: ["fields", "nickname"],
     handleInput: ["fields", "handle"],
-    mainCharacterInput: ["fields", "mainCharacter"],
+    catchphraseInput: ["fields", "catchphrase"],
     bioInput: ["fields", "bio"],
     memoInput: ["fields", "memo"],
     activityOtherInput: ["fields", "activityOther"],
-    fav2Input: ["fields", "fav2"],
-    love1Input: ["fields", "love1"],
-    love2Input: ["fields", "love2"],
     tierSelect: ["fields", "tier"],
   };
 
@@ -100,6 +115,12 @@ function bindInputs() {
     draw();
   });
 
+  $("#canvasFontSelect").addEventListener("change", async (event) => {
+    state.canvasFont = event.target.value;
+    await loadCanvasFont();
+    draw();
+  });
+
   $("#fontScaleInput").addEventListener("input", (event) => {
     state.fontScale = Number(event.target.value) / 100;
     draw();
@@ -107,11 +128,6 @@ function bindInputs() {
 
   $("#imageDimInput").addEventListener("input", (event) => {
     state.imageDim = Number(event.target.value) / 100;
-    draw();
-  });
-
-  $("#guideToggle").addEventListener("change", (event) => {
-    state.guide = event.target.checked;
     draw();
   });
 
@@ -124,19 +140,9 @@ function bindInputs() {
     });
   });
   $("#downloadBtn").addEventListener("click", downloadPng);
-  $("#saveJsonBtn").addEventListener("click", saveJson);
-  $("#loadJsonInput").addEventListener("change", loadJson);
   $("#randomizeBtn").addEventListener("click", randomizeTone);
   $("#resetBtn").addEventListener("click", resetState);
-
-  $$("#ratioSegment button").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.ratio = button.dataset.ratio;
-      $$("#ratioSegment button").forEach((item) => item.classList.toggle("active", item === button));
-      resizeCanvas();
-      draw();
-    });
-  });
+  bindCharacterControls();
 
   $$("#backgroundModeSegment button").forEach((button) => {
     button.addEventListener("click", () => {
@@ -145,6 +151,47 @@ function bindInputs() {
       draw();
     });
   });
+}
+
+function populateCanvasFontSelect() {
+  const select = $("#canvasFontSelect");
+  select.innerHTML = "";
+  CANVAS_FONTS.forEach(({ value, label }) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    option.style.fontFamily = `"${value}", "Paperozi", sans-serif`;
+    select.append(option);
+  });
+  select.value = state.canvasFont;
+}
+
+function bindCharacterControls() {
+  $("#mainCharactersInput").addEventListener("input", (event) => {
+    state.characters.mainText = event.target.value;
+    draw();
+  });
+
+  $("#loveCharactersInput").addEventListener("input", (event) => {
+    state.characters.loveText = event.target.value;
+    draw();
+  });
+}
+
+function canvasFontStack() {
+  return `"${state.canvasFont}", "Paperozi", system-ui, sans-serif`;
+}
+
+function setCanvasFont(size, weight = 400) {
+  ctx.font = `${weight} ${Math.round(size)}px ${canvasFontStack()}`;
+}
+
+async function loadCanvasFont() {
+  if (!document.fonts?.load) return;
+  await Promise.all([
+    document.fonts.load(`400 24px ${canvasFontStack()}`),
+    document.fonts.load(`700 24px ${canvasFontStack()}`),
+  ]);
 }
 
 function bindChips() {
@@ -167,7 +214,7 @@ function bindChips() {
 }
 
 function resizeCanvas() {
-  const [width, height] = ratios[state.ratio];
+  const [width, height] = CANVAS_SIZE;
   canvas.width = width;
   canvas.height = height;
 }
@@ -184,6 +231,7 @@ function loadImage(event, key) {
       if (key === "background") {
         state.backgroundMode = "image";
         syncBackgroundMode();
+        applyImageTone(image);
       }
       setUploadName(key, file.name);
       draw();
@@ -233,48 +281,21 @@ function draw() {
   drawMainImage(layout.mainImage);
   drawProfileImage(layout.profileImage);
   drawContent(w, h, layout);
-  if (state.guide) drawGuide(w, h);
 }
 
 function getCanvasLayout(w, h) {
   const pad = Math.round(Math.min(w, h) * 0.064);
   const inner = { x: pad, y: pad, w: w - pad * 2, h: h - pad * 2 };
-  const isWide = state.ratio === "wide";
-  const isPost = state.ratio === "post";
-  if (isWide) {
-    return {
-      pad,
-      inner,
-      content: { x: pad + inner.w * 0.04, title: pad + inner.h * 0.17, w: inner.w * 0.4 },
-      mainImage: { x: pad + inner.w * 0.64, y: pad + inner.h * 0.16, w: inner.w * 0.31, h: inner.h * 0.44 },
-      profileImage: { x: pad + inner.w * 0.49, y: pad + inner.h * 0.31, size: Math.round(inner.w * 0.12) },
-      stat: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.5, w: inner.w * 0.42 },
-      memo: { x: pad + inner.w * 0.64, y: pad + inner.h * 0.66, w: inner.w * 0.31, h: inner.h * 0.15 },
-      slots: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.82, w: inner.w * 0.91, columns: 4 },
-    };
-  }
-  if (isPost) {
-    const profileSize = Math.round(inner.w * 0.19);
-    return {
-      pad,
-      inner,
-      content: { x: pad + inner.w * 0.06, title: pad + inner.h * 0.12, w: inner.w * 0.78 },
-      mainImage: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.36, w: inner.w * 0.76, h: inner.h * 0.22 },
-      profileImage: { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.59, size: profileSize },
-      stat: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.65, w: inner.w * 0.72 },
-      memo: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.84, w: inner.w * 0.72, h: inner.h * 0.08 },
-      slots: { x: pad + inner.w * 0.06, y: pad + inner.h * 0.91, w: inner.w * 0.88, columns: 2 },
-    };
-  }
+  const profileSize = Math.round(inner.w * 0.18);
   return {
     pad,
     inner,
-    content: { x: pad + inner.w * 0.04, title: pad + inner.h * 0.18, w: inner.w * 0.42 },
-    mainImage: { x: pad + inner.w * 0.58, y: pad + inner.h * 0.18, w: inner.w * 0.34, h: inner.h * 0.36 },
-    profileImage: { x: pad + inner.w * 0.47, y: pad + inner.h * 0.39, size: Math.round(inner.w * 0.17) },
-    stat: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.57, w: inner.w * 0.43 },
-    memo: { x: pad + inner.w * 0.58, y: pad + inner.h * 0.59, w: inner.w * 0.34, h: inner.h * 0.16 },
-    slots: { x: pad + inner.w * 0.04, y: pad + inner.h * 0.84, w: inner.w * 0.88, columns: 4 },
+    content: { x: pad + inner.w * 0.09, title: pad + inner.h * 0.11, w: inner.w * 0.7, h: inner.h * 0.19 },
+    mainImage: { x: pad + inner.w * 0.14, y: pad + inner.h * 0.31, w: inner.w * 0.72, h: inner.h * 0.23 },
+    profileImage: { x: w / 2 - profileSize / 2, y: pad + inner.h * 0.535, size: profileSize },
+    stat: { x: pad + inner.w * 0.1, y: pad + inner.h * 0.68, w: inner.w * 0.8, columns: 2 },
+    memo: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.925, w: inner.w * 0.68, h: inner.h * 0.055 },
+    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.805, w: inner.w * 0.68, h: inner.h * 0.105 },
   };
 }
 
@@ -311,6 +332,7 @@ function drawTemplate(w, h) {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, w, h);
   drawBackgroundTone(w, h, 0.06);
+  drawGraphicDecor(w, h);
 
   ctx.save();
   ctx.globalAlpha = 0.16;
@@ -321,6 +343,59 @@ function drawTemplate(w, h) {
     ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x + h, h);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawGraphicDecor(w, h) {
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.strokeStyle = state.subAccent;
+  ctx.lineWidth = Math.max(2, w * 0.002);
+  roundedStroke(w * 0.1, h * 0.08, w * 0.48, h * 0.25, h * 0.13);
+  roundedStroke(w * 0.56, h * 0.78, w * 0.3, h * 0.13, h * 0.065);
+
+  ctx.globalAlpha = 0.1;
+  ctx.fillStyle = "#ffffff";
+  roundedRect(w * 0.12, h * 0.71, w * 0.24, h * 0.11, 0);
+  ctx.fill();
+
+  ctx.globalAlpha = 0.16;
+  ctx.strokeStyle = "#ffffff";
+  const grid = Math.max(26, w * 0.025);
+  const gx = w * 0.77;
+  const gy = h * 0.07;
+  const gw = grid * 4;
+  const gh = grid * 4;
+  for (let x = gx; x <= gx + gw; x += grid) {
+    ctx.beginPath();
+    ctx.moveTo(x, gy);
+    ctx.lineTo(x, gy + gh);
+    ctx.stroke();
+  }
+  for (let y = gy; y <= gy + gh; y += grid) {
+    ctx.beginPath();
+    ctx.moveTo(gx, y);
+    ctx.lineTo(gx + gw, y);
+    ctx.stroke();
+  }
+
+  drawSpark(w * 0.12, h * 0.18, Math.min(w, h) * 0.04);
+  drawSpark(w * 0.87, h * 0.64, Math.min(w, h) * 0.028);
+  ctx.restore();
+}
+
+function drawSpark(x, y, radius) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.strokeStyle = state.subAccent;
+  ctx.lineWidth = Math.max(2, radius * 0.08);
+  for (let i = 0; i < 12; i += 1) {
+    ctx.rotate(Math.PI / 6);
+    ctx.beginPath();
+    ctx.moveTo(radius * 0.25, 0);
+    ctx.lineTo(radius, 0);
     ctx.stroke();
   }
   ctx.restore();
@@ -360,7 +435,7 @@ function drawMainImage(box) {
     ctx.fillStyle = "rgba(12, 17, 18, 0.34)";
     ctx.fillRect(x, y, boxW, boxH);
     ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.font = `${Math.round(24 * state.fontScale)}px Paperlogy, sans-serif`;
+    setCanvasFont(24 * state.fontScale);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("MAIN IMAGE", x + boxW / 2, y + boxH / 2);
@@ -386,7 +461,7 @@ function drawProfileImage(box) {
     ctx.fillStyle = "rgba(12, 17, 18, 0.7)";
     ctx.fillRect(x, y, size, size);
     ctx.fillStyle = "rgba(255,255,255,0.78)";
-    ctx.font = `700 ${Math.round(size * 0.1)}px Paperlogy, sans-serif`;
+    setCanvasFont(size * 0.1, 700);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("PROFILE", x + size / 2, y + size / 2);
@@ -413,19 +488,19 @@ function drawContent(w, h, layout) {
   const titleY = layout.content.title;
   const scale = state.fontScale;
 
-  drawGlassPanel(pad - 22, titleY - 56 * scale, leftW + 44, 236 * scale, 14, 0.34);
+  drawGlassPanel(pad - 22, titleY - 56 * scale, leftW + 44, layout.content.h, 14, 0.36);
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = state.subAccent;
-  ctx.font = `${Math.round(34 * scale)}px Rajdhani, sans-serif`;
-  ctx.fillText("FIND YOUR LUMIA FRIEND", pad, titleY);
+  setCanvasFont(34 * scale, 700);
+  fitText(catchphraseText(), pad, titleY, leftW, 34 * scale, 14);
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = `700 ${Math.round(72 * scale)}px Paperlogy, sans-serif`;
+  setCanvasFont(72 * scale, 700);
   if (state.fields.nickname) fitText(state.fields.nickname, pad, titleY + 78 * scale, leftW, 72 * scale);
 
   ctx.fillStyle = state.accent;
-  ctx.font = `${Math.round(36 * scale)}px Rajdhani, sans-serif`;
+  setCanvasFont(36 * scale, 600);
   if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + 130 * scale);
 
   const bioY = titleY + (state.fields.nickname ? 162 : 106) * scale;
@@ -434,6 +509,10 @@ function drawContent(w, h, layout) {
   drawStatRows(layout.stat.x, layout.stat.y, layout.stat.w);
   drawCharacterSlots(w, h, layout);
   drawMemo(layout.memo);
+}
+
+function catchphraseText() {
+  return String(state.fields.catchphrase || "").trim() || "오늘도 루미아섬에서 만나요";
 }
 
 function drawStatRows(x, y, width) {
@@ -445,54 +524,74 @@ function drawStatRows(x, y, width) {
     ["INFO", [...state.chips.gender, ...state.chips.age, ...activityValues()]],
     ["BYE", state.chips.bye],
   ];
-  const baseRowH = state.ratio === "post" ? Math.max(42, canvas.height * 0.028) : Math.max(54, canvas.height * 0.039);
-  let cursorY = y;
-  rows.forEach(([label, values]) => {
-    const pillAreaW = width * 0.74;
+  const layout = getCanvasLayout(canvas.width, canvas.height);
+  const columns = layout.stat.columns || 1;
+  const gap = 8;
+  const columnGap = 10;
+  const columnW = (width - columnGap * (columns - 1)) / columns;
+  const baseRowH = Math.max(42, canvas.height * 0.027);
+
+  rows.forEach(([label, values], index) => {
+    const col = index % columns;
+    const row = Math.floor(index / columns);
+    const xx = x + col * (columnW + columnGap);
+    const yy = y + row * (baseRowH + gap);
+    const pillAreaW = columnW * (columns > 1 ? 0.66 : 0.74);
     const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
-    const rowH = Math.max(baseRowH, layout.height + 18);
-    const yy = cursorY;
     ctx.fillStyle = "rgba(0,0,0,0.46)";
-    roundedRect(x, yy, width, rowH, 10);
+    roundedRect(xx, yy, columnW, baseRowH, 10);
     ctx.fill();
     ctx.fillStyle = state.subAccent;
-    ctx.font = `700 ${Math.round(22 * state.fontScale)}px Rajdhani, sans-serif`;
-    ctx.fillText(label, x + 18, yy + rowH * 0.62);
-    drawPills(layout, x + width * 0.24, yy + 9, pillAreaW);
-    cursorY += rowH + 10;
+    setCanvasFont((columns > 1 ? 18 : 22) * state.fontScale, 700);
+    ctx.fillText(label, xx + 16, yy + baseRowH * 0.62);
+    drawPills(layout, xx + columnW * (columns > 1 ? 0.3 : 0.24), yy + 9, pillAreaW);
   });
 }
 
 function getPillLayout(values, width, singleHeight) {
-  const items = values.filter(Boolean).slice(0, 8);
-  ctx.font = `${Math.round(22 * state.fontScale)}px Paperlogy, sans-serif`;
+  const rawItems = values.filter(Boolean);
+  setCanvasFont(22 * state.fontScale);
   const gap = 8;
-  const natural = items.map((value) => ({
+  const natural = rawItems.map((value) => ({
     value,
-    width: Math.min(ctx.measureText(value).width + 32, width),
+    width: Math.min(ctx.measureText(value).width + 28, Math.max(42, width * 0.48)),
   }));
-  const total = natural.reduce((sum, item) => sum + item.width, 0) + Math.max(0, natural.length - 1) * gap;
   const pillH = singleHeight;
+  const visible = [];
+  let used = 0;
 
-  if (total <= width || natural.length <= 1) {
-    return { rows: [natural], height: pillH, pillH, gap };
-  }
-
-  let bestSplit = 1;
-  let bestScore = Infinity;
-  for (let split = 1; split < natural.length; split += 1) {
-    const first = rowWidth(natural.slice(0, split), gap);
-    const second = rowWidth(natural.slice(split), gap);
-    const overflow = Math.max(0, first - width) + Math.max(0, second - width);
-    const balance = Math.abs(first - second);
-    const score = overflow * 1000 + balance;
-    if (score < bestScore) {
-      bestScore = score;
-      bestSplit = split;
+  natural.forEach((item, index) => {
+    const remaining = natural.length - index - 1;
+    const needsMore = remaining > 0;
+    const moreWidth = needsMore ? 44 + gap : 0;
+    const nextWidth = item.width + (visible.length ? gap : 0);
+    if (used + nextWidth + moreWidth <= width) {
+      visible.push(item);
+      used += nextWidth;
     }
+  });
+
+  const hidden = Math.max(0, natural.length - visible.length);
+  if (!visible.length && hidden) {
+    visible.push({
+      value: `+${hidden}`,
+      width: Math.min(44, width),
+      isMore: true,
+    });
+    return { rows: [visible], height: pillH, pillH, gap };
   }
 
-  return { rows: [natural.slice(0, bestSplit), natural.slice(bestSplit)], height: pillH * 2 + gap, pillH, gap };
+  if (hidden) {
+    const more = {
+      value: `+${hidden}`,
+      width: 44,
+      isMore: true,
+    };
+    while (visible.length && rowWidth([...visible, more], gap) > width) visible.pop();
+    visible.push(more);
+  }
+
+  return { rows: [visible], height: pillH, pillH, gap };
 }
 
 function drawPills(layout, x, y, width) {
@@ -505,12 +604,12 @@ function drawPills(layout, x, y, width) {
     row.forEach((item) => {
       const pillW = item.width * scale;
       const yy = y + rowIndex * (layout.pillH + layout.gap);
-      ctx.fillStyle = colorWithAlpha(state.accent, 0.36);
+      ctx.fillStyle = colorWithAlpha(state.accent, item.isMore ? 0.52 : 0.36);
       roundedRect(cursor, yy, pillW, layout.pillH, 8);
       ctx.fill();
       ctx.fillStyle = "#ffffff";
       const fontSize = Math.max(16, Math.round(22 * state.fontScale * Math.min(1, scale + 0.08)));
-      ctx.font = `${fontSize}px Paperlogy, sans-serif`;
+      setCanvasFont(fontSize);
       fitText(item.value, cursor + 16 * scale, yy + layout.pillH * 0.68, Math.max(20, pillW - 32 * scale), fontSize);
       cursor += pillW + layout.gap;
     });
@@ -522,39 +621,48 @@ function rowWidth(row, gap) {
 }
 
 function drawCharacterSlots(w, h, layout) {
-  const labels = [
-    ["주 실험체", state.fields.mainCharacter],
-    ["주캐릭터 2", state.fields.fav2],
-    ["애정캐릭터 1", state.fields.love1],
-    ["애정캐릭터 2", state.fields.love2],
-  ];
-  const gap = Math.max(10, Math.min(w, h) * 0.01);
-  const columns = layout.slots.columns;
-  const rows = Math.ceil(labels.length / columns);
-  const slotW = (layout.slots.w - gap * (columns - 1)) / columns;
-  const slotH = state.ratio === "post" ? Math.max(64, Math.min(76, h * 0.048)) : Math.max(82, Math.min(128, h * (rows > 1 ? 0.066 : 0.084)));
-  const y = layout.slots.y;
+  const { x, y, w: boxW, h: boxH } = layout.slots;
+  drawGlassPanel(x, y, boxW, boxH, 16, 0.42);
+  ctx.strokeStyle = colorWithAlpha(state.accent, 0.72);
+  ctx.lineWidth = 2;
+  roundedStroke(x, y, boxW, boxH, 16);
 
-  labels.forEach(([label, value], index) => {
-    const col = index % columns;
-    const row = Math.floor(index / columns);
-    const x = layout.slots.x + col * (slotW + gap);
-    const yy = y + row * (slotH + gap);
-    ctx.fillStyle = "rgba(0,0,0,0.38)";
-    roundedRect(x, yy, slotW, slotH, 12);
-    ctx.fill();
-    ctx.strokeStyle = index < 2 ? state.accent : state.subAccent;
-    ctx.lineWidth = 2;
-    roundedStroke(x, yy, slotW, slotH, 12);
-    ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.font = `700 ${Math.round(Math.min(18, slotH * 0.2) * state.fontScale)}px Rajdhani, sans-serif`;
-    ctx.fillText(label.toUpperCase(), x + 16, yy + Math.max(25, slotH * 0.3));
-    if (value) {
-      ctx.fillStyle = "#ffffff";
-      ctx.font = `${Math.round(Math.min(32, slotH * 0.32) * state.fontScale)}px Paperlogy, sans-serif`;
-      fitText(value, x + 16, yy + slotH - Math.max(20, slotH * 0.22), slotW - 32, Math.min(32, slotH * 0.32) * state.fontScale);
-    }
-  });
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = state.subAccent;
+  setCanvasFont(18 * state.fontScale, 700);
+  ctx.fillText("CHARACTERS", x + 18, y + 15);
+
+  const mainValues = characterDisplayValues("main");
+  const loveValues = characterDisplayValues("love");
+  const sectionGap = Math.max(10, boxH * 0.08);
+  const sectionY = y + Math.max(42, boxH * 0.28);
+  const sectionH = (boxH - (sectionY - y) - sectionGap - 16) / 2;
+  drawCharacterLine("주캐", mainValues, x + 18, sectionY, boxW - 36, sectionH, state.accent);
+  drawCharacterLine("애정캐", loveValues, x + 18, sectionY + sectionH + sectionGap, boxW - 36, sectionH, state.subAccent);
+  ctx.textBaseline = "alphabetic";
+}
+
+function characterDisplayValues(type) {
+  return splitCommaValues(state.characters[`${type}Text`]).slice(0, 3);
+}
+
+function drawCharacterLine(label, values, x, y, width, height, accent) {
+  ctx.fillStyle = colorWithAlpha(accent, 0.2);
+  roundedRect(x, y, width, height, 10);
+  ctx.fill();
+
+  ctx.fillStyle = accent;
+  setCanvasFont(Math.min(18, height * 0.32) * state.fontScale, 700);
+  ctx.fillText(label, x + 16, y + Math.max(9, height * 0.2));
+
+  const text = values.length ? values.join(", ") : "선택 안 함";
+  const labelW = Math.min(width * 0.22, 86);
+  const textX = x + labelW;
+  const textW = width - labelW - 18;
+  ctx.fillStyle = "#ffffff";
+  setCanvasFont(Math.min(22, height * 0.38) * state.fontScale, 600);
+  fitText(text, textX, y + height * 0.34, textW, Math.min(22, height * 0.38) * state.fontScale, 12);
 }
 
 function drawMemo(box) {
@@ -564,7 +672,7 @@ function drawMemo(box) {
   roundedRect(x, y, boxW, boxH, 14);
   ctx.fill();
   ctx.fillStyle = state.subAccent;
-  ctx.font = `700 ${Math.round(22 * state.fontScale)}px Rajdhani, sans-serif`;
+  setCanvasFont(22 * state.fontScale, 700);
   ctx.fillText("MEMO", x + 22, y + 36);
   drawWrappedText(state.fields.memo, x + 22, y + 78, boxW - 44, 30 * state.fontScale, 4, "#ffffff");
 }
@@ -575,23 +683,9 @@ function drawGlassPanel(x, y, w, h, r, alpha) {
   ctx.fill();
 }
 
-function drawGuide(w, h) {
-  ctx.save();
-  ctx.strokeStyle = "rgba(255,255,255,0.13)";
-  ctx.lineWidth = 1;
-  ctx.setLineDash([10, 10]);
-  ctx.beginPath();
-  ctx.moveTo(w / 2, 0);
-  ctx.lineTo(w / 2, h);
-  ctx.moveTo(0, h / 2);
-  ctx.lineTo(w, h / 2);
-  ctx.stroke();
-  ctx.restore();
-}
-
 function drawWrappedText(text, x, y, width, lineHeight, maxLines, color) {
   ctx.fillStyle = color;
-  ctx.font = `${Math.round(lineHeight * 0.72)}px Paperlogy, sans-serif`;
+  setCanvasFont(lineHeight * 0.72);
   const words = String(text || "").split(/\s+/);
   const lines = [];
   let line = "";
@@ -611,10 +705,10 @@ function drawWrappedText(text, x, y, width, lineHeight, maxLines, color) {
   });
 }
 
-function fitText(text, x, y, maxWidth, baseSize) {
+function fitText(text, x, y, maxWidth, baseSize, minSize = 18) {
   let size = baseSize;
   ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
-  while (ctx.measureText(text).width > maxWidth && size > 18) {
+  while (ctx.measureText(text).width > maxWidth && size > minSize) {
     size -= 2;
     ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
   }
@@ -649,94 +743,34 @@ function colorWithAlpha(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function downloadPng() {
-  const previousGuide = state.guide;
-  state.guide = false;
+async function downloadPng() {
+  await loadCanvasFont();
   draw();
   const link = document.createElement("a");
   link.download = `eret-profile-${Date.now()}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
-  state.guide = previousGuide;
-  draw();
-}
-
-function saveJson() {
-  const data = serializeState();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const link = document.createElement("a");
-  link.download = "eret-profile-work.json";
-  link.href = URL.createObjectURL(blob);
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
-
-function loadJson(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async () => {
-    const data = JSON.parse(reader.result);
-    await applySerializedState(data);
-  };
-  reader.readAsText(file);
-}
-
-function makeImage(src) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.onload = () => resolve({ src, image });
-    image.src = src;
-  });
-}
-
-function serializeState() {
-  return {
-    ...state,
-    background: state.background?.src || null,
-    mainImage: state.mainImage?.src || null,
-    profileImage: state.profileImage?.src || null,
-  };
-}
-
-async function applySerializedState(data) {
-  const nextFields = { ...state.fields, ...(data.fields || {}) };
-  if (!nextFields.mainCharacter && data.fields?.fav1) nextFields.mainCharacter = data.fields.fav1;
-  const nextChips = { ...state.chips, ...(data.chips || {}) };
-  Object.assign(state, data, { fields: nextFields, chips: nextChips });
-  state.background = data.background ? await makeImage(data.background) : null;
-  state.mainImage = data.mainImage ? await makeImage(data.mainImage) : null;
-  state.profileImage = data.profileImage ? await makeImage(data.profileImage) : null;
-  syncControls();
-  resizeCanvas();
-  setUploadName("background", state.background ? "불러온 배경" : "선택 안 함");
-  setUploadName("mainImage", state.mainImage ? "불러온 메인" : "선택 안 함");
-  setUploadName("profileImage", state.profileImage ? "불러온 프로필" : "선택 안 함");
-  draw();
 }
 
 function syncControls() {
   $("#nicknameInput").value = state.fields.nickname;
   $("#handleInput").value = state.fields.handle;
-  $("#mainCharacterInput").value = state.fields.mainCharacter;
+  $("#catchphraseInput").value = state.fields.catchphrase;
   $("#bioInput").value = state.fields.bio;
   $("#memoInput").value = state.fields.memo;
   $("#activityOtherInput").value = state.fields.activityOther;
-  $("#fav2Input").value = state.fields.fav2;
-  $("#love1Input").value = state.fields.love1;
-  $("#love2Input").value = state.fields.love2;
   $("#tierSelect").value = state.fields.tier;
+  $("#mainCharactersInput").value = state.characters.mainText;
+  $("#loveCharactersInput").value = state.characters.loveText;
   $("#accentInput").value = state.accent;
   $("#subAccentInput").value = state.subAccent;
   $("#bgStartInput").value = state.bgStart;
   $("#bgEndInput").value = state.bgEnd;
+  $("#canvasFontSelect").value = state.canvasFont;
   $("#fontScaleInput").value = Math.round(state.fontScale * 100);
   $("#imageDimInput").value = Math.round(state.imageDim * 100);
-  $("#guideToggle").checked = state.guide;
   document.documentElement.style.setProperty("--accent", state.accent);
   document.documentElement.style.setProperty("--sub", state.subAccent);
-  $$("#ratioSegment button").forEach((button) => button.classList.toggle("active", button.dataset.ratio === state.ratio));
   syncBackgroundMode();
   $$(".chips").forEach((group) => {
     const key = group.dataset.key;
@@ -751,6 +785,10 @@ function syncBackgroundMode() {
 }
 
 function randomizeTone() {
+  if (state.background?.image) {
+    if (applyImageTone(state.background.image)) return;
+  }
+
   const pairs = [
     ["#13c8b5", "#ffcf5a", "#071011", "#173735"],
     ["#5bd7ff", "#f46b83", "#10151b", "#242033"],
@@ -767,6 +805,145 @@ function randomizeTone() {
   draw();
 }
 
+function applyImageTone(image) {
+  const palette = extractImagePalette(image);
+  if (!palette) return false;
+  state.accent = palette.accent;
+  state.subAccent = palette.subAccent;
+  state.bgStart = palette.bgStart;
+  state.bgEnd = palette.bgEnd;
+  syncControls();
+  draw();
+  return true;
+}
+
+function extractImagePalette(image) {
+  const sampler = document.createElement("canvas");
+  const size = 64;
+  sampler.width = size;
+  sampler.height = size;
+  const samplerCtx = sampler.getContext("2d", { willReadFrequently: true });
+  if (!samplerCtx) return null;
+
+  samplerCtx.drawImage(image, 0, 0, size, size);
+  const data = samplerCtx.getImageData(0, 0, size, size).data;
+  const buckets = new Map();
+
+  for (let i = 0; i < data.length; i += 16) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const a = data[i + 3];
+    if (a < 180) continue;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const saturation = max === 0 ? 0 : (max - min) / max;
+    const lightness = (max + min) / 510;
+    if (lightness < 0.06 || lightness > 0.94 || saturation < 0.08) continue;
+
+    const key = `${Math.round(r / 24) * 24},${Math.round(g / 24) * 24},${Math.round(b / 24) * 24}`;
+    const bucket = buckets.get(key) || { r: 0, g: 0, b: 0, count: 0, saturation: 0, lightness: 0 };
+    bucket.r += r;
+    bucket.g += g;
+    bucket.b += b;
+    bucket.count += 1;
+    bucket.saturation += saturation;
+    bucket.lightness += lightness;
+    buckets.set(key, bucket);
+  }
+
+  const colors = [...buckets.values()].map((bucket) => {
+    const color = {
+      r: Math.round(bucket.r / bucket.count),
+      g: Math.round(bucket.g / bucket.count),
+      b: Math.round(bucket.b / bucket.count),
+      count: bucket.count,
+      saturation: bucket.saturation / bucket.count,
+      lightness: bucket.lightness / bucket.count,
+    };
+    color.score = color.count * (0.5 + color.saturation) * (1 - Math.abs(color.lightness - 0.55));
+    return color;
+  });
+
+  if (!colors.length) return null;
+
+  const accent = [...colors].sort((a, b) => b.score - a.score)[0];
+  const subAccent = [...colors].sort((a, b) => contrastScore(b, accent) - contrastScore(a, accent))[0] || accent;
+  const darkBase = [...colors].sort((a, b) => a.lightness - b.lightness)[0] || accent;
+  const bgStart = adjustColor(darkBase, -0.5, 0.75);
+  const bgEnd = adjustColor(accent, -0.58, 0.65);
+
+  return {
+    accent: rgbToHex(...Object.values(adjustColor(accent, 0.12, 1.1))),
+    subAccent: rgbToHex(...Object.values(adjustColor(subAccent, 0.18, 1.16))),
+    bgStart: rgbToHex(bgStart.r, bgStart.g, bgStart.b),
+    bgEnd: rgbToHex(bgEnd.r, bgEnd.g, bgEnd.b),
+  };
+}
+
+function contrastScore(color, base) {
+  const distance = Math.hypot(color.r - base.r, color.g - base.g, color.b - base.b);
+  return distance * (0.7 + color.saturation) * (1 - Math.abs(color.lightness - 0.62));
+}
+
+function adjustColor(color, lightnessShift, saturationBoost) {
+  const hsl = rgbToHsl(color.r, color.g, color.b);
+  hsl.s = clamp(hsl.s * saturationBoost, 0, 1);
+  hsl.l = clamp(hsl.l + lightnessShift, 0.05, 0.92);
+  return hslToRgb(hsl.h, hsl.s, hsl.l);
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    if (max === g) h = (b - r) / d + 2;
+    if (max === b) h = (r - g) / d + 4;
+    h /= 6;
+  }
+
+  return { h, s, l };
+}
+
+function hslToRgb(h, s, l) {
+  if (s === 0) {
+    const value = Math.round(l * 255);
+    return { r: value, g: value, b: value };
+  }
+
+  const hue2rgb = (p, q, t) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  return {
+    r: Math.round(hue2rgb(p, q, h + 1 / 3) * 255),
+    g: Math.round(hue2rgb(p, q, h) * 255),
+    b: Math.round(hue2rgb(p, q, h - 1 / 3) * 255),
+  };
+}
+
 function resetState() {
   state.background = null;
   state.backgroundMode = "default";
@@ -777,17 +954,19 @@ function resetState() {
   setUploadName("profileImage", "선택 안 함");
   state.bgStart = "#071011";
   state.bgEnd = "#173735";
+  state.canvasFont = "Paperozi";
   state.imageDim = 0.28;
   state.fields.nickname = "";
   state.fields.handle = "";
-  state.fields.mainCharacter = "";
+  state.fields.catchphrase = "";
   state.fields.bio = "";
   state.fields.tier = "";
   state.fields.memo = "";
   state.fields.activityOther = "";
-  state.fields.fav2 = "";
-  state.fields.love1 = "";
-  state.fields.love2 = "";
+  state.characters = {
+    mainText: "",
+    loveText: "",
+  };
   state.chips = {
     modes: [],
     voice: [],
@@ -803,11 +982,18 @@ function resetState() {
 
 function activityValues() {
   const base = state.chips.activity.filter((value) => value !== "기타");
-  const other = String(state.fields.activityOther || "").trim();
-  if (state.chips.activity.includes("기타") && other) {
-    return [...base, other];
+  const other = splitCommaValues(state.fields.activityOther);
+  if (state.chips.activity.includes("기타") && other.length) {
+    return [...base, ...other];
   }
   return state.chips.activity;
+}
+
+function splitCommaValues(text) {
+  return String(text || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function mixHex(hexA, hexB, amount) {
