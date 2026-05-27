@@ -111,7 +111,12 @@ h2 {
 
 .file-action input,
 .file-input {
-  display: none;
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-9999px, -9999px);
 }
 
 svg {
@@ -192,6 +197,7 @@ input[type="range"] {
 }
 
 .upload-row {
+  width: 100%;
   min-height: 42px;
   padding: 10px 11px;
   border: 1px dashed color-mix(in srgb, var(--accent), var(--line) 60%);
@@ -204,6 +210,8 @@ input[type="range"] {
   justify-content: space-between;
   gap: 12px;
   margin: 10px 0;
+  font: inherit;
+  text-align: left;
 }
 
 .upload-row strong {
@@ -215,47 +223,6 @@ input[type="range"] {
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.template-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.template-card {
-  min-height: 74px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  color: var(--text);
-  background: linear-gradient(135deg, #111516, #1c2224);
-  position: relative;
-  overflow: hidden;
-}
-
-.template-card.active {
-  border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent), transparent 30%);
-}
-
-.template-card span {
-  position: absolute;
-  left: 8px;
-  bottom: 7px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.swatch-neon {
-  background: linear-gradient(135deg, #091113, #173835 72%, #263b3a);
-}
-
-.swatch-clean {
-  background: linear-gradient(135deg, #1a2022, #d3dedc);
-}
-
-.swatch-signal {
-  background: linear-gradient(135deg, #17181b, #253036 60%, #35464f);
 }
 
 .segmented,
@@ -372,6 +339,14 @@ canvas {
   .workspace {
     grid-template-columns: 1fr;
     padding: 10px;
+  }
+
+  .controls {
+    order: 0;
+  }
+
+  .stage {
+    order: -1;
   }
 
   canvas {
