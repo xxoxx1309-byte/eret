@@ -18,6 +18,8 @@ const state = {
   ratio: "square",
   accent: "#13c8b5",
   subAccent: "#ffcf5a",
+  bgStart: "#071011",
+  bgEnd: "#173735",
   fontScale: 1,
   imageDim: 0.12,
   guide: true,
@@ -114,6 +116,16 @@ function bindInputs() {
     draw();
   });
 
+  $("#bgStartInput").addEventListener("input", (event) => {
+    state.bgStart = event.target.value;
+    draw();
+  });
+
+  $("#bgEndInput").addEventListener("input", (event) => {
+    state.bgEnd = event.target.value;
+    draw();
+  });
+
   $("#fontScaleInput").addEventListener("input", (event) => {
     state.fontScale = Number(event.target.value) / 100;
     draw();
@@ -195,6 +207,7 @@ function draw() {
 
   if (state.background?.image) {
     drawCoverImage(state.background.image, 0, 0, w, h);
+    drawBackgroundTone(w, h, 0.22);
     ctx.fillStyle = `rgba(0, 0, 0, ${state.imageDim})`;
     ctx.fillRect(0, 0, w, h);
   } else {
@@ -211,20 +224,21 @@ function draw() {
 function drawTemplate(w, h) {
   const gradient = ctx.createLinearGradient(0, 0, w, h);
   if (state.template === "clean") {
-    gradient.addColorStop(0, "#edf6f3");
-    gradient.addColorStop(0.5, "#dbe9e6");
-    gradient.addColorStop(1, "#22292a");
+    gradient.addColorStop(0, mixHex(state.bgStart, "#ffffff", 0.82));
+    gradient.addColorStop(0.5, mixHex(state.accent, "#ffffff", 0.76));
+    gradient.addColorStop(1, mixHex(state.bgEnd, "#111516", 0.28));
   } else if (state.template === "signal") {
-    gradient.addColorStop(0, "#151719");
-    gradient.addColorStop(0.45, "#32171e");
-    gradient.addColorStop(1, "#d4a93f");
+    gradient.addColorStop(0, mixHex(state.bgStart, "#151719", 0.72));
+    gradient.addColorStop(0.45, mixHex(state.accent, "#32171e", 0.5));
+    gradient.addColorStop(1, mixHex(state.subAccent, state.bgEnd, 0.48));
   } else {
-    gradient.addColorStop(0, "#071011");
-    gradient.addColorStop(0.54, "#173735");
-    gradient.addColorStop(1, "#101314");
+    gradient.addColorStop(0, state.bgStart);
+    gradient.addColorStop(0.54, mixHex(state.accent, state.bgEnd, 0.38));
+    gradient.addColorStop(1, state.bgEnd);
   }
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, w, h);
+  drawBackgroundTone(w, h, 0.14);
 
   ctx.save();
   ctx.globalAlpha = 0.16;
@@ -238,6 +252,15 @@ function drawTemplate(w, h) {
     ctx.stroke();
   }
   ctx.restore();
+}
+
+function drawBackgroundTone(w, h, alpha) {
+  const tone = ctx.createRadialGradient(w * 0.78, h * 0.18, 0, w * 0.78, h * 0.18, Math.max(w, h) * 0.72);
+  tone.addColorStop(0, colorWithAlpha(state.subAccent, alpha));
+  tone.addColorStop(0.48, colorWithAlpha(state.accent, alpha * 0.7));
+  tone.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = tone;
+  ctx.fillRect(0, 0, w, h);
 }
 
 function drawFrame(w, h) {
@@ -376,32 +399,79 @@ function drawStatRows(x, y, width) {
     ["INFO", [...state.chips.gender, ...state.chips.age, ...activityValues()]],
     ["BYE", state.chips.bye],
   ];
-  const rowH = Math.max(54, canvas.height * 0.039);
+  const baseRowH = Math.max(54, canvas.height * 0.039);
+  let cursorY = y;
   rows.forEach(([label, values], index) => {
-    const yy = y + index * (rowH + 10);
+    const pillAreaW = width * 0.74;
+    const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
+    const rowH = Math.max(baseRowH, layout.height + 18);
+    const yy = cursorY;
     ctx.fillStyle = "rgba(0,0,0,0.26)";
     roundedRect(x, yy, width, rowH, 10);
     ctx.fill();
     ctx.fillStyle = state.subAccent;
     ctx.font = `700 ${Math.round(22 * state.fontScale)}px Rajdhani, sans-serif`;
     ctx.fillText(label, x + 18, yy + rowH * 0.62);
-    drawPills(values, x + width * 0.24, yy + 9, width * 0.74, rowH - 18);
+    drawPills(layout, x + width * 0.24, yy + 9, pillAreaW);
+    cursorY += rowH + 10;
   });
 }
 
-function drawPills(values, x, y, width, height) {
-  let cursor = x;
+function getPillLayout(values, width, singleHeight) {
+  const items = values.filter(Boolean).slice(0, 8);
   ctx.font = `${Math.round(22 * state.fontScale)}px Paperlogy, sans-serif`;
-  values.filter(Boolean).slice(0, 6).forEach((value) => {
-    const pillW = Math.min(ctx.measureText(value).width + 32, width);
-    if (cursor + pillW > x + width) return;
-    ctx.fillStyle = colorWithAlpha(state.accent, 0.22);
-    roundedRect(cursor, y, pillW, height, 8);
-    ctx.fill();
-    ctx.fillStyle = "#ffffff";
-    ctx.fillText(value, cursor + 16, y + height * 0.68);
-    cursor += pillW + 8;
+  const gap = 8;
+  const natural = items.map((value) => ({
+    value,
+    width: Math.min(ctx.measureText(value).width + 32, width),
+  }));
+  const total = natural.reduce((sum, item) => sum + item.width, 0) + Math.max(0, natural.length - 1) * gap;
+  const pillH = singleHeight;
+
+  if (total <= width || natural.length <= 1) {
+    return { rows: [natural], height: pillH, pillH, gap };
+  }
+
+  let bestSplit = 1;
+  let bestScore = Infinity;
+  for (let split = 1; split < natural.length; split += 1) {
+    const first = rowWidth(natural.slice(0, split), gap);
+    const second = rowWidth(natural.slice(split), gap);
+    const overflow = Math.max(0, first - width) + Math.max(0, second - width);
+    const balance = Math.abs(first - second);
+    const score = overflow * 1000 + balance;
+    if (score < bestScore) {
+      bestScore = score;
+      bestSplit = split;
+    }
+  }
+
+  return { rows: [natural.slice(0, bestSplit), natural.slice(bestSplit)], height: pillH * 2 + gap, pillH, gap };
+}
+
+function drawPills(layout, x, y, width) {
+  layout.rows.forEach((row, rowIndex) => {
+    const available = width - Math.max(0, row.length - 1) * layout.gap;
+    const naturalWidth = row.reduce((sum, item) => sum + item.width, 0);
+    const scale = naturalWidth > available ? available / naturalWidth : 1;
+    let cursor = x + Math.max(0, (width - rowWidth(row, layout.gap) * scale) / 2);
+    row.forEach((item) => {
+      const pillW = item.width * scale;
+      const yy = y + rowIndex * (layout.pillH + layout.gap);
+      ctx.fillStyle = colorWithAlpha(state.accent, 0.22);
+      roundedRect(cursor, yy, pillW, layout.pillH, 8);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      const fontSize = Math.max(16, Math.round(22 * state.fontScale * Math.min(1, scale + 0.08)));
+      ctx.font = `${fontSize}px Paperlogy, sans-serif`;
+      fitText(item.value, cursor + 16 * scale, yy + layout.pillH * 0.68, Math.max(20, pillW - 32 * scale), fontSize);
+      cursor += pillW + layout.gap;
+    });
   });
+}
+
+function rowWidth(row, gap) {
+  return row.reduce((sum, item) => sum + item.width, 0) + Math.max(0, row.length - 1) * gap;
 }
 
 function drawCharacterSlots(w, h, pad) {
@@ -412,24 +482,31 @@ function drawCharacterSlots(w, h, pad) {
     ["애정캐릭터 2", state.fields.love2],
   ];
   const areaW = w - pad * 2;
-  const slotW = (areaW - 30) / 4;
-  const slotH = Math.max(94, h * 0.084);
-  const y = h - pad - slotH;
+  const gap = Math.max(10, Math.min(w, h) * 0.01);
+  const columns = state.ratio === "post" || areaW / 4 < 255 ? 2 : 4;
+  const rows = Math.ceil(labels.length / columns);
+  const slotW = (areaW - gap * (columns - 1)) / columns;
+  const slotH = Math.max(82, Math.min(128, h * (rows > 1 ? 0.066 : 0.084)));
+  const totalH = rows * slotH + (rows - 1) * gap;
+  const y = h - pad - totalH;
 
   labels.forEach(([label, value], index) => {
-    const x = pad + index * (slotW + 10);
+    const col = index % columns;
+    const row = Math.floor(index / columns);
+    const x = pad + col * (slotW + gap);
+    const yy = y + row * (slotH + gap);
     ctx.fillStyle = "rgba(255,255,255,0.1)";
-    roundedRect(x, y, slotW, slotH, 12);
+    roundedRect(x, yy, slotW, slotH, 12);
     ctx.fill();
     ctx.strokeStyle = index < 2 ? state.accent : state.subAccent;
     ctx.lineWidth = 2;
-    roundedStroke(x, y, slotW, slotH, 12);
+    roundedStroke(x, yy, slotW, slotH, 12);
     ctx.fillStyle = "rgba(255,255,255,0.72)";
-    ctx.font = `700 ${Math.round(18 * state.fontScale)}px Rajdhani, sans-serif`;
-    ctx.fillText(label.toUpperCase(), x + 16, y + 30);
+    ctx.font = `700 ${Math.round(Math.min(18, slotH * 0.2) * state.fontScale)}px Rajdhani, sans-serif`;
+    ctx.fillText(label.toUpperCase(), x + 16, yy + Math.max(25, slotH * 0.3));
     ctx.fillStyle = "#ffffff";
-    ctx.font = `${Math.round(32 * state.fontScale)}px Paperlogy, sans-serif`;
-    fitText(value || "-", x + 16, y + slotH - 26, slotW - 32, 32 * state.fontScale);
+    ctx.font = `${Math.round(Math.min(32, slotH * 0.32) * state.fontScale)}px Paperlogy, sans-serif`;
+    fitText(value || "-", x + 16, yy + slotH - Math.max(20, slotH * 0.22), slotW - 32, Math.min(32, slotH * 0.32) * state.fontScale);
   });
 }
 
@@ -599,6 +676,8 @@ function syncControls() {
   $("#tierSelect").value = state.fields.tier;
   $("#accentInput").value = state.accent;
   $("#subAccentInput").value = state.subAccent;
+  $("#bgStartInput").value = state.bgStart;
+  $("#bgEndInput").value = state.bgEnd;
   $("#fontScaleInput").value = Math.round(state.fontScale * 100);
   $("#imageDimInput").value = Math.round(state.imageDim * 100);
   $("#guideToggle").checked = state.guide;
@@ -613,15 +692,17 @@ function syncControls() {
 
 function randomizeTone() {
   const pairs = [
-    ["#13c8b5", "#ffcf5a"],
-    ["#5bd7ff", "#f46b83"],
-    ["#8ee56f", "#f2d06b"],
-    ["#ff7c55", "#8de0d1"],
-    ["#d0f16f", "#62a8ff"],
+    ["#13c8b5", "#ffcf5a", "#071011", "#173735"],
+    ["#5bd7ff", "#f46b83", "#10151b", "#242033"],
+    ["#8ee56f", "#f2d06b", "#10160f", "#24331b"],
+    ["#ff7c55", "#8de0d1", "#171111", "#2c2520"],
+    ["#d0f16f", "#62a8ff", "#11160f", "#182a34"],
   ];
-  const [accent, sub] = pairs[Math.floor(Math.random() * pairs.length)];
+  const [accent, sub, bgStart, bgEnd] = pairs[Math.floor(Math.random() * pairs.length)];
   state.accent = accent;
   state.subAccent = sub;
+  state.bgStart = bgStart;
+  state.bgEnd = bgEnd;
   syncControls();
   draw();
 }
@@ -630,6 +711,8 @@ function resetState() {
   state.background = null;
   state.mainImage = null;
   state.profileImage = null;
+  state.bgStart = "#071011";
+  state.bgEnd = "#173735";
   state.fields.nickname = "루미아의 친구";
   state.fields.handle = "@eternal_return";
   state.fields.mainCharacter = "아야 / 헤이즈";
@@ -660,6 +743,27 @@ function activityValues() {
     return [...base, other];
   }
   return state.chips.activity;
+}
+
+function mixHex(hexA, hexB, amount) {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  const mix = (from, to) => Math.round(from + (to - from) * amount);
+  return rgbToHex(mix(a.r, b.r), mix(a.g, b.g), mix(a.b, b.b));
+}
+
+function hexToRgb(hex) {
+  const value = hex.replace("#", "");
+  const bigint = parseInt(value.length === 3 ? value.split("").map((char) => char + char).join("") : value, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
+}
+
+function rgbToHex(r, g, b) {
+  return `#${[r, g, b].map((value) => value.toString(16).padStart(2, "0")).join("")}`;
 }
 
 init();
