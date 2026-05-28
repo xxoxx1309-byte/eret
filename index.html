@@ -3,16 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>이터널리턴 트친소표 제작기</title>
-    <link rel="stylesheet" href="style.css?v=20260528-finalui5" />
+    <title>LUMIA CARD GEN | 이터널리턴 트친소표 제작기</title>
+    <link rel="stylesheet" href="style.css?v=20260528-neon2" />
   </head>
   <body>
     <header class="topbar">
       <div>
-        <p class="eyebrow">ETERNAL RETURN</p>
-        <h1>트친소표 제작기</h1>
+        <p class="eyebrow">LUMIA CARD GEN</p>
+        <h1>이터널리턴 트친소표 제작기</h1>
       </div>
       <div class="top-actions">
+        <button class="ghost-button" id="randomizeBtn">
+          <i data-lucide="sparkles"></i>
+          톤 맞춤
+        </button>
+        <button class="ghost-button" id="resetBtn">
+          <i data-lucide="rotate-ccw"></i>
+          초기화
+        </button>
         <button class="primary-button" id="downloadBtn">
           <i data-lucide="download"></i>
           PNG 다운로드
@@ -26,6 +34,7 @@
           <div class="group-title">
             <i data-lucide="layout-template"></i>
             <h2>폼</h2>
+            <span>FORM_00</span>
           </div>
           <button class="upload-row" type="button" data-file-target="backgroundInput">
             <span>배경 폼</span>
@@ -43,6 +52,7 @@
           <div class="group-title">
             <i data-lucide="user-round"></i>
             <h2>프로필</h2>
+            <span>ID_01</span>
           </div>
           <label>닉네임<input id="nicknameInput" type="text" maxlength="20" placeholder="예: 루미아의 친구" /></label>
           <label>X 아이디<input id="handleInput" type="text" maxlength="24" placeholder="@username" /></label>
@@ -61,6 +71,7 @@
           <div class="group-title">
             <i data-lucide="shield"></i>
             <h2>게임 정보</h2>
+            <span>DATA_SYNC</span>
           </div>
           <label>티어
             <select id="tierSelect">
@@ -81,7 +92,7 @@
           <div class="chip-field">
             <span>선호 모드</span>
             <div class="chips multi" data-key="modes">
-              <button>일반</button><button>랭크</button><button>코발트</button><button>내전</button>
+              <button>일반</button><button>랭크</button><button>코발트</button><button>스쿼드</button><button>내전</button>
             </div>
           </div>
           <div class="chip-field">
@@ -96,16 +107,22 @@
               <button>즐겜</button><button>빡겜</button><button>랭크</button><button>일겜</button><button>초보환영</button><button>디코</button>
             </div>
           </div>
+          <div class="chip-field">
+            <span>접속 시간대</span>
+            <div class="chips multi" data-key="time">
+              <button>아침</button><button>점심</button><button>저녁</button><button>새벽</button><button>랜덤</button>
+            </div>
+          </div>
         </section>
       </aside>
 
       <section class="stage">
+        <div class="stage-head">
+          <p class="eyebrow">LIVE PREVIEW</p>
+          <strong>실시간 미리보기</strong>
+        </div>
         <div class="canvas-shell">
           <canvas id="profileCanvas" width="1400" height="1400"></canvas>
-        </div>
-        <div class="mini-toolbar">
-          <button id="randomizeBtn"><i data-lucide="sparkles"></i> 톤 맞춤</button>
-          <button id="resetBtn"><i data-lucide="rotate-ccw"></i> 초기화</button>
         </div>
       </section>
 
@@ -114,17 +131,24 @@
           <div class="group-title">
             <i data-lucide="heart"></i>
             <h2>교류</h2>
+            <span>SOCIAL</span>
           </div>
           <div class="chip-field">
             <span>성별</span>
             <div class="chips single" data-key="gender">
-              <button>여</button><button>남</button><button>기타</button>
+              <button>여성</button><button>남성</button><button>비공개</button>
             </div>
           </div>
           <div class="chip-field">
             <span>나이</span>
             <div class="chips single" data-key="age">
-              <button>성인</button><button>청소년</button><button>기타</button>
+              <button>성인</button><button>미성년자</button><button>비공개</button>
+            </div>
+          </div>
+          <div class="chip-field">
+            <span>타장르 언급</span>
+            <div class="chips single" data-key="genre">
+              <button>O</button><button>X</button>
             </div>
           </div>
           <div class="chip-field">
@@ -147,11 +171,12 @@
           <div class="group-title">
             <i data-lucide="palette"></i>
             <h2>스타일</h2>
+            <span>VISUAL</span>
           </div>
-          <label>포인트 색상<input id="accentInput" type="color" value="#13c8b5" /></label>
-          <label>보조 색상<input id="subAccentInput" type="color" value="#ffcf5a" /></label>
-          <label>배경 시작 색상<input id="bgStartInput" type="color" value="#071011" /></label>
-          <label>배경 끝 색상<input id="bgEndInput" type="color" value="#173735" /></label>
+          <label>포인트 색상<input id="accentInput" type="color" value="#ff2d78" /></label>
+          <label>보조 색상<input id="subAccentInput" type="color" value="#00ffcc" /></label>
+          <label>배경 시작 색상<input id="bgStartInput" type="color" value="#050508" /></label>
+          <label>배경 끝 색상<input id="bgEndInput" type="color" value="#1a1a2e" /></label>
           <label>다운로드 폰트
             <select id="canvasFontSelect">
               <option value="Paperozi" style="font-family: Paperozi, sans-serif">페이퍼 로지</option>
@@ -168,7 +193,8 @@
         <section class="control-group">
           <div class="group-title">
             <i data-lucide="images"></i>
-            <h2>캐릭터 슬롯</h2>
+            <h2>실험체 슬롯</h2>
+            <span>SLOTS</span>
           </div>
           <div class="character-picker">
             <div class="character-block">
@@ -183,6 +209,6 @@
     </main>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="app.js?v=20260528-finalui5"></script>
+    <script src="app.js?v=20260528-neon2"></script>
   </body>
 </html>

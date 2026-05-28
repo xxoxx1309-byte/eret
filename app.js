@@ -24,10 +24,10 @@ const CANVAS_FONTS = [
 const state = {
   template: "neon",
   backgroundMode: "default",
-  accent: "#13c8b5",
-  subAccent: "#ffcf5a",
-  bgStart: "#071011",
-  bgEnd: "#173735",
+  accent: "#ff2d78",
+  subAccent: "#00ffcc",
+  bgStart: "#050508",
+  bgEnd: "#1a1a2e",
   canvasFont: "Paperozi",
   fontScale: 1,
   imageDim: 0.28,
@@ -52,6 +52,8 @@ const state = {
     traits: [],
     gender: [],
     age: [],
+    genre: [],
+    time: [],
     activity: [],
     bye: [],
   },
@@ -287,9 +289,9 @@ function getCanvasLayout(w, h) {
     inner,
     content: { x: pad + inner.w * 0.12, title: pad + inner.h * 0.125, w: inner.w * 0.58, h: inner.h * 0.13 },
     profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.31, w: inner.w * 0.64, h: inner.h * 0.27 },
-    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.625, w: inner.w * 0.76, columns: 2 },
+    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.615, w: inner.w * 0.76, columns: 2 },
     memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.91, w: inner.w * 0.64, h: inner.h * 0.052 },
-    slots: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.765, w: inner.w * 0.64, h: inner.h * 0.118 },
+    slots: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.79, w: inner.w * 0.64, h: inner.h * 0.108 },
   };
 }
 
@@ -500,7 +502,9 @@ function drawStatRows(x, y, width) {
     ["MODE", state.chips.modes],
     ["DISCORD", state.chips.voice],
     ["PLAY", state.chips.traits],
-    ["INFO", [...state.chips.gender, ...state.chips.age, ...activityValues()]],
+    ["TIME", state.chips.time],
+    ["INFO", [...state.chips.gender, ...state.chips.age, ...state.chips.genre]],
+    ["ACTIVITY", activityValues()],
     ["BYE", state.chips.bye],
   ];
   const layout = getCanvasLayout(canvas.width, canvas.height);
@@ -508,72 +512,77 @@ function drawStatRows(x, y, width) {
   const gap = 8;
   const columnGap = 10;
   const columnW = (width - columnGap * (columns - 1)) / columns;
-  const baseRowH = Math.max(46, canvas.height * 0.03);
+  const minRowH = Math.max(42, canvas.height * 0.028);
+  const labelW = columnW * (columns > 1 ? 0.3 : 0.24);
+  const pillAreaW = columnW - labelW - 24;
+  const prepared = rows.map(([label, values]) => {
+    const pillLayout = getPillLayout(values, pillAreaW, minRowH - 18);
+    return {
+      label,
+      pillLayout,
+      height: Math.max(minRowH, pillLayout.height + 18),
+    };
+  });
+  const rowHeights = [];
+  prepared.forEach((item, index) => {
+    const row = Math.floor(index / columns);
+    rowHeights[row] = Math.max(rowHeights[row] || minRowH, item.height);
+  });
+  const rowTops = rowHeights.reduce((acc, height, index) => {
+    acc.push(index ? acc[index - 1] + rowHeights[index - 1] + gap : y);
+    return acc;
+  }, []);
 
-  rows.forEach(([label, values], index) => {
+  prepared.forEach(({ label, pillLayout }, index) => {
     const col = index % columns;
     const row = Math.floor(index / columns);
     const xx = x + col * (columnW + columnGap);
-    const yy = y + row * (baseRowH + gap);
-    const pillAreaW = columnW * (columns > 1 ? 0.66 : 0.74);
-    const layout = getPillLayout(values, pillAreaW, baseRowH - 18);
+    const yy = rowTops[row];
+    const rowH = rowHeights[row];
     ctx.fillStyle = "rgba(0,0,0,0.48)";
-    roundedRect(xx, yy, columnW, baseRowH, 12);
+    roundedRect(xx, yy, columnW, rowH, 12);
     ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.06)";
     ctx.lineWidth = 1;
-    roundedStroke(xx, yy, columnW, baseRowH, 12);
+    roundedStroke(xx, yy, columnW, rowH, 12);
     ctx.fillStyle = state.subAccent;
     setCanvasFont((columns > 1 ? 18 : 22) * state.fontScale, 700);
-    ctx.fillText(label, xx + 16, yy + baseRowH * 0.62);
-    drawPills(layout, xx + columnW * (columns > 1 ? 0.3 : 0.24), yy + 9, pillAreaW);
+    ctx.fillText(label, xx + 16, yy + Math.min(rowH * 0.62, 28));
+    drawPills(pillLayout, xx + labelW, yy + 9, pillAreaW);
   });
 }
 
 function getPillLayout(values, width, singleHeight) {
   const rawItems = values.filter(Boolean);
-  setCanvasFont(22 * state.fontScale);
   const gap = 8;
-  const natural = rawItems.map((value) => ({
-    value,
-    width: Math.min(ctx.measureText(value).width + 28, Math.max(42, width * 0.48)),
-  }));
-  const pillH = singleHeight;
-  const visible = [];
-  let used = 0;
+  const pillH = Math.max(22, singleHeight);
+  const fontSize = Math.max(14, Math.round(20 * state.fontScale));
+  setCanvasFont(fontSize);
+  const natural = rawItems.map((value) => {
+    const measured = ctx.measureText(value).width + 24;
+    return {
+      value,
+      width: Math.min(measured, Math.max(42, width)),
+    };
+  });
+  const rows = [];
 
-  natural.forEach((item, index) => {
-    const remaining = natural.length - index - 1;
-    const needsMore = remaining > 0;
-    const moreWidth = needsMore ? 44 + gap : 0;
-    const nextWidth = item.width + (visible.length ? gap : 0);
-    if (used + nextWidth + moreWidth <= width) {
-      visible.push(item);
-      used += nextWidth;
+  natural.forEach((item) => {
+    let current = rows[rows.length - 1];
+    if (!current || rowWidth([...current, item], gap) > width) {
+      current = [];
+      rows.push(current);
     }
+    current.push(item);
   });
 
-  const hidden = Math.max(0, natural.length - visible.length);
-  if (!visible.length && hidden) {
-    visible.push({
-      value: `+${hidden}`,
-      width: Math.min(44, width),
-      isMore: true,
-    });
-    return { rows: [visible], height: pillH, pillH, gap };
-  }
-
-  if (hidden) {
-    const more = {
-      value: `+${hidden}`,
-      width: 44,
-      isMore: true,
-    };
-    while (visible.length && rowWidth([...visible, more], gap) > width) visible.pop();
-    visible.push(more);
-  }
-
-  return { rows: [visible], height: pillH, pillH, gap };
+  return {
+    rows,
+    height: rows.length ? rows.length * pillH + Math.max(0, rows.length - 1) * gap : pillH,
+    pillH,
+    gap,
+    fontSize,
+  };
 }
 
 function drawPills(layout, x, y, width) {
@@ -586,11 +595,11 @@ function drawPills(layout, x, y, width) {
     row.forEach((item) => {
       const pillW = item.width * scale;
       const yy = y + rowIndex * (layout.pillH + layout.gap);
-      ctx.fillStyle = colorWithAlpha(state.accent, item.isMore ? 0.52 : 0.36);
+      ctx.fillStyle = colorWithAlpha(state.accent, 0.36);
       roundedRect(cursor, yy, pillW, layout.pillH, 8);
       ctx.fill();
       ctx.fillStyle = "#ffffff";
-      const fontSize = Math.max(16, Math.round(22 * state.fontScale * Math.min(1, scale + 0.08)));
+      const fontSize = Math.max(13, Math.round(layout.fontSize * Math.min(1, scale + 0.08)));
       setCanvasFont(fontSize);
       fitText(item.value, cursor + 16 * scale, yy + layout.pillH * 0.68, Math.max(20, pillW - 32 * scale), fontSize);
       cursor += pillW + layout.gap;
@@ -744,8 +753,28 @@ function colorWithAlpha(hex, alpha) {
 async function downloadPng() {
   await loadCanvasFont();
   draw();
+  const fileName = `eret-profile-${Date.now()}.png`;
   const link = document.createElement("a");
-  link.download = `eret-profile-${Date.now()}.png`;
+  link.download = fileName;
+
+  if (canvas.toBlob) {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        downloadFromDataUrl(link);
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, "image/png");
+    return;
+  }
+
+  downloadFromDataUrl(link);
+}
+
+function downloadFromDataUrl(link) {
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
@@ -788,11 +817,11 @@ function randomizeTone() {
   }
 
   const pairs = [
-    ["#13c8b5", "#ffcf5a", "#071011", "#173735"],
-    ["#5bd7ff", "#f46b83", "#10151b", "#242033"],
-    ["#8ee56f", "#f2d06b", "#10160f", "#24331b"],
-    ["#ff7c55", "#8de0d1", "#171111", "#2c2520"],
-    ["#d0f16f", "#62a8ff", "#11160f", "#182a34"],
+    ["#ff2d78", "#00ffcc", "#050508", "#1a1a2e"],
+    ["#5bd7ff", "#f46b83", "#080914", "#242033"],
+    ["#8ee56f", "#ffe04a", "#081008", "#1d2b16"],
+    ["#ff7c55", "#8de0d1", "#120808", "#2c2520"],
+    ["#d0f16f", "#62a8ff", "#0a0d0a", "#182a34"],
   ];
   const [accent, sub, bgStart, bgEnd] = pairs[Math.floor(Math.random() * pairs.length)];
   state.accent = accent;
@@ -948,9 +977,12 @@ function resetState() {
   state.profileImage = null;
   setUploadName("background", "선택 안 함");
   setUploadName("profileImage", "선택 안 함");
-  state.bgStart = "#071011";
-  state.bgEnd = "#173735";
+  state.accent = "#ff2d78";
+  state.subAccent = "#00ffcc";
+  state.bgStart = "#050508";
+  state.bgEnd = "#1a1a2e";
   state.canvasFont = "Paperozi";
+  state.fontScale = 1;
   state.imageDim = 0.28;
   state.fields.nickname = "";
   state.fields.handle = "";
@@ -969,6 +1001,8 @@ function resetState() {
     traits: [],
     gender: [],
     age: [],
+    genre: [],
+    time: [],
     activity: [],
     bye: [],
   };
