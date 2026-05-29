@@ -374,10 +374,10 @@ function getCanvasLayout(w, h) {
     pad,
     inner,
     content: { x: pad + inner.w * 0.12, title: pad + inner.h * 0.125, w: inner.w * 0.58, h: inner.h * 0.13 },
-    profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.31, w: inner.w * 0.64, h: inner.h * 0.27 },
-    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.585, w: inner.w * 0.76, columns: 2 },
-    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.94, w: inner.w * 0.64, h: inner.h * 0.048 },
-    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.815, w: inner.w * 0.68, h: inner.h * 0.112 },
+    profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.305, w: inner.w * 0.64, h: inner.h * 0.245 },
+    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.59, w: inner.w * 0.76, columns: 2 },
+    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.935, w: inner.w * 0.64, h: inner.h * 0.048 },
+    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.805, w: inner.w * 0.68, h: inner.h * 0.118 },
   };
 }
 
@@ -595,10 +595,10 @@ function drawStatRows(x, y, width) {
   ];
   const layout = getCanvasLayout(canvas.width, canvas.height);
   const columns = layout.stat.columns || 1;
-  const gap = 6;
-  const columnGap = 10;
+  const gap = 7;
+  const columnGap = 12;
   const columnW = (width - columnGap * (columns - 1)) / columns;
-  const minRowH = Math.max(36, canvas.height * 0.024);
+  const minRowH = Math.max(38, canvas.height * 0.025);
   const labelW = columnW * (columns > 1 ? 0.3 : 0.24);
   const pillAreaW = columnW - labelW - 24;
   const prepared = rows.map(([label, values]) => {
@@ -606,7 +606,7 @@ function drawStatRows(x, y, width) {
     return {
       label,
       pillLayout,
-      height: Math.max(minRowH, pillLayout.height + 18),
+      height: Math.max(minRowH, pillLayout.height + 16),
     };
   });
   const rowHeights = [];
@@ -634,7 +634,7 @@ function drawStatRows(x, y, width) {
     ctx.fillStyle = state.subAccent;
     setCanvasFont((columns > 1 ? 18 : 22) * state.fontScale, 700);
     ctx.fillText(label, xx + 16, yy + Math.min(rowH * 0.62, 28));
-    drawPills(pillLayout, xx + labelW, yy + 7, pillAreaW);
+    drawPills(pillLayout, xx + labelW, yy + 8, pillAreaW);
   });
 }
 
