@@ -375,9 +375,9 @@ function getCanvasLayout(w, h) {
     inner,
     content: { x: pad + inner.w * 0.12, title: pad + inner.h * 0.125, w: inner.w * 0.58, h: inner.h * 0.13 },
     profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.31, w: inner.w * 0.64, h: inner.h * 0.27 },
-    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.615, w: inner.w * 0.76, columns: 2 },
-    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.93, w: inner.w * 0.64, h: inner.h * 0.052 },
-    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.765, w: inner.w * 0.68, h: inner.h * 0.152 },
+    stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.595, w: inner.w * 0.76, columns: 2 },
+    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.935, w: inner.w * 0.64, h: inner.h * 0.052 },
+    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.785, w: inner.w * 0.68, h: inner.h * 0.142 },
   };
 }
 
