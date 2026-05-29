@@ -2039,8 +2039,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 6,
     "skinName": "????? ? ???",
-    "file": "Li_Dailin_Mini_06_face.png",
-    "url": "essets/characters/Li_Dailin_Mini_06_face.png"
+    "file": "Li_Dailin_Mini_06_face_final.png",
+    "url": "essets/characters/Li_Dailin_Mini_06_face_final.png"
   },
   {
     "character": "Li Dailin",
@@ -2057,8 +2057,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 7,
     "skinName": "? ? ? ???",
-    "file": "Li_Dailin_Mini_07_face.png",
-    "url": "essets/characters/Li_Dailin_Mini_07_face.png"
+    "file": "Li_Dailin_Mini_07_face_final.png",
+    "url": "essets/characters/Li_Dailin_Mini_07_face_final.png"
   },
   {
     "character": "Rio",
@@ -2696,8 +2696,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 1,
     "skinName": "??? ??? ???",
-    "file": "Mirka_Mini_01_face.png",
-    "url": "essets/characters/Mirka_Mini_01_face.png"
+    "file": "Mirka_Mini_01_face_final.png",
+    "url": "essets/characters/Mirka_Mini_01_face_final.png"
   },
   {
     "character": "Vanya",
@@ -4118,8 +4118,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 6,
     "skinName": "????? ???",
-    "file": "Sissela_Mini_06_face.png",
-    "url": "essets/characters/Sissela_Mini_06_face.png"
+    "file": "Sissela_Mini_06_face_final.png",
+    "url": "essets/characters/Sissela_Mini_06_face_final.png"
   },
   {
     "character": "Silvia",
@@ -5000,8 +5000,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 4,
     "skinName": "????? ???",
-    "file": "Isol_Mini_04_face.png",
-    "url": "essets/characters/Isol_Mini_04_face.png"
+    "file": "Isol_Mini_04_face_final.png",
+    "url": "essets/characters/Isol_Mini_04_face_final.png"
   },
   {
     "character": "Isaac",
@@ -7592,8 +7592,8 @@ window.CHARACTER_ASSETS = [
     "variant": "Mini",
     "skin": 4,
     "skinName": "??? ???",
-    "file": "Camilo_Mini_04_face.png",
-    "url": "essets/characters/Camilo_Mini_04_face.png"
+    "file": "Camilo_Mini_04_face_final.png",
+    "url": "essets/characters/Camilo_Mini_04_face_final.png"
   },
   {
     "character": "Katja",
