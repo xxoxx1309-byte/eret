@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>이터널리턴 트친소표 제작기</title>
-    <link rel="stylesheet" href="style.css?v=20260528-neon2" />
+    <link rel="stylesheet" href="style.css?v=20260529-readflow1" />
   </head>
   <body>
     <header class="topbar">
       <div>
-        <p class="eyebrow">LUMIA CARD GEN</p>
+        <p class="eyebrow">이터리고?</p>
         <h1>이터널리턴 트친소표 제작기</h1>
         <p class="creator-credit">created by 11lolol11__ · @ER__etet</p>
       </div>
@@ -47,6 +47,11 @@
             <button data-bg-mode="solid">단색</button>
             <button data-bg-mode="image">이미지</button>
           </div>
+          <div class="crop-controls" data-image-adjust="background">
+            <label>배경 가로 위치<input id="backgroundPosXInput" type="range" min="-100" max="100" value="0" /></label>
+            <label>배경 세로 위치<input id="backgroundPosYInput" type="range" min="-100" max="100" value="0" /></label>
+            <label>배경 확대/크롭<input id="backgroundZoomInput" type="range" min="100" max="260" value="100" /></label>
+          </div>
         </section>
 
         <section class="control-group">
@@ -55,16 +60,21 @@
             <h2>프로필</h2>
             <span>ID_01</span>
           </div>
-          <label>닉네임<input id="nicknameInput" type="text" maxlength="20" placeholder="예: 루미아의 친구" /></label>
-          <label>X 아이디<input id="handleInput" type="text" maxlength="24" placeholder="@username" /></label>
-          <label>캐치프레이즈<input id="catchphraseInput" type="text" maxlength="32" placeholder="예: 오늘도 루미아섬에서 만나요" /></label>
-          <label>한 줄 소개<textarea id="bioInput" maxlength="72" rows="3" placeholder="같이 게임할 친구를 찾고 있어요."></textarea></label>
+          <label>닉네임<input id="nicknameInput" type="text" maxlength="20" /></label>
+          <label>X 아이디<input id="handleInput" type="text" maxlength="24" /></label>
+          <label>캐치프레이즈<input id="catchphraseInput" type="text" maxlength="32" /></label>
+          <label>한 줄 소개<textarea id="bioInput" maxlength="72" rows="3"></textarea></label>
           <div class="upload-pair">
             <button class="upload-row" type="button" data-file-target="profileImageInput">
               <span>메인 프로필 이미지</span>
               <strong id="profileImageFileName">선택 안 함</strong>
             </button>
             <input class="file-input" id="profileImageInput" type="file" accept="image/*" />
+          </div>
+          <div class="crop-controls" data-image-adjust="profileImage">
+            <label>프로필 가로 위치<input id="profileImagePosXInput" type="range" min="-100" max="100" value="0" /></label>
+            <label>프로필 세로 위치<input id="profileImagePosYInput" type="range" min="-100" max="100" value="0" /></label>
+            <label>프로필 확대/크롭<input id="profileImageZoomInput" type="range" min="100" max="260" value="100" /></label>
           </div>
         </section>
 
@@ -93,25 +103,25 @@
           <div class="chip-field">
             <span>선호 모드</span>
             <div class="chips multi" data-key="modes">
-              <button>일반</button><button>랭크</button><button>코발트</button><button>스쿼드</button><button>내전</button>
+              <button>일반</button><button>랭크</button><button>코발트</button><button>내전</button>
             </div>
           </div>
           <div class="chip-field">
             <span>디스코드</span>
             <div class="chips single" data-key="voice">
-              <button>듣기</button><button>말하기</button><button>전부</button><button>미사용</button>
+              <button>사용</button><button>미사용</button><button>듣코만</button>
             </div>
           </div>
           <div class="chip-field">
             <span>성향</span>
             <div class="chips multi" data-key="traits">
-              <button>즐겜</button><button>빡겜</button><button>랭크</button><button>일겜</button><button>초보환영</button><button>디코</button>
+              <button>즐겜</button><button>빡겜</button><button>랭크만 빡겜</button>
             </div>
           </div>
           <div class="chip-field">
             <span>접속 시간대</span>
             <div class="chips multi" data-key="time">
-              <button>아침</button><button>점심</button><button>저녁</button><button>새벽</button><button>랜덤</button>
+              <button>오전</button><button>오후</button><button>밤</button><button>상시</button><button>랜덤</button>
             </div>
           </div>
         </section>
@@ -158,14 +168,14 @@
               <button>연성</button><button>소비</button><button>흔적</button><button>일상</button><button>기타</button>
             </div>
           </div>
-          <label>활동 기타<input id="activityOtherInput" type="text" maxlength="48" placeholder="예: 대회 관전, 그림, 친선" /></label>
+          <label>활동 기타<input id="activityOtherInput" type="text" maxlength="48" /></label>
           <div class="chip-field">
             <span>이별</span>
             <div class="chips single" data-key="bye">
               <button>블락</button><button>블언블</button><button>언팔</button>
             </div>
           </div>
-          <label>메모<textarea id="memoInput" maxlength="96" rows="4" placeholder="접속 시간, 좋아하는 플레이, 지뢰 요소 등을 적어보세요."></textarea></label>
+          <label>메모<textarea id="memoInput" maxlength="96" rows="4"></textarea></label>
         </section>
 
         <section class="control-group">
@@ -180,11 +190,19 @@
           <label>배경 끝 색상<input id="bgEndInput" type="color" value="#1a1a2e" /></label>
           <label>다운로드 폰트
             <select id="canvasFontSelect">
+              <option value="NotGothicButGoding" style="font-family: NotGothicButGoding, sans-serif">고딕 아니고 고딩</option>
+              <option value="NanumSquare" style="font-family: NanumSquare, sans-serif">나눔스퀘어</option>
+              <option value="Netmarble" style="font-family: Netmarble, sans-serif">넷마블체</option>
+              <option value="NexonLv2Gothic" style="font-family: NexonLv2Gothic, sans-serif">넥슨 Lv.2 고딕</option>
+              <option value="JoseonGulim" style="font-family: JoseonGulim, sans-serif">조선 굴림체</option>
+              <option value="ChosunIlboMyungjo" style="font-family: ChosunIlboMyungjo, serif">조선일보명조체</option>
               <option value="Paperozi" style="font-family: Paperozi, sans-serif">페이퍼 로지</option>
               <option value="Pretendard" style="font-family: Pretendard, sans-serif">프리텐다드</option>
-              <option value="ChosunIlboMyungjo" style="font-family: ChosunIlboMyungjo, serif">조선일보명조체</option>
+              <option value="GMarketSans" style="font-family: GMarketSans, sans-serif">G마켓 산스</option>
+              <option value="KoPubWorld Dotum" style="font-family: 'KoPubWorld Dotum', sans-serif">KoPub 돋움</option>
+              <option value="KoPubWorld Batang" style="font-family: 'KoPubWorld Batang', serif">KoPub 바탕</option>
               <option value="Mona12" style="font-family: Mona12, monospace">Mona12</option>
-              <option value="MitmiFont" style="font-family: MitmiFont, sans-serif">밑미 폰트</option>
+              <option value="Wanted Sans Variable" style="font-family: 'Wanted Sans Variable', sans-serif">Wanted Sans</option>
             </select>
           </label>
           <label>글자 크기<input id="fontScaleInput" type="range" min="85" max="120" value="100" /></label>
@@ -199,20 +217,12 @@
           </div>
           <div class="character-picker">
             <div class="character-block">
-              <label>주캐<input id="mainCharactersInput" type="text" maxlength="42" placeholder="예: 아야, 레녹스, 헤이즈" /></label>
-              <label>주캐 스킨
-                <select id="mainCharacterAssetSelect">
-                  <option value="">선택 안 함</option>
-                </select>
-              </label>
+              <label>주캐<input id="mainCharactersInput" type="text" maxlength="42" /></label>
+              <div class="skin-selects" id="mainCharacterSkinSelects"></div>
             </div>
             <div class="character-block">
-              <label>애정캐<input id="loveCharactersInput" type="text" maxlength="42" placeholder="예: 엠마, 리오, 프리야" /></label>
-              <label>애정캐 스킨
-                <select id="loveCharacterAssetSelect">
-                  <option value="">선택 안 함</option>
-                </select>
-              </label>
+              <label>애정캐<input id="loveCharactersInput" type="text" maxlength="42" /></label>
+              <div class="skin-selects" id="loveCharacterSkinSelects"></div>
             </div>
           </div>
         </section>
@@ -220,7 +230,7 @@
     </main>
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="character-assets.js?v=20260529-all-assets1"></script>
-    <script src="app.js?v=20260529-all-assets1"></script>
+    <script src="character-assets.js?v=20260529-skinfix2"></script>
+    <script src="app.js?v=20260529-facecrop2"></script>
   </body>
 </html>
