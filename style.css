@@ -1,4 +1,7 @@
 @import url("https://cdn.jsdelivr.net/gh/MonadABXY/mona-font/web/mona.css");
+@import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+@import url("https://cdn.jsdelivr.net/npm/font-kopubworld@1.0.3/css/all.min.css");
 
 @font-face {
   font-family: "Paperozi";
@@ -134,8 +137,78 @@
 }
 
 @font-face {
-  font-family: "MitmiFont";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2") format("woff2");
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff") format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GMarketSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JoseonGulim";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Netmarble";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleL.woff") format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Netmarble";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleM.woff") format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Netmarble";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleB.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NexonLv2Gothic";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON%20Lv2%20Gothic%20Light.woff") format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NexonLv2Gothic";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON%20Lv2%20Gothic.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NexonLv2Gothic";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON%20Lv2%20Gothic%20Bold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NotGothicButGoding";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_05@1.0/Gothic_Goding.woff") format("woff");
   font-weight: normal;
   font-display: swap;
 }
@@ -153,8 +226,8 @@
   --tertiary: #ffe04a;
   --danger: #ff6f7d;
   --radius: 4px;
-  --font-ui: "Pretendard", "Paperozi", system-ui, sans-serif;
-  --font-tech: "Mona12", "Pretendard", system-ui, sans-serif;
+  --font-ui: "Pretendard", "Wanted Sans Variable", "Paperozi", system-ui, sans-serif;
+  --font-tech: "Mona12", "Wanted Sans Variable", "Pretendard", system-ui, sans-serif;
 }
 
 * {
@@ -263,7 +336,7 @@ h2 {
   align-items: center;
   gap: 9px;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .icon-button,
@@ -374,6 +447,7 @@ svg {
 .group-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 14px;
   padding-bottom: 9px;
@@ -397,11 +471,13 @@ svg {
 label,
 .chip-field {
   display: grid;
+  justify-items: stretch;
   gap: 7px;
   margin: 10px 0;
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
+  text-align: left;
 }
 
 input[type="text"],
@@ -413,8 +489,27 @@ textarea {
   background: rgba(0, 0, 0, 0.42);
   color: var(--text);
   padding: 10px 11px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
   outline: none;
   transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+select {
+  text-align-last: left;
+}
+
+select option,
+select optgroup {
+  background: #0b0b12;
+  color: var(--text);
+  text-align: left;
+}
+
+select optgroup {
+  color: var(--sub);
+  font-weight: 900;
 }
 
 input[type="text"]:focus,
@@ -437,11 +532,13 @@ input[type="color"] {
   border-radius: var(--radius);
   background: rgba(0, 0, 0, 0.42);
   padding: 4px;
+  cursor: pointer;
 }
 
 input[type="range"] {
   accent-color: var(--accent);
   width: 100%;
+  cursor: pointer;
 }
 
 .upload-row {
@@ -470,7 +567,7 @@ input[type="range"] {
 }
 
 .upload-row strong {
-  max-width: 52%;
+  max-width: 58%;
   min-height: 26px;
   padding: 4px 8px;
   border-radius: 6px;
@@ -486,8 +583,29 @@ input[type="range"] {
 
 .upload-pair {
   display: grid;
+  justify-items: stretch;
   gap: 8px;
   margin-top: 10px;
+}
+
+.crop-controls {
+  display: none;
+  justify-items: stretch;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.crop-controls.is-visible {
+  display: grid;
+}
+
+.crop-controls label {
+  width: 100%;
+  margin: 0;
 }
 
 .character-picker {
@@ -504,15 +622,32 @@ input[type="range"] {
   margin: 0;
 }
 
+.skin-selects {
+  display: grid;
+  gap: 8px;
+}
+
+.skin-selects:empty {
+  display: none;
+}
+
+.skin-selects label {
+  margin: 0;
+}
+
 .segmented,
 .chips {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 7px;
 }
 
 .segmented button,
 .chips button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(0, 0, 0, 0.38);
