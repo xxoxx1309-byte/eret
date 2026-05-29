@@ -365,6 +365,7 @@ function draw() {
   drawFrame(w, h, layout);
   drawProfileImage(layout.profileImage);
   drawContent(w, h, layout);
+  drawCreatorCredit(w, h, layout);
 }
 
 function getCanvasLayout(w, h) {
@@ -501,6 +502,17 @@ function drawFrame(w, h, layout) {
   ctx.strokeStyle = "rgba(255,255,255,0.45)";
   ctx.lineWidth = 1;
   ctx.strokeRect(pad + 14, pad + 14, w - (pad + 14) * 2, h - (pad + 14) * 2);
+  ctx.restore();
+}
+
+function drawCreatorCredit(w, h, layout) {
+  const pad = Math.round(layout.pad * 0.78);
+  ctx.save();
+  ctx.textAlign = "right";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "rgba(255,255,255,0.46)";
+  setCanvasFont(16 * state.fontScale, 700);
+  ctx.fillText("created by 11lolol11__ · @ER__etet", w - pad - 18, h - pad - 18);
   ctx.restore();
 }
 
