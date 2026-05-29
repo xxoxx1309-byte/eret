@@ -21,6 +21,9 @@ const CANVAS_FONTS = [
   { value: "MitmiFont", label: "밑미 폰트" },
 ];
 
+const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
+const imageBoundsCache = new WeakMap();
+
 const state = {
   template: "neon",
   backgroundMode: "default",
@@ -45,6 +48,8 @@ const state = {
   characters: {
     mainText: "",
     loveText: "",
+    mainAsset: null,
+    loveAsset: null,
   },
   chips: {
     modes: [],
@@ -167,6 +172,8 @@ function populateCanvasFontSelect() {
 }
 
 function bindCharacterControls() {
+  populateCharacterAssetSelects();
+
   $("#mainCharactersInput").addEventListener("input", (event) => {
     state.characters.mainText = event.target.value;
     draw();
@@ -176,6 +183,85 @@ function bindCharacterControls() {
     state.characters.loveText = event.target.value;
     draw();
   });
+
+  $("#mainCharacterAssetSelect").addEventListener("change", (event) => {
+    loadCharacterAsset("main", event.target.value);
+  });
+
+  $("#loveCharacterAssetSelect").addEventListener("change", (event) => {
+    loadCharacterAsset("love", event.target.value);
+  });
+}
+
+function populateCharacterAssetSelects() {
+  const selects = [$("#mainCharacterAssetSelect"), $("#loveCharacterAssetSelect")].filter(Boolean);
+  if (!selects.length) return;
+
+  const halfAssets = CHARACTER_ASSETS
+    .filter((asset) => asset.variant === "Half")
+    .sort((a, b) => assetLabel(a).localeCompare(assetLabel(b), "ko") || a.skin - b.skin);
+  const grouped = halfAssets.reduce((groups, asset) => {
+    const label = assetLabel(asset);
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push(asset);
+    return groups;
+  }, new Map());
+
+  selects.forEach((select) => {
+    select.innerHTML = "";
+    const empty = document.createElement("option");
+    empty.value = "";
+    empty.textContent = "선택 안 함";
+    select.append(empty);
+
+    grouped.forEach((assets, label) => {
+      const group = document.createElement("optgroup");
+      group.label = label;
+      assets.forEach((asset) => {
+        const option = document.createElement("option");
+        option.value = asset.url;
+        option.textContent = skinLabel(asset);
+        group.append(option);
+      });
+      select.append(group);
+    });
+  });
+}
+
+function assetLabel(asset) {
+  return asset?.label || asset?.character || "";
+}
+
+function skinLabel(asset) {
+  return asset?.skinName || (asset?.skin ? `스킨 ${asset.skin}` : "기본");
+}
+
+function loadCharacterAsset(type, url) {
+  const key = `${type}Asset`;
+  if (!url) {
+    state.characters[key] = null;
+    draw();
+    return;
+  }
+
+  const asset = CHARACTER_ASSETS.find((item) => item.url === url);
+  if (!asset) return;
+
+  const image = new Image();
+  state.characters[key] = { ...asset, image, loaded: false };
+  image.onload = () => {
+    const current = state.characters[key];
+    if (current?.url === url) {
+      current.loaded = true;
+      draw();
+    }
+  };
+  image.onerror = () => {
+    if (state.characters[key]?.url === url) state.characters[key] = null;
+    draw();
+  };
+  image.src = asset.url;
+  draw();
 }
 
 function canvasFontStack() {
@@ -290,8 +376,8 @@ function getCanvasLayout(w, h) {
     content: { x: pad + inner.w * 0.12, title: pad + inner.h * 0.125, w: inner.w * 0.58, h: inner.h * 0.13 },
     profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.31, w: inner.w * 0.64, h: inner.h * 0.27 },
     stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.615, w: inner.w * 0.76, columns: 2 },
-    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.91, w: inner.w * 0.64, h: inner.h * 0.052 },
-    slots: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.79, w: inner.w * 0.64, h: inner.h * 0.108 },
+    memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.93, w: inner.w * 0.64, h: inner.h * 0.052 },
+    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.765, w: inner.w * 0.68, h: inner.h * 0.152 },
   };
 }
 
@@ -613,7 +699,7 @@ function rowWidth(row, gap) {
 
 function drawCharacterSlots(w, h, layout) {
   const { x, y, w: boxW, h: boxH } = layout.slots;
-  drawGlassPanel(x, y, boxW, boxH, 18, 0.46);
+  drawGlassPanel(x, y, boxW, boxH, 18, 0.5);
   ctx.strokeStyle = colorWithAlpha(state.accent, 0.72);
   ctx.lineWidth = 2;
   roundedStroke(x, y, boxW, boxH, 18);
@@ -626,37 +712,77 @@ function drawCharacterSlots(w, h, layout) {
 
   const mainValues = characterDisplayValues("main");
   const loveValues = characterDisplayValues("love");
-  const sectionGap = Math.max(8, boxH * 0.06);
-  const sectionY = y + Math.max(42, boxH * 0.28);
-  const sectionH = (boxH - (sectionY - y) - sectionGap - 16) / 2;
-  drawCharacterLine("주캐", mainValues, x + 18, sectionY, boxW - 36, sectionH, state.accent);
-  drawCharacterLine("애정캐", loveValues, x + 18, sectionY + sectionH + sectionGap, boxW - 36, sectionH, state.subAccent);
+  const cardGap = 14;
+  const cardY = y + Math.max(42, boxH * 0.22);
+  const cardH = boxH - (cardY - y) - 16;
+  const cardW = (boxW - 36 - cardGap) / 2;
+  drawCharacterLine("주캐", mainValues, x + 18, cardY, cardW, cardH, state.accent);
+  drawCharacterLine("애정캐", loveValues, x + 18 + cardW + cardGap, cardY, cardW, cardH, state.subAccent);
   ctx.textBaseline = "alphabetic";
 }
 
 function characterDisplayValues(type) {
-  return splitCommaValues(state.characters[`${type}Text`]).slice(0, 3);
+  const typed = splitCommaValues(state.characters[`${type}Text`]).slice(0, 3);
+  const selected = state.characters[`${type}Asset`];
+  if (typed.length || !selected) return typed;
+  return [assetLabel(selected)];
 }
 
 function drawCharacterLine(label, values, x, y, width, height, accent) {
-  ctx.fillStyle = colorWithAlpha(accent, 0.24);
+  const asset = label === "주캐" ? state.characters.mainAsset : state.characters.loveAsset;
+  ctx.fillStyle = colorWithAlpha(accent, 0.18);
   roundedRect(x, y, width, height, 12);
+  ctx.fill();
+  ctx.strokeStyle = colorWithAlpha(accent, 0.38);
+  ctx.lineWidth = 2;
+  roundedStroke(x, y, width, height, 12);
+
+  const pad = Math.max(12, height * 0.08);
+  const imageW = Math.min(width * 0.42, height * 0.86);
+  const imageH = height - pad * 2;
+  const imageX = x + pad;
+  const imageY = y + pad;
+  const textX = imageX + imageW + 14;
+  const textW = x + width - textX - pad;
+
+  ctx.fillStyle = "rgba(0,0,0,0.32)";
+  roundedRect(imageX, imageY, imageW, imageH, 10);
   ctx.fill();
   ctx.strokeStyle = colorWithAlpha(accent, 0.16);
   ctx.lineWidth = 1;
-  roundedStroke(x, y, width, height, 12);
+  roundedStroke(imageX, imageY, imageW, imageH, 10);
+
+  if (asset?.loaded && asset.image) {
+    ctx.save();
+    roundedRect(imageX, imageY, imageW, imageH, 10);
+    ctx.clip();
+    drawNormalizedCharacterImage(asset.image, imageX + 4, imageY + 4, imageW - 8, imageH - 8);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = "rgba(255,255,255,0.42)";
+    setCanvasFont(13 * state.fontScale, 800);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("NO IMAGE", imageX + imageW / 2, imageY + imageH / 2);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+  }
 
   ctx.fillStyle = accent;
-  setCanvasFont(Math.min(18, height * 0.34) * state.fontScale, 800);
-  ctx.fillText(label, x + 16, y + Math.max(10, height * 0.22));
+  setCanvasFont(Math.min(18, height * 0.15) * state.fontScale, 800);
+  ctx.fillText(label, textX, y + pad + 2);
 
-  const text = values.length ? values.join(", ") : "선택 안 함";
-  const labelW = Math.min(width * 0.2, 92);
-  const textX = x + labelW;
-  const textW = width - labelW - 18;
+  const characterText = values.length ? values.join(", ") : asset ? assetLabel(asset) : "선택 안 함";
+  const skinText = asset ? skinLabel(asset) : "";
   ctx.fillStyle = "#ffffff";
-  setCanvasFont(Math.min(22, height * 0.38) * state.fontScale, 600);
-  fitText(text, textX, y + height * 0.34, textW, Math.min(22, height * 0.38) * state.fontScale, 12);
+  setCanvasFont(Math.min(26, height * 0.2) * state.fontScale, 800);
+  fitText(characterText, textX, y + height * 0.47, textW, Math.min(26, height * 0.2) * state.fontScale, 14);
+
+  if (skinText) {
+    ctx.fillStyle = colorWithAlpha("#ffffff", 0.72);
+    setCanvasFont(Math.min(17, height * 0.13) * state.fontScale, 600);
+    fitText(skinText, textX, y + height * 0.68, textW, Math.min(17, height * 0.13) * state.fontScale, 10);
+  }
 }
 
 function drawMemo(box) {
@@ -731,6 +857,83 @@ function drawCoverImage(image, x, y, w, h) {
   ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
 }
 
+function drawContainImage(image, x, y, w, h) {
+  const scale = Math.min(w / image.width, h / image.height);
+  const dw = image.width * scale;
+  const dh = image.height * scale;
+  const dx = x + (w - dw) / 2;
+  const dy = y + h - dh;
+  ctx.drawImage(image, dx, dy, dw, dh);
+}
+
+function drawNormalizedCharacterImage(image, x, y, w, h) {
+  const bounds = getImageContentBounds(image);
+  const sourceW = bounds.sw;
+  const sourceH = bounds.sh;
+  const scale = Math.min(w / sourceW, h / sourceH) * 1.02;
+  const dw = sourceW * scale;
+  const dh = sourceH * scale;
+  const dx = x + (w - dw) / 2;
+  const dy = y + h - dh;
+  ctx.drawImage(image, bounds.sx, bounds.sy, bounds.sw, bounds.sh, dx, dy, dw, dh);
+}
+
+function getImageContentBounds(image) {
+  const cached = imageBoundsCache.get(image);
+  if (cached) return cached;
+
+  const sampleW = 120;
+  const sampleH = Math.max(1, Math.round((image.height / image.width) * sampleW));
+  const sampler = document.createElement("canvas");
+  sampler.width = sampleW;
+  sampler.height = sampleH;
+  const samplerCtx = sampler.getContext("2d", { willReadFrequently: true });
+  if (!samplerCtx) {
+    return { sx: 0, sy: 0, sw: image.width, sh: image.height };
+  }
+
+  samplerCtx.drawImage(image, 0, 0, sampleW, sampleH);
+  const data = samplerCtx.getImageData(0, 0, sampleW, sampleH).data;
+  let minX = sampleW;
+  let minY = sampleH;
+  let maxX = -1;
+  let maxY = -1;
+
+  for (let y = 0; y < sampleH; y += 1) {
+    for (let x = 0; x < sampleW; x += 1) {
+      const index = (y * sampleW + x) * 4;
+      if (data[index + 3] > 20) {
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+  }
+
+  if (maxX < minX || maxY < minY) {
+    const fallback = { sx: 0, sy: 0, sw: image.width, sh: image.height };
+    imageBoundsCache.set(image, fallback);
+    return fallback;
+  }
+
+  const marginX = Math.round((maxX - minX + 1) * 0.04);
+  const marginY = Math.round((maxY - minY + 1) * 0.035);
+  minX = Math.max(0, minX - marginX);
+  minY = Math.max(0, minY - marginY);
+  maxX = Math.min(sampleW - 1, maxX + marginX);
+  maxY = Math.min(sampleH - 1, maxY + marginY);
+
+  const bounds = {
+    sx: (minX / sampleW) * image.width,
+    sy: (minY / sampleH) * image.height,
+    sw: ((maxX - minX + 1) / sampleW) * image.width,
+    sh: ((maxY - minY + 1) / sampleH) * image.height,
+  };
+  imageBoundsCache.set(image, bounds);
+  return bounds;
+}
+
 function roundedRect(x, y, w, h, r) {
   ctx.beginPath();
   ctx.roundRect(x, y, w, h, r);
@@ -789,6 +992,8 @@ function syncControls() {
   $("#tierSelect").value = state.fields.tier;
   $("#mainCharactersInput").value = state.characters.mainText;
   $("#loveCharactersInput").value = state.characters.loveText;
+  $("#mainCharacterAssetSelect").value = state.characters.mainAsset?.url || "";
+  $("#loveCharacterAssetSelect").value = state.characters.loveAsset?.url || "";
   $("#accentInput").value = state.accent;
   $("#subAccentInput").value = state.subAccent;
   $("#bgStartInput").value = state.bgStart;
@@ -994,6 +1199,8 @@ function resetState() {
   state.characters = {
     mainText: "",
     loveText: "",
+    mainAsset: null,
+    loveAsset: null,
   };
   state.chips = {
     modes: [],
