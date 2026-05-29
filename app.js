@@ -30,7 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260529-reupload1";
+const ASSET_CACHE_VERSION = "20260529-characterpos1";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
@@ -913,18 +913,21 @@ function drawCharacterSlots(w, h, layout) {
   ctx.lineWidth = 2;
   roundedStroke(x, y, boxW, boxH, 18);
 
+  const outerPad = Math.max(18, Math.min(26, boxH * 0.16));
+  const titleFontSize = Math.min(19, Math.max(15, boxH * 0.12)) * state.fontScale;
   ctx.textAlign = "left";
-  ctx.textBaseline = "top";
+  ctx.textBaseline = "middle";
   ctx.fillStyle = state.subAccent;
-  setCanvasFont(18 * state.fontScale, 800);
-  ctx.fillText("CHARACTERS", x + 18, y + 15);
+  setCanvasFont(titleFontSize, 800);
+  ctx.fillText("CHARACTERS", x + outerPad, y + outerPad);
 
   const cardGap = 16;
-  const cardY = y + Math.max(34, boxH * 0.22);
-  const cardH = boxH - (cardY - y) - 12;
-  const cardW = (boxW - 36 - cardGap) / 2;
-  drawCharacterLine("주캐", "main", x + 18, cardY, cardW, cardH, state.accent);
-  drawCharacterLine("애정캐", "love", x + 18 + cardW + cardGap, cardY, cardW, cardH, state.subAccent);
+  const cardX = x + outerPad;
+  const cardY = y + outerPad + Math.max(18, titleFontSize * 1.15);
+  const cardH = boxH - (cardY - y) - outerPad;
+  const cardW = (boxW - outerPad * 2 - cardGap) / 2;
+  drawCharacterLine("주캐", "main", cardX, cardY, cardW, cardH, state.accent);
+  drawCharacterLine("애정캐", "love", cardX + cardW + cardGap, cardY, cardW, cardH, state.subAccent);
   ctx.textBaseline = "alphabetic";
 }
 
@@ -936,21 +939,24 @@ function drawCharacterLine(label, type, x, y, width, height, accent) {
   ctx.lineWidth = 2;
   roundedStroke(x, y, width, height, 12);
 
-  const pad = Math.max(9, height * 0.07);
+  const pad = Math.max(11, height * 0.1);
   const names = characterInputValues(type);
   const assets = state.characters[`${type}Assets`];
   const items = [0, 1, 2].map((index) => ({ name: names[index] || "", asset: assets[index] || null }));
 
   ctx.fillStyle = accent;
-  setCanvasFont(Math.min(18, height * 0.16) * state.fontScale, 800);
-  ctx.fillText(label, x + pad, y + pad + 2);
+  const labelFontSize = Math.min(17, Math.max(13, height * 0.16)) * state.fontScale;
+  setCanvasFont(labelFontSize, 800);
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillText(label, x + pad, y + pad + labelFontSize * 0.45);
 
   const visibleItems = items.filter((item) => item.name || item.asset);
   if (!visibleItems.length) return;
 
   const slotCount = clamp(visibleItems.length, 1, 3);
   const slotGap = slotCount === 1 ? 0 : 8;
-  const slotY = y + Math.max(25, height * 0.23);
+  const slotY = y + pad + labelFontSize + Math.max(8, height * 0.05);
   const slotH = height - (slotY - y) - pad;
   const availableW = width - pad * 2;
   const rawSlotW = (availableW - slotGap * (slotCount - 1)) / slotCount;
