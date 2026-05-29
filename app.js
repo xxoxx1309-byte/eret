@@ -30,6 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
+const ASSET_CACHE_VERSION = "20260529-final4";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
@@ -381,7 +382,7 @@ function assetSelectionKey(asset) {
 }
 
 function assetImageUrl(asset) {
-  return `essets/characters/${asset.file}`;
+  return `essets/characters/${encodeURIComponent(asset.file)}?v=${ASSET_CACHE_VERSION}`;
 }
 
 function loadCharacterAsset(type, index, selectionKey) {
