@@ -14,15 +14,32 @@ const ETERNAL_RETURN_CHARACTERS = [
 ];
 
 const CANVAS_FONTS = [
+  { value: "NotGothicButGoding", label: "고딕 아니고 고딩" },
+  { value: "NanumSquare", label: "나눔스퀘어" },
+  { value: "Netmarble", label: "넷마블체" },
+  { value: "NexonLv2Gothic", label: "넥슨 Lv.2 고딕" },
+  { value: "JoseonGulim", label: "조선 굴림체" },
+  { value: "ChosunIlboMyungjo", label: "조선일보명조체" },
   { value: "Paperozi", label: "페이퍼 로지" },
   { value: "Pretendard", label: "프리텐다드" },
-  { value: "ChosunIlboMyungjo", label: "조선일보명조체" },
+  { value: "GMarketSans", label: "G마켓 산스" },
+  { value: "KoPubWorld Dotum", label: "KoPub 돋움" },
+  { value: "KoPubWorld Batang", label: "KoPub 바탕" },
   { value: "Mona12", label: "Mona12" },
-  { value: "MitmiFont", label: "밑미 폰트" },
+  { value: "Wanted Sans Variable", label: "Wanted Sans" },
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
 const imageBoundsCache = new WeakMap();
+const characterHeadBoundsCache = new WeakMap();
+const CHARACTER_FACE_CROPS = {
+  "Li_Dailin_Half_06_wiki.webp": { x: 0.43, y: 0.04, size: 0.24 },
+  "Li_Dailin_Half_07_wiki.webp": { x: 0.4, y: 0.17, size: 0.23 },
+  "Mirka_Half_01_wiki.webp": { x: 0.39, y: 0.05, size: 0.25 },
+  "Sissela_Half_06_wiki.webp": { x: 0.39, y: 0.27, size: 0.25 },
+  "Isol_Half_04_wiki.webp": { x: 0.39, y: 0.06, size: 0.25 },
+  "Camilo_Half_04_wiki.webp": { x: 0.33, y: 0.32, size: 0.25 },
+};
 
 const state = {
   template: "neon",
@@ -36,6 +53,10 @@ const state = {
   imageDim: 0.28,
   background: null,
   profileImage: null,
+  imageAdjust: {
+    background: { x: 0, y: 0, zoom: 100 },
+    profileImage: { x: 0, y: 0, zoom: 100 },
+  },
   fields: {
     nickname: "",
     handle: "",
@@ -48,8 +69,8 @@ const state = {
   characters: {
     mainText: "",
     loveText: "",
-    mainAsset: null,
-    loveAsset: null,
+    mainAssets: [null, null, null],
+    loveAssets: [null, null, null],
   },
   chips: {
     modes: [],
@@ -139,6 +160,7 @@ function bindInputs() {
 
   $("#backgroundInput").addEventListener("change", (event) => loadImage(event, "background"));
   $("#profileImageInput").addEventListener("change", (event) => loadImage(event, "profileImage"));
+  bindImageAdjustControls();
   $$("[data-file-target]").forEach((button) => {
     button.addEventListener("click", () => {
       document.getElementById(button.dataset.fileTarget)?.click();
@@ -158,6 +180,27 @@ function bindInputs() {
   });
 }
 
+function bindImageAdjustControls() {
+  const controlMap = {
+    backgroundPosXInput: ["background", "x"],
+    backgroundPosYInput: ["background", "y"],
+    backgroundZoomInput: ["background", "zoom"],
+    profileImagePosXInput: ["profileImage", "x"],
+    profileImagePosYInput: ["profileImage", "y"],
+    profileImageZoomInput: ["profileImage", "zoom"],
+  };
+
+  Object.entries(controlMap).forEach(([id, [target, key]]) => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.value = state.imageAdjust[target][key];
+    input.addEventListener("input", () => {
+      state.imageAdjust[target][key] = Number(input.value);
+      draw();
+    });
+  });
+}
+
 function populateCanvasFontSelect() {
   const select = $("#canvasFontSelect");
   select.innerHTML = "";
@@ -172,60 +215,156 @@ function populateCanvasFontSelect() {
 }
 
 function bindCharacterControls() {
-  populateCharacterAssetSelects();
+  renderCharacterSkinSelects("main");
+  renderCharacterSkinSelects("love");
 
   $("#mainCharactersInput").addEventListener("input", (event) => {
     state.characters.mainText = event.target.value;
+    trimCharacterAssets("main");
+    renderCharacterSkinSelects("main");
     draw();
   });
 
   $("#loveCharactersInput").addEventListener("input", (event) => {
     state.characters.loveText = event.target.value;
+    trimCharacterAssets("love");
+    renderCharacterSkinSelects("love");
     draw();
-  });
-
-  $("#mainCharacterAssetSelect").addEventListener("change", (event) => {
-    loadCharacterAsset("main", event.target.value);
-  });
-
-  $("#loveCharacterAssetSelect").addEventListener("change", (event) => {
-    loadCharacterAsset("love", event.target.value);
   });
 }
 
-function populateCharacterAssetSelects() {
-  const selects = [$("#mainCharacterAssetSelect"), $("#loveCharacterAssetSelect")].filter(Boolean);
-  if (!selects.length) return;
+function renderCharacterSkinSelects(type) {
+  const container = $(`#${type}CharacterSkinSelects`);
+  if (!container) return;
 
-  const halfAssets = CHARACTER_ASSETS
-    .filter((asset) => asset.variant === "Half")
-    .sort((a, b) => assetLabel(a).localeCompare(assetLabel(b), "ko") || a.skin - b.skin);
-  const grouped = halfAssets.reduce((groups, asset) => {
+  container.innerHTML = "";
+  characterInputValues(type).forEach((name, index) => {
+    const label = document.createElement("label");
+    label.textContent = `${name} 스킨`;
+    const select = document.createElement("select");
+    label.append(select);
+    container.append(label);
+    populateCharacterAssetSelect(select, type, index, name);
+    select.addEventListener("change", (event) => {
+      loadCharacterAsset(type, index, event.target.value);
+    });
+  });
+}
+
+function populateCharacterAssetSelect(select, type, index, name) {
+  const selected = state.characters[`${type}Assets`]?.[index] || null;
+  const query = String(name || "").trim().toLowerCase();
+  const headAssets = matchingCharacterAssets(query);
+
+  select.innerHTML = "";
+  const empty = document.createElement("option");
+  empty.value = "";
+  empty.textContent = "선택 안 함";
+  select.append(empty);
+
+  const grouped = headAssets.reduce((groups, asset) => {
     const label = assetLabel(asset);
     if (!groups.has(label)) groups.set(label, []);
     groups.get(label).push(asset);
     return groups;
   }, new Map());
 
-  selects.forEach((select) => {
-    select.innerHTML = "";
-    const empty = document.createElement("option");
-    empty.value = "";
-    empty.textContent = "선택 안 함";
-    select.append(empty);
+  if (!headAssets.length) {
+    const noResult = document.createElement("option");
+    noResult.value = "";
+    noResult.textContent = "실험체명 확인 필요";
+    noResult.disabled = true;
+    select.append(noResult);
+  }
 
-    grouped.forEach((assets, label) => {
-      const group = document.createElement("optgroup");
-      group.label = label;
-      assets.forEach((asset) => {
-        const option = document.createElement("option");
-        option.value = asset.url;
-        option.textContent = skinLabel(asset);
-        group.append(option);
-      });
-      select.append(group);
+  grouped.forEach((assets, label) => {
+    const group = document.createElement("optgroup");
+    group.label = label;
+    assets.forEach((asset) => {
+      const option = document.createElement("option");
+      option.value = assetSelectionKey(asset);
+      option.textContent = skinLabel(asset);
+      group.append(option);
     });
+    select.append(group);
   });
+
+  const keepsSelected = selected && headAssets.some((asset) => assetSelectionKey(asset) === assetSelectionKey(selected));
+  if (!keepsSelected) state.characters[`${type}Assets`][index] = null;
+  select.value = keepsSelected ? assetSelectionKey(selected) : "";
+}
+
+function characterInputValues(type) {
+  return splitCommaValues(state.characters[`${type}Text`]).slice(0, 3);
+}
+
+function trimCharacterAssets(type) {
+  const names = characterInputValues(type);
+  state.characters[`${type}Assets`] = state.characters[`${type}Assets`].map((asset, index) => {
+    if (!names[index]) return null;
+    return asset && characterMatchesQuery(asset, names[index]) ? asset : null;
+  });
+}
+
+function matchingCharacterAssets(query) {
+  const characterLabel = resolveCharacterLabel(query);
+  if (!characterLabel) return [];
+
+  const variantPriority = { Mini: 0, Half: 1, Full: 2 };
+  const grouped = new Map();
+  CHARACTER_ASSETS
+    .filter((asset) => assetLabel(asset) === characterLabel)
+    .forEach((asset) => {
+      const key = `${assetLabel(asset)}::${asset.skin}`;
+      const current = grouped.get(key);
+      if (!current || variantPriority[asset.variant] < variantPriority[current.variant]) {
+        grouped.set(key, asset);
+      }
+    });
+
+  return [...grouped.values()].sort((a, b) => a.skin - b.skin || skinLabel(a).localeCompare(skinLabel(b), "ko"));
+}
+
+function assetMatchesQuery(asset, query) {
+  const normalized = String(query || "").trim().toLowerCase();
+  const haystack = [
+    asset.character,
+    asset.label,
+    asset.skinName,
+    asset.file,
+  ].filter(Boolean).join(" ").toLowerCase();
+  return haystack.includes(normalized);
+}
+
+function characterMatchesQuery(asset, query) {
+  const characterLabel = resolveCharacterLabel(query);
+  return Boolean(characterLabel && assetLabel(asset) === characterLabel);
+}
+
+function resolveCharacterLabel(query) {
+  const normalized = normalizeSearchText(query);
+  if (!normalized) return "";
+
+  const labels = [...new Set(CHARACTER_ASSETS.map((asset) => assetLabel(asset)).filter(Boolean))];
+  const exact = labels.find((label) => normalizeSearchText(label) === normalized);
+  if (exact) return exact;
+
+  const romanExact = CHARACTER_ASSETS.find((asset) => normalizeSearchText(asset.character) === normalized);
+  if (romanExact) return assetLabel(romanExact);
+
+  const prefixMatches = labels.filter((label) => normalizeSearchText(label).startsWith(normalized));
+  if (prefixMatches.length === 1) return prefixMatches[0];
+
+  const containsMatches = labels.filter((label) => normalizeSearchText(label).includes(normalized));
+  return containsMatches.length === 1 ? containsMatches[0] : "";
+}
+
+function normalizeSearchText(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/&amp;/g, "&")
+    .replace(/[\s&._()[\]{}\-]+/g, "");
 }
 
 function assetLabel(asset) {
@@ -236,36 +375,46 @@ function skinLabel(asset) {
   return asset?.skinName || (asset?.skin ? `스킨 ${asset.skin}` : "기본");
 }
 
-function loadCharacterAsset(type, url) {
-  const key = `${type}Asset`;
-  if (!url) {
-    state.characters[key] = null;
+function assetSelectionKey(asset) {
+  if (!asset) return "";
+  return [asset.character, asset.variant, asset.skin, asset.file].join("::");
+}
+
+function assetImageUrl(asset) {
+  return `essets/characters/${asset.file}`;
+}
+
+function loadCharacterAsset(type, index, selectionKey) {
+  const assetKey = `${type}Assets`;
+  if (!selectionKey) {
+    state.characters[assetKey][index] = null;
     draw();
     return;
   }
 
-  const asset = CHARACTER_ASSETS.find((item) => item.url === url);
+  const asset = CHARACTER_ASSETS.find((item) => assetSelectionKey(item) === selectionKey);
   if (!asset) return;
 
   const image = new Image();
-  state.characters[key] = { ...asset, image, loaded: false };
+  image.decoding = "async";
+  state.characters[assetKey][index] = { ...asset, image, loaded: false };
   image.onload = () => {
-    const current = state.characters[key];
-    if (current?.url === url) {
+    const current = state.characters[assetKey][index];
+    if (assetSelectionKey(current) === assetSelectionKey(asset)) {
       current.loaded = true;
       draw();
     }
   };
   image.onerror = () => {
-    if (state.characters[key]?.url === url) state.characters[key] = null;
+    if (assetSelectionKey(state.characters[assetKey][index]) === assetSelectionKey(asset)) state.characters[assetKey][index] = null;
     draw();
   };
-  image.src = asset.url;
+  image.src = assetImageUrl(asset);
   draw();
 }
 
 function canvasFontStack() {
-  return `"${state.canvasFont}", "Paperozi", system-ui, sans-serif`;
+  return `"${state.canvasFont}", "Pretendard", "Paperozi", system-ui, sans-serif`;
 }
 
 function setCanvasFont(size, weight = 400) {
@@ -314,6 +463,7 @@ function loadImage(event, key) {
     const image = new Image();
     image.onload = () => {
       state[key] = { src: reader.result, image };
+      resetImageAdjust(key);
       if (key === "background") {
         state.backgroundMode = "image";
         syncBackgroundMode();
@@ -334,6 +484,31 @@ function loadImage(event, key) {
   event.target.value = "";
 }
 
+function resetImageAdjust(key) {
+  if (!state.imageAdjust[key]) return;
+  state.imageAdjust[key] = { x: 0, y: 0, zoom: 100 };
+  syncImageAdjustControls(key);
+}
+
+function syncImageAdjustControls(key) {
+  const idMap = {
+    background: {
+      x: "backgroundPosXInput",
+      y: "backgroundPosYInput",
+      zoom: "backgroundZoomInput",
+    },
+    profileImage: {
+      x: "profileImagePosXInput",
+      y: "profileImagePosYInput",
+      zoom: "profileImageZoomInput",
+    },
+  };
+  Object.entries(idMap[key] || {}).forEach(([field, id]) => {
+    const input = document.getElementById(id);
+    if (input) input.value = state.imageAdjust[key][field];
+  });
+}
+
 function setUploadName(key, name) {
   const idMap = {
     background: "backgroundFileName",
@@ -341,6 +516,14 @@ function setUploadName(key, name) {
   };
   const target = document.getElementById(idMap[key]);
   if (target) target.textContent = name || "선택 안 함";
+  syncImageAdjustVisibility();
+}
+
+function syncImageAdjustVisibility() {
+  $$("[data-image-adjust]").forEach((panel) => {
+    const key = panel.dataset.imageAdjust;
+    panel.classList.toggle("is-visible", Boolean(state[key]?.image));
+  });
 }
 
 function draw() {
@@ -350,7 +533,7 @@ function draw() {
   ctx.clearRect(0, 0, w, h);
 
   if (state.backgroundMode === "image" && state.background?.image) {
-    drawCoverImage(state.background.image, 0, 0, w, h);
+    drawCoverImage(state.background.image, 0, 0, w, h, state.imageAdjust.background);
     drawReadableOverlay(w, h);
     ctx.fillStyle = `rgba(0, 0, 0, ${Math.max(0.18, state.imageDim)})`;
     ctx.fillRect(0, 0, w, h);
@@ -378,7 +561,7 @@ function getCanvasLayout(w, h) {
     profileImage: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.305, w: inner.w * 0.64, h: inner.h * 0.245 },
     stat: { x: pad + inner.w * 0.12, y: pad + inner.h * 0.59, w: inner.w * 0.76, columns: 2 },
     memo: { x: pad + inner.w * 0.18, y: pad + inner.h * 0.935, w: inner.w * 0.64, h: inner.h * 0.048 },
-    slots: { x: pad + inner.w * 0.16, y: pad + inner.h * 0.805, w: inner.w * 0.68, h: inner.h * 0.118 },
+    slots: { x: pad + inner.w * 0.13, y: pad + inner.h * 0.77, w: inner.w * 0.74, h: inner.h * 0.15 },
   };
 }
 
@@ -525,17 +708,12 @@ function drawProfileImage(box) {
   roundedRect(x, y, boxW, boxH, 28);
   ctx.clip();
   if (state.profileImage?.image) {
-    drawCoverImage(state.profileImage.image, x, y, boxW, boxH);
+    drawCoverImage(state.profileImage.image, x, y, boxW, boxH, state.imageAdjust.profileImage);
     ctx.fillStyle = "rgba(0,0,0,0.08)";
     ctx.fillRect(x, y, boxW, boxH);
   } else {
     ctx.fillStyle = "rgba(12, 17, 18, 0.34)";
     ctx.fillRect(x, y, boxW, boxH);
-    ctx.fillStyle = "rgba(255,255,255,0.78)";
-    setCanvasFont(Math.min(28, boxH * 0.12) * state.fontScale, 700);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("MAIN PROFILE", x + boxW / 2, y + boxH / 2);
   }
   ctx.restore();
 
@@ -554,36 +732,42 @@ function drawContent(w, h, layout) {
   const leftW = layout.content.w;
   const titleY = layout.content.title;
   const scale = state.fontScale;
-  const hasName = Boolean(state.fields.nickname.trim());
-  const hasHandle = Boolean(state.fields.handle.trim());
-  const hasBio = Boolean(state.fields.bio.trim());
-  const panelTop = titleY - 46 * scale;
-  const panelH = Math.max(
-    86 * scale,
-    (hasName ? 160 : hasHandle ? 118 : 82) * scale + (hasBio ? 56 * scale : 0)
-  );
+  const catchphrase = catchphraseText();
+  const nickname = state.fields.nickname.trim();
+  const handle = state.fields.handle.trim();
+  const bio = state.fields.bio.trim();
+  const hasIdentity = Boolean(catchphrase || nickname || handle || bio);
+  const panelTop = titleY - 44 * scale;
+  const panelH = 206 * scale;
 
-  drawGlassPanel(pad - 22, panelTop, leftW + 44, panelH, 16, 0.38);
-  ctx.strokeStyle = colorWithAlpha(state.accent, 0.16);
-  ctx.lineWidth = 1;
-  roundedStroke(pad - 22, panelTop, leftW + 44, panelH, 16);
+  if (hasIdentity) {
+    drawGlassPanel(pad - 22, panelTop, leftW + 44, panelH, 16, 0.38);
+    ctx.strokeStyle = colorWithAlpha(state.accent, 0.16);
+    ctx.lineWidth = 1;
+    roundedStroke(pad - 22, panelTop, leftW + 44, panelH, 16);
+  }
 
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
+  const innerX = pad;
+  const topLineY = panelTop + 48 * scale;
+  const nameY = panelTop + 112 * scale;
+  const handleY = panelTop + 158 * scale;
+  const bioY = panelTop + 188 * scale;
+
   ctx.fillStyle = state.subAccent;
-  setCanvasFont(32 * scale, 700);
-  fitText(catchphraseText(), pad, titleY, leftW, 32 * scale, 14);
+  setCanvasFont(28 * scale, 700);
+  if (catchphrase) fitText(catchphrase, innerX, topLineY, leftW, 28 * scale, 14);
 
   ctx.fillStyle = "#ffffff";
-  setCanvasFont(68 * scale, 800);
-  if (state.fields.nickname) fitText(state.fields.nickname, pad, titleY + 76 * scale, leftW, 68 * scale);
+  setCanvasFont(58 * scale, 800);
+  if (nickname) fitText(nickname, innerX, nameY, leftW, 58 * scale, 20);
 
   ctx.fillStyle = state.accent;
-  setCanvasFont(36 * scale, 600);
-  if (state.fields.handle) ctx.fillText(state.fields.handle, pad, titleY + (hasName ? 128 : 58) * scale);
+  setCanvasFont(30 * scale, 650);
+  if (handle) fitText(handle, innerX, handleY, leftW, 30 * scale, 16);
 
-  const bioY = titleY + (state.fields.nickname ? 162 : 106) * scale;
-  drawWrappedText(state.fields.bio, pad, bioY, leftW, 34 * scale, 2, "#eef5f4");
+  drawWrappedText(bio, innerX, bioY, leftW, 25 * scale, 1, "#eef5f4");
 
   drawStatRows(layout.stat.x, layout.stat.y, layout.stat.w);
   drawCharacterSlots(w, h, layout);
@@ -591,7 +775,7 @@ function drawContent(w, h, layout) {
 }
 
 function catchphraseText() {
-  return String(state.fields.catchphrase || "").trim() || "오늘도 루미아섬에서 만나요";
+  return String(state.fields.catchphrase || "").trim();
 }
 
 function drawStatRows(x, y, width) {
@@ -607,18 +791,20 @@ function drawStatRows(x, y, width) {
   ];
   const layout = getCanvasLayout(canvas.width, canvas.height);
   const columns = layout.stat.columns || 1;
-  const gap = 7;
+  const gap = 8;
   const columnGap = 12;
   const columnW = (width - columnGap * (columns - 1)) / columns;
   const minRowH = Math.max(38, canvas.height * 0.025);
-  const labelW = columnW * (columns > 1 ? 0.3 : 0.24);
-  const pillAreaW = columnW - labelW - 24;
+  const labelW = columnW * (columns > 1 ? 0.32 : 0.24);
+  const rowPadX = columns > 1 ? 12 : 16;
+  const rowPadY = 7;
+  const pillAreaW = Math.max(40, columnW - labelW - rowPadX * 2);
   const prepared = rows.map(([label, values]) => {
-    const pillLayout = getPillLayout(values, pillAreaW, minRowH - 18);
+    const pillLayout = getPillLayout(values, pillAreaW, minRowH - rowPadY * 2);
     return {
       label,
       pillLayout,
-      height: Math.max(minRowH, pillLayout.height + 16),
+      height: Math.max(minRowH, pillLayout.height + rowPadY * 2),
     };
   });
   const rowHeights = [];
@@ -645,22 +831,26 @@ function drawStatRows(x, y, width) {
     roundedStroke(xx, yy, columnW, rowH, 12);
     ctx.fillStyle = state.subAccent;
     setCanvasFont((columns > 1 ? 18 : 22) * state.fontScale, 700);
-    ctx.fillText(label, xx + 16, yy + Math.min(rowH * 0.62, 28));
-    drawPills(pillLayout, xx + labelW, yy + 8, pillAreaW);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(label, xx + rowPadX, yy + rowH / 2);
+    drawPills(pillLayout, xx + labelW + rowPadX, yy + rowPadY, pillAreaW, rowH - rowPadY * 2);
   });
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
 }
 
 function getPillLayout(values, width, singleHeight) {
   const rawItems = values.filter(Boolean);
   const gap = 6;
-  const pillH = Math.max(22, singleHeight);
-  const fontSize = Math.max(13, Math.round(18 * state.fontScale));
+  const pillH = Math.max(24, singleHeight);
+  const fontSize = Math.max(13, Math.round(16 * state.fontScale));
   setCanvasFont(fontSize);
   const natural = rawItems.map((value) => {
-    const measured = ctx.measureText(value).width + 24;
+    const measured = ctx.measureText(value).width + 22;
     return {
       value,
-      width: Math.min(measured, Math.max(42, width)),
+      width: Math.min(measured, Math.max(44, width)),
     };
   });
   const rows = [];
@@ -683,26 +873,32 @@ function getPillLayout(values, width, singleHeight) {
   };
 }
 
-function drawPills(layout, x, y, width) {
+function drawPills(layout, x, y, width, height = layout.height) {
+  const totalH = layout.height;
+  const startY = y + Math.max(0, (height - totalH) / 2);
   layout.rows.forEach((row, rowIndex) => {
     const available = width - Math.max(0, row.length - 1) * layout.gap;
     const naturalWidth = row.reduce((sum, item) => sum + item.width, 0);
     const scale = naturalWidth > available ? available / naturalWidth : 1;
-    const visibleWidth = naturalWidth * scale + Math.max(0, row.length - 1) * layout.gap;
-    let cursor = x + Math.max(0, (width - visibleWidth) / 2);
+    const scaledRowW = naturalWidth * scale + Math.max(0, row.length - 1) * layout.gap;
+    let cursor = x + Math.max(0, (width - scaledRowW) / 2);
     row.forEach((item) => {
       const pillW = item.width * scale;
-      const yy = y + rowIndex * (layout.pillH + layout.gap);
+      const yy = startY + rowIndex * (layout.pillH + layout.gap);
       ctx.fillStyle = colorWithAlpha(state.accent, 0.36);
       roundedRect(cursor, yy, pillW, layout.pillH, 8);
       ctx.fill();
       ctx.fillStyle = "#ffffff";
       const fontSize = Math.max(13, Math.round(layout.fontSize * Math.min(1, scale + 0.08)));
       setCanvasFont(fontSize);
-      fitText(item.value, cursor + 16 * scale, yy + layout.pillH * 0.68, Math.max(20, pillW - 32 * scale), fontSize);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      fitCenteredText(item.value, cursor + pillW / 2, yy + layout.pillH / 2, Math.max(20, pillW - 14), fontSize, 10);
       cursor += pillW + layout.gap;
     });
   });
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
 }
 
 function rowWidth(row, gap) {
@@ -722,26 +918,16 @@ function drawCharacterSlots(w, h, layout) {
   setCanvasFont(18 * state.fontScale, 800);
   ctx.fillText("CHARACTERS", x + 18, y + 15);
 
-  const mainValues = characterDisplayValues("main");
-  const loveValues = characterDisplayValues("love");
-  const cardGap = 14;
-  const cardY = y + Math.max(36, boxH * 0.24);
+  const cardGap = 16;
+  const cardY = y + Math.max(34, boxH * 0.22);
   const cardH = boxH - (cardY - y) - 12;
   const cardW = (boxW - 36 - cardGap) / 2;
-  drawCharacterLine("주캐", mainValues, x + 18, cardY, cardW, cardH, state.accent);
-  drawCharacterLine("애정캐", loveValues, x + 18 + cardW + cardGap, cardY, cardW, cardH, state.subAccent);
+  drawCharacterLine("주캐", "main", x + 18, cardY, cardW, cardH, state.accent);
+  drawCharacterLine("애정캐", "love", x + 18 + cardW + cardGap, cardY, cardW, cardH, state.subAccent);
   ctx.textBaseline = "alphabetic";
 }
 
-function characterDisplayValues(type) {
-  const typed = splitCommaValues(state.characters[`${type}Text`]).slice(0, 3);
-  const selected = state.characters[`${type}Asset`];
-  if (typed.length || !selected) return typed;
-  return [assetLabel(selected)];
-}
-
-function drawCharacterLine(label, values, x, y, width, height, accent) {
-  const asset = label === "주캐" ? state.characters.mainAsset : state.characters.loveAsset;
+function drawCharacterLine(label, type, x, y, width, height, accent) {
   ctx.fillStyle = colorWithAlpha(accent, 0.18);
   roundedRect(x, y, width, height, 12);
   ctx.fill();
@@ -749,52 +935,79 @@ function drawCharacterLine(label, values, x, y, width, height, accent) {
   ctx.lineWidth = 2;
   roundedStroke(x, y, width, height, 12);
 
-  const pad = Math.max(12, height * 0.08);
-  const imageW = Math.min(width * 0.42, height * 0.86);
-  const imageH = height - pad * 2;
-  const imageX = x + pad;
-  const imageY = y + pad;
-  const textX = imageX + imageW + 14;
-  const textW = x + width - textX - pad;
-
-  ctx.fillStyle = "rgba(0,0,0,0.32)";
-  roundedRect(imageX, imageY, imageW, imageH, 10);
-  ctx.fill();
-  ctx.strokeStyle = colorWithAlpha(accent, 0.16);
-  ctx.lineWidth = 1;
-  roundedStroke(imageX, imageY, imageW, imageH, 10);
-
-  if (asset?.loaded && asset.image) {
-    ctx.save();
-    roundedRect(imageX, imageY, imageW, imageH, 10);
-    ctx.clip();
-    drawNormalizedCharacterImage(asset.image, imageX + 4, imageY + 4, imageW - 8, imageH - 8);
-    ctx.restore();
-  } else {
-    ctx.fillStyle = "rgba(255,255,255,0.42)";
-    setCanvasFont(13 * state.fontScale, 800);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("NO IMAGE", imageX + imageW / 2, imageY + imageH / 2);
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-  }
+  const pad = Math.max(9, height * 0.07);
+  const names = characterInputValues(type);
+  const assets = state.characters[`${type}Assets`];
+  const items = [0, 1, 2].map((index) => ({ name: names[index] || "", asset: assets[index] || null }));
 
   ctx.fillStyle = accent;
-  setCanvasFont(Math.min(18, height * 0.15) * state.fontScale, 800);
-  ctx.fillText(label, textX, y + pad + 2);
+  setCanvasFont(Math.min(18, height * 0.16) * state.fontScale, 800);
+  ctx.fillText(label, x + pad, y + pad + 2);
 
-  const characterText = values.length ? values.join(", ") : asset ? assetLabel(asset) : "선택 안 함";
-  const skinText = asset ? skinLabel(asset) : "";
-  ctx.fillStyle = "#ffffff";
-  setCanvasFont(Math.min(26, height * 0.2) * state.fontScale, 800);
-  fitText(characterText, textX, y + height * 0.47, textW, Math.min(26, height * 0.2) * state.fontScale, 14);
+  const visibleItems = items.filter((item) => item.name || item.asset);
+  if (!visibleItems.length) return;
 
-  if (skinText) {
-    ctx.fillStyle = colorWithAlpha("#ffffff", 0.72);
-    setCanvasFont(Math.min(17, height * 0.13) * state.fontScale, 600);
-    fitText(skinText, textX, y + height * 0.68, textW, Math.min(17, height * 0.13) * state.fontScale, 10);
+  const slotCount = clamp(visibleItems.length, 1, 3);
+  const slotGap = slotCount === 1 ? 0 : 8;
+  const slotY = y + Math.max(25, height * 0.23);
+  const slotH = height - (slotY - y) - pad;
+  const availableW = width - pad * 2;
+  const rawSlotW = (availableW - slotGap * (slotCount - 1)) / slotCount;
+  const slotW = Math.min(rawSlotW, slotH * 1.35);
+  const totalSlotW = slotW * slotCount + slotGap * (slotCount - 1);
+  const startX = x + pad + (availableW - totalSlotW) / 2;
+  visibleItems.forEach((item, index) => {
+    const slotX = startX + index * (slotW + slotGap);
+    drawCharacterMiniSlot(item.name, item.asset, slotX, slotY, slotW, slotH, accent);
+  });
+}
+
+function drawCharacterMiniSlot(name, asset, x, y, width, height, accent) {
+  ctx.fillStyle = "rgba(0,0,0,0.24)";
+  roundedRect(x, y, width, height, 10);
+  ctx.fill();
+  ctx.strokeStyle = colorWithAlpha(accent, 0.18);
+  ctx.lineWidth = 1;
+  roundedStroke(x, y, width, height, 10);
+
+  const hasImage = isRenderableImage(asset);
+  const textAreaH = Math.max(25, height * 0.31);
+  const imageSize = Math.max(34, Math.min(width - 10, height - textAreaH - 8));
+  const imageX = x + (width - imageSize) / 2;
+  const imageY = y + 5;
+  const imageW = imageSize;
+  const imageH = imageSize;
+  if (hasImage) {
+    ctx.save();
+    roundedRect(imageX, imageY, imageW, imageH, 8);
+    ctx.clip();
+    drawCharacterSlotImage(asset, imageX, imageY, imageW, imageH);
+    ctx.restore();
   }
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "#ffffff";
+  const nameSize = Math.min(16, textAreaH * 0.47) * state.fontScale;
+  const skinSize = Math.min(11, textAreaH * 0.34) * state.fontScale;
+  const textY = imageY + imageH + 5;
+  setCanvasFont(nameSize, 800);
+  fitText(name || assetLabel(asset) || "", x + 8, textY, width - 16, nameSize, 10);
+
+  if (asset) {
+    ctx.fillStyle = colorWithAlpha("#ffffff", 0.64);
+    setCanvasFont(skinSize, 600);
+    fitText(skinLabel(asset), x + 8, textY + nameSize + 2, width - 16, skinSize, 8);
+  }
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+}
+
+function isRenderableImage(asset) {
+  return Boolean(
+    asset?.image &&
+    (asset.loaded || (asset.image.complete && asset.image.naturalWidth > 0))
+  );
 }
 
 function drawMemo(box) {
@@ -831,10 +1044,18 @@ function drawGlassPanel(x, y, w, h, r, alpha) {
 function drawWrappedText(text, x, y, width, lineHeight, maxLines, color) {
   ctx.fillStyle = color;
   setCanvasFont(lineHeight * 0.72);
-  const words = String(text || "").split(/\s+/);
+  const words = String(text || "").trim().split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
   words.forEach((word) => {
+    if (ctx.measureText(word).width > width) {
+      if (line) {
+        lines.push(line);
+        line = "";
+      }
+      splitLongWord(word, width).forEach((part) => lines.push(part));
+      return;
+    }
     const test = line ? `${line} ${word}` : word;
     if (ctx.measureText(test).width > width && line) {
       lines.push(line);
@@ -851,22 +1072,41 @@ function drawWrappedText(text, x, y, width, lineHeight, maxLines, color) {
 }
 
 function fitText(text, x, y, maxWidth, baseSize, minSize = 18) {
+  const value = String(text || "");
   let size = baseSize;
   ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
-  while (ctx.measureText(text).width > maxWidth && size > minSize) {
+  while (ctx.measureText(value).width > maxWidth && size > minSize) {
     size -= 2;
     ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
   }
-  ctx.fillText(text, x, y);
+  ctx.fillText(value, x, y);
 }
 
-function drawCoverImage(image, x, y, w, h) {
-  const scale = Math.max(w / image.width, h / image.height);
-  const sw = w / scale;
-  const sh = h / scale;
-  const sx = (image.width - sw) / 2;
-  const sy = (image.height - sh) / 2;
-  ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
+function fitCenteredText(text, x, y, maxWidth, baseSize, minSize = 10) {
+  const value = String(text || "");
+  let size = baseSize;
+  ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+  while (ctx.measureText(value).width > maxWidth && size > minSize) {
+    size -= 1;
+    ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+  }
+  ctx.fillText(value, x, y);
+}
+
+function drawCoverImage(image, x, y, w, h, adjust = { x: 0, y: 0, zoom: 100 }) {
+  const zoom = Math.max(100, Number(adjust.zoom) || 100) / 100;
+  const scale = Math.max(w / image.width, h / image.height) * zoom;
+  const dw = image.width * scale;
+  const dh = image.height * scale;
+  const overflowX = Math.max(0, dw - w);
+  const overflowY = Math.max(0, dh - h);
+  const dx = x + (w - dw) / 2 + (clamp(Number(adjust.x) || 0, -100, 100) / 100) * (overflowX / 2);
+  const dy = y + (h - dh) / 2 + (clamp(Number(adjust.y) || 0, -100, 100) / 100) * (overflowY / 2);
+  ctx.save();
+  roundedRect(x, y, w, h, 0);
+  ctx.clip();
+  ctx.drawImage(image, dx, dy, dw, dh);
+  ctx.restore();
 }
 
 function drawContainImage(image, x, y, w, h) {
@@ -888,6 +1128,171 @@ function drawNormalizedCharacterImage(image, x, y, w, h) {
   const dx = x + (w - dw) / 2;
   const dy = y + h - dh;
   ctx.drawImage(image, bounds.sx, bounds.sy, bounds.sw, bounds.sh, dx, dy, dw, dh);
+}
+
+function drawCharacterHeadImage(asset, x, y, w, h) {
+  const image = asset.image;
+  if (asset.variant !== "Mini") {
+    const headBounds = getFallbackHeadBounds(image, asset);
+    drawSourceCrop(image, headBounds, x, y, w, h, 1.06);
+    return;
+  }
+
+  const bounds = getImageContentBounds(image);
+  drawSourceCrop(image, bounds, x, y, w, h, 1.04);
+}
+
+function drawSourceCrop(image, source, x, y, w, h, zoom = 1) {
+  const sourceW = source.sw;
+  const sourceH = source.sh;
+  const scale = Math.max(w / sourceW, h / sourceH) * zoom;
+  const dw = sourceW * scale;
+  const dh = sourceH * scale;
+  const dx = x + (w - dw) / 2;
+  const dy = y + (h - dh) / 2;
+  ctx.drawImage(image, source.sx, source.sy, source.sw, source.sh, dx, dy, dw, dh);
+}
+
+function drawCharacterSlotImage(asset, x, y, w, h) {
+  try {
+    drawCharacterHeadImage(asset, x, y, w, h);
+  } catch (error) {
+    drawCoverImage(asset.image, x, y, w, h);
+  }
+}
+
+function getCharacterHeadBounds(bounds, image, variant) {
+  if (variant === "Mini") return bounds;
+
+  const cachedByVariant = characterHeadBoundsCache.get(image);
+  if (cachedByVariant?.[variant]) return cachedByVariant[variant];
+
+  const upperBounds = getUpperAlphaBounds(image, variant);
+  if (upperBounds) {
+    const cropSize = Math.max(
+      1,
+      Math.min(
+        upperBounds.sw * (variant === "Full" ? 0.56 : 0.64),
+        upperBounds.sh * (variant === "Full" ? 0.78 : 0.86),
+        Math.min(image.width, image.height) * (variant === "Full" ? 0.4 : 0.46)
+      )
+    );
+    const crop = {
+      sx: clamp(upperBounds.sx + upperBounds.sw / 2 - cropSize / 2, 0, image.width - cropSize),
+      sy: clamp(upperBounds.sy + upperBounds.sh * 0.06 - cropSize * 0.12, 0, image.height - cropSize),
+      sw: cropSize,
+      sh: cropSize,
+    };
+    characterHeadBoundsCache.set(image, { ...(cachedByVariant || {}), [variant]: crop });
+    return crop;
+  }
+
+  const sourceW = bounds.sw;
+  const sourceH = bounds.sh;
+  const cropRatio = variant === "Full" ? 0.38 : 0.46;
+  const cropSize = Math.max(
+    1,
+    Math.min(sourceW * (variant === "Full" ? 0.5 : 0.62), sourceH * cropRatio, Math.min(image.width, image.height) * 0.46)
+  );
+  const centerX = bounds.sx + sourceW / 2;
+  const topBias = variant === "Full" ? 0.02 : 0.04;
+  const sx = clamp(centerX - cropSize / 2, 0, image.width - cropSize);
+  const sy = clamp(bounds.sy + sourceH * topBias, 0, image.height - cropSize);
+
+  return {
+    sx,
+    sy,
+    sw: cropSize,
+    sh: cropSize,
+  };
+}
+
+function getFallbackHeadBounds(image, asset) {
+  const override = CHARACTER_FACE_CROPS[asset.file];
+  if (override) {
+    const cropSize = Math.min(image.width, image.height) * override.size;
+    return {
+      sx: clamp(image.width * override.x, 0, image.width - cropSize),
+      sy: clamp(image.height * override.y, 0, image.height - cropSize),
+      sw: cropSize,
+      sh: cropSize,
+    };
+  }
+
+  const variant = asset.variant;
+  const minSide = Math.min(image.width, image.height);
+  const cropSize = minSide * (variant === "Full" ? 0.34 : 0.42);
+  const centerX = image.width * 0.5;
+  const topY = image.height * (variant === "Full" ? 0.03 : 0.02);
+
+  return {
+    sx: clamp(centerX - cropSize / 2, 0, image.width - cropSize),
+    sy: clamp(topY, 0, image.height - cropSize),
+    sw: cropSize,
+    sh: cropSize,
+  };
+}
+
+function getUpperAlphaBounds(image, variant) {
+  const sampleW = 140;
+  const sampleH = Math.max(1, Math.round((image.height / image.width) * sampleW));
+  const sampler = document.createElement("canvas");
+  sampler.width = sampleW;
+  sampler.height = sampleH;
+  const samplerCtx = sampler.getContext("2d", { willReadFrequently: true });
+  if (!samplerCtx) return null;
+
+  samplerCtx.drawImage(image, 0, 0, sampleW, sampleH);
+  const data = samplerCtx.getImageData(0, 0, sampleW, sampleH).data;
+  const scanLimitY = Math.max(1, Math.round(sampleH * (variant === "Full" ? 0.44 : 0.54)));
+  let minX = sampleW;
+  let minY = sampleH;
+  let maxX = -1;
+  let maxY = -1;
+
+  for (let y = 0; y < scanLimitY; y += 1) {
+    for (let x = 0; x < sampleW; x += 1) {
+      const index = (y * sampleW + x) * 4;
+      if (data[index + 3] > 24) {
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+  }
+
+  if (maxX < minX || maxY < minY) return null;
+
+  const marginX = Math.round((maxX - minX + 1) * 0.08);
+  const marginY = Math.round((maxY - minY + 1) * 0.08);
+  minX = Math.max(0, minX - marginX);
+  minY = Math.max(0, minY - marginY);
+  maxX = Math.min(sampleW - 1, maxX + marginX);
+  maxY = Math.min(sampleH - 1, maxY + marginY);
+
+  return {
+    sx: (minX / sampleW) * image.width,
+    sy: (minY / sampleH) * image.height,
+    sw: ((maxX - minX + 1) / sampleW) * image.width,
+    sh: ((maxY - minY + 1) / sampleH) * image.height,
+  };
+}
+
+function splitLongWord(word, width) {
+  const parts = [];
+  let part = "";
+  [...word].forEach((char) => {
+    const test = part + char;
+    if (part && ctx.measureText(test).width > width) {
+      parts.push(part);
+      part = char;
+    } else {
+      part = test;
+    }
+  });
+  if (part) parts.push(part);
+  return parts;
 }
 
 function getImageContentBounds(image) {
@@ -1004,8 +1409,8 @@ function syncControls() {
   $("#tierSelect").value = state.fields.tier;
   $("#mainCharactersInput").value = state.characters.mainText;
   $("#loveCharactersInput").value = state.characters.loveText;
-  $("#mainCharacterAssetSelect").value = state.characters.mainAsset?.url || "";
-  $("#loveCharacterAssetSelect").value = state.characters.loveAsset?.url || "";
+  renderCharacterSkinSelects("main");
+  renderCharacterSkinSelects("love");
   $("#accentInput").value = state.accent;
   $("#subAccentInput").value = state.subAccent;
   $("#bgStartInput").value = state.bgStart;
@@ -1013,9 +1418,12 @@ function syncControls() {
   $("#canvasFontSelect").value = state.canvasFont;
   $("#fontScaleInput").value = Math.round(state.fontScale * 100);
   $("#imageDimInput").value = Math.round(state.imageDim * 100);
+  syncImageAdjustControls("background");
+  syncImageAdjustControls("profileImage");
   document.documentElement.style.setProperty("--accent", state.accent);
   document.documentElement.style.setProperty("--sub", state.subAccent);
   syncBackgroundMode();
+  syncImageAdjustVisibility();
   $$(".chips").forEach((group) => {
     const key = group.dataset.key;
     group.querySelectorAll("button").forEach((button) => button.classList.toggle("active", state.chips[key]?.includes(button.textContent)));
@@ -1033,18 +1441,29 @@ function randomizeTone() {
     if (applyImageTone(state.background.image)) return;
   }
 
-  const pairs = [
-    ["#ff2d78", "#00ffcc", "#050508", "#1a1a2e"],
-    ["#5bd7ff", "#f46b83", "#080914", "#242033"],
-    ["#8ee56f", "#ffe04a", "#081008", "#1d2b16"],
-    ["#ff7c55", "#8de0d1", "#120808", "#2c2520"],
-    ["#d0f16f", "#62a8ff", "#0a0d0a", "#182a34"],
+  const palettes = [
+    { accent: "#ff2d78", subAccent: "#00ffcc", bgStart: "#050508", bgEnd: "#1a1a2e", template: "neon" },
+    { accent: "#ff5fa2", subAccent: "#6ef3ff", bgStart: "#120716", bgEnd: "#29163d", template: "signal" },
+    { accent: "#ff8a5b", subAccent: "#ffe66d", bgStart: "#140807", bgEnd: "#342119", template: "signal" },
+    { accent: "#7c5cff", subAccent: "#68f0b5", bgStart: "#070814", bgEnd: "#1e1641", template: "neon" },
+    { accent: "#5bd7ff", subAccent: "#f46b83", bgStart: "#060914", bgEnd: "#242033", template: "clean" },
+    { accent: "#d0f16f", subAccent: "#62a8ff", bgStart: "#07100a", bgEnd: "#162b34", template: "signal" },
+    { accent: "#ffcf5a", subAccent: "#9bffdf", bgStart: "#100b05", bgEnd: "#2d2414", template: "clean" },
+    { accent: "#ff6ad5", subAccent: "#80ffea", bgStart: "#100718", bgEnd: "#30103b", template: "neon" },
+    { accent: "#8ee56f", subAccent: "#ffe04a", bgStart: "#071008", bgEnd: "#1d2b16", template: "signal" },
+    { accent: "#ff4f64", subAccent: "#7df9ff", bgStart: "#0f0508", bgEnd: "#251528", template: "neon" },
+    { accent: "#b7ff5a", subAccent: "#ff7ab6", bgStart: "#080f06", bgEnd: "#22201a", template: "clean" },
+    { accent: "#7ad7ff", subAccent: "#cfa7ff", bgStart: "#061017", bgEnd: "#181b36", template: "signal" },
+    { accent: "#ff9f43", subAccent: "#54e6a5", bgStart: "#120904", bgEnd: "#202c1c", template: "clean" },
+    { accent: "#f05dff", subAccent: "#f9f871", bgStart: "#110515", bgEnd: "#2a1530", template: "neon" },
+    { accent: "#4ee1a0", subAccent: "#ff6f91", bgStart: "#04110d", bgEnd: "#241927", template: "signal" },
   ];
-  const [accent, sub, bgStart, bgEnd] = pairs[Math.floor(Math.random() * pairs.length)];
-  state.accent = accent;
-  state.subAccent = sub;
-  state.bgStart = bgStart;
-  state.bgEnd = bgEnd;
+  const palette = palettes[Math.floor(Math.random() * palettes.length)];
+  state.accent = palette.accent;
+  state.subAccent = palette.subAccent;
+  state.bgStart = palette.bgStart;
+  state.bgEnd = palette.bgEnd;
+  state.template = palette.template;
   syncControls();
   draw();
 }
@@ -1192,6 +1611,10 @@ function resetState() {
   state.background = null;
   state.backgroundMode = "default";
   state.profileImage = null;
+  state.imageAdjust = {
+    background: { x: 0, y: 0, zoom: 100 },
+    profileImage: { x: 0, y: 0, zoom: 100 },
+  };
   setUploadName("background", "선택 안 함");
   setUploadName("profileImage", "선택 안 함");
   state.accent = "#ff2d78";
@@ -1211,8 +1634,8 @@ function resetState() {
   state.characters = {
     mainText: "",
     loveText: "",
-    mainAsset: null,
-    loveAsset: null,
+    mainAssets: [null, null, null],
+    loveAssets: [null, null, null],
   };
   state.chips = {
     modes: [],
