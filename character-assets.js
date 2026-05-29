@@ -2035,12 +2035,30 @@ window.CHARACTER_ASSETS = [
   },
   {
     "character": "Li Dailin",
+    "label": "? ???",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "????? ? ???",
+    "file": "Li_Dailin_Mini_06_face.png",
+    "url": "essets/characters/Li_Dailin_Mini_06_face.png"
+  },
+  {
+    "character": "Li Dailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 7,
     "skinName": "잭 오 리 다이린",
     "file": "Li_Dailin_Half_07_wiki.webp",
     "url": "essets/characters/Li_Dailin_Half_07_wiki.webp"
+  },
+  {
+    "character": "Li Dailin",
+    "label": "? ???",
+    "variant": "Mini",
+    "skin": 7,
+    "skinName": "? ? ? ???",
+    "file": "Li_Dailin_Mini_07_face.png",
+    "url": "essets/characters/Li_Dailin_Mini_07_face.png"
   },
   {
     "character": "Rio",
@@ -2671,6 +2689,15 @@ window.CHARACTER_ASSETS = [
     "skinName": "와일드 메이드 미르카",
     "file": "Mirka_Half_01_wiki.webp",
     "url": "essets/characters/Mirka_Half_01_wiki.webp"
+  },
+  {
+    "character": "Mirka",
+    "label": "???",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "??? ??? ???",
+    "file": "Mirka_Mini_01_face.png",
+    "url": "essets/characters/Mirka_Mini_01_face.png"
   },
   {
     "character": "Vanya",
@@ -4086,6 +4113,15 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/Sissela_Half_06_wiki.webp"
   },
   {
+    "character": "Sissela",
+    "label": "???",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "????? ???",
+    "file": "Sissela_Mini_06_face.png",
+    "url": "essets/characters/Sissela_Mini_06_face.png"
+  },
+  {
     "character": "Silvia",
     "label": "실비아",
     "variant": "Full",
@@ -4957,6 +4993,15 @@ window.CHARACTER_ASSETS = [
     "skinName": "사관후보생 아이솔",
     "file": "Isol_Half_04_wiki.webp",
     "url": "essets/characters/Isol_Half_04_wiki.webp"
+  },
+  {
+    "character": "Isol",
+    "label": "???",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "????? ???",
+    "file": "Isol_Mini_04_face.png",
+    "url": "essets/characters/Isol_Mini_04_face.png"
   },
   {
     "character": "Isaac",
@@ -7540,6 +7585,15 @@ window.CHARACTER_ASSETS = [
     "skinName": "크로우 카밀로",
     "file": "Camilo_Half_04_wiki.webp",
     "url": "essets/characters/Camilo_Half_04_wiki.webp"
+  },
+  {
+    "character": "Camilo",
+    "label": "???",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "??? ???",
+    "file": "Camilo_Mini_04_face.png",
+    "url": "essets/characters/Camilo_Mini_04_face.png"
   },
   {
     "character": "Katja",
