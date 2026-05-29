@@ -2027,20 +2027,38 @@ window.CHARACTER_ASSETS = [
   {
     "character": "Li Dailin",
     "label": "리 다이린",
-    "variant": "Half",
+    "variant": "Full",
     "skin": 6,
     "skinName": "사관후보생 리 다이린",
-    "file": "HALF_LiDailin_006.webp",
-    "url": "essets/characters/HALF_LiDailin_006.webp"
+    "file": "FULL_LiDailin_006.png",
+    "url": "essets/characters/FULL_LiDailin_006.png"
   },
   {
     "character": "Li Dailin",
-    "label": "? ???",
+    "label": "리 다이린",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "사관후보생 리 다이린",
+    "file": "HALF_LiDailin_006.png",
+    "url": "essets/characters/HALF_LiDailin_006.png"
+  },
+  {
+    "character": "Li Dailin",
+    "label": "리 다이린",
     "variant": "Mini",
     "skin": 6,
-    "skinName": "????? ? ???",
+    "skinName": "사관후보생 리 다이린",
     "file": "MINI_LiDailin_006.png",
     "url": "essets/characters/MINI_LiDailin_006.png"
+  },
+  {
+    "character": "Li Dailin",
+    "label": "리 다이린",
+    "variant": "Full",
+    "skin": 7,
+    "skinName": "잭 오 리 다이린",
+    "file": "FULL_LiDailin_007.png",
+    "url": "essets/characters/FULL_LiDailin_007.png"
   },
   {
     "character": "Li Dailin",
@@ -2048,15 +2066,15 @@ window.CHARACTER_ASSETS = [
     "variant": "Half",
     "skin": 7,
     "skinName": "잭 오 리 다이린",
-    "file": "HALF_LiDailin_007.webp",
-    "url": "essets/characters/HALF_LiDailin_007.webp"
+    "file": "HALF_LiDailin_007.png",
+    "url": "essets/characters/HALF_LiDailin_007.png"
   },
   {
     "character": "Li Dailin",
-    "label": "? ???",
+    "label": "리 다이린",
     "variant": "Mini",
     "skin": 7,
-    "skinName": "? ? ? ???",
+    "skinName": "잭 오 리 다이린",
     "file": "MINI_LiDailin_007.png",
     "url": "essets/characters/MINI_LiDailin_007.png"
   },
@@ -2684,18 +2702,27 @@ window.CHARACTER_ASSETS = [
   {
     "character": "Mirka",
     "label": "미르카",
-    "variant": "Half",
+    "variant": "Full",
     "skin": 1,
     "skinName": "와일드 메이드 미르카",
-    "file": "HALF_Mirka_001.webp",
-    "url": "essets/characters/HALF_Mirka_001.webp"
+    "file": "FULL_Mirka_001.png",
+    "url": "essets/characters/FULL_Mirka_001.png"
   },
   {
     "character": "Mirka",
-    "label": "???",
+    "label": "미르카",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "와일드 메이드 미르카",
+    "file": "HALF_Mirka_001.png",
+    "url": "essets/characters/HALF_Mirka_001.png"
+  },
+  {
+    "character": "Mirka",
+    "label": "미르카",
     "variant": "Mini",
     "skin": 1,
-    "skinName": "??? ??? ???",
+    "skinName": "와일드 메이드 미르카",
     "file": "MINI_Mirka_001.png",
     "url": "essets/characters/MINI_Mirka_001.png"
   },
@@ -4106,18 +4133,27 @@ window.CHARACTER_ASSETS = [
   {
     "character": "Sissela",
     "label": "시셀라",
-    "variant": "Half",
+    "variant": "Full",
     "skin": 6,
     "skinName": "사관후보생 시셀라",
-    "file": "HALF_Sissela_006.webp",
-    "url": "essets/characters/HALF_Sissela_006.webp"
+    "file": "FULL_Sissela_006.png",
+    "url": "essets/characters/FULL_Sissela_006.png"
   },
   {
     "character": "Sissela",
-    "label": "???",
+    "label": "시셀라",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "사관후보생 시셀라",
+    "file": "HALF_Sissela_006.png",
+    "url": "essets/characters/HALF_Sissela_006.png"
+  },
+  {
+    "character": "Sissela",
+    "label": "시셀라",
     "variant": "Mini",
     "skin": 6,
-    "skinName": "????? ???",
+    "skinName": "사관후보생 시셀라",
     "file": "MINI_Sissela_006.png",
     "url": "essets/characters/MINI_Sissela_006.png"
   },
@@ -4988,18 +5024,27 @@ window.CHARACTER_ASSETS = [
   {
     "character": "Isol",
     "label": "아이솔",
-    "variant": "Half",
+    "variant": "Full",
     "skin": 4,
     "skinName": "사관후보생 아이솔",
-    "file": "HALF_Isol_004.webp",
-    "url": "essets/characters/HALF_Isol_004.webp"
+    "file": "FULL_Isol_004.png",
+    "url": "essets/characters/FULL_Isol_004.png"
   },
   {
     "character": "Isol",
-    "label": "???",
+    "label": "아이솔",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "사관후보생 아이솔",
+    "file": "HALF_Isol_004.png",
+    "url": "essets/characters/HALF_Isol_004.png"
+  },
+  {
+    "character": "Isol",
+    "label": "아이솔",
     "variant": "Mini",
     "skin": 4,
-    "skinName": "????? ???",
+    "skinName": "사관후보생 아이솔",
     "file": "MINI_Isol_004.png",
     "url": "essets/characters/MINI_Isol_004.png"
   },
@@ -7571,18 +7616,27 @@ window.CHARACTER_ASSETS = [
   {
     "character": "Camilo",
     "label": "카밀로",
-    "variant": "Half",
+    "variant": "Full",
     "skin": 4,
     "skinName": "크로우 카밀로",
-    "file": "HALF_Camilo_004.webp",
-    "url": "essets/characters/HALF_Camilo_004.webp"
+    "file": "FULL_Camilo_004.png",
+    "url": "essets/characters/FULL_Camilo_004.png"
   },
   {
     "character": "Camilo",
-    "label": "???",
+    "label": "카밀로",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "크로우 카밀로",
+    "file": "HALF_Camilo_004.png",
+    "url": "essets/characters/HALF_Camilo_004.png"
+  },
+  {
+    "character": "Camilo",
+    "label": "카밀로",
     "variant": "Mini",
     "skin": 4,
-    "skinName": "??? ???",
+    "skinName": "크로우 카밀로",
     "file": "MINI_Camilo_004.png",
     "url": "essets/characters/MINI_Camilo_004.png"
   },
