@@ -6646,7 +6646,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Full",
     "skin": 1,
-    "skinName": "Celestial Clocktower Eva",
+    "skinName": "별 관찰자 이바",
     "file": "FULL_Eva_001.png",
     "url": "essets/characters/FULL_Eva_001.png"
   },
@@ -6655,7 +6655,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Half",
     "skin": 1,
-    "skinName": "Celestial Clocktower Eva",
+    "skinName": "별 관찰자 이바",
     "file": "HALF_Eva_001.png",
     "url": "essets/characters/HALF_Eva_001.png"
   },
@@ -6664,7 +6664,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Mini",
     "skin": 1,
-    "skinName": "Celestial Clocktower Eva",
+    "skinName": "별 관찰자 이바",
     "file": "MINI_Eva_001.png",
     "url": "essets/characters/MINI_Eva_001.png"
   },
