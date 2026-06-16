@@ -2650,7 +2650,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Full",
     "skin": 4,
-    "skinName": "사관후보생 매그너스",
+    "skinName": "Mk.VIII Destroyer M.A.G",
     "file": "FULL_Magnus_004.png",
     "url": "essets/characters/FULL_Magnus_004.png"
   },
@@ -2659,7 +2659,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Half",
     "skin": 4,
-    "skinName": "사관후보생 매그너스",
+    "skinName": "Mk.VIII Destroyer M.A.G",
     "file": "HALF_Magnus_004.png",
     "url": "essets/characters/HALF_Magnus_004.png"
   },
@@ -2668,7 +2668,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Mini",
     "skin": 4,
-    "skinName": "사관후보생 매그너스",
+    "skinName": "Mk.VIII Destroyer M.A.G",
     "file": "MINI_Magnus_004.png",
     "url": "essets/characters/MINI_Magnus_004.png"
   },
@@ -6619,7 +6619,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Full",
     "skin": 0,
-    "skinName": "별 관찰자 이바",
+    "skinName": "기본",
     "file": "FULL_Eva_000.png",
     "url": "essets/characters/FULL_Eva_000.png"
   },
@@ -6628,7 +6628,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Half",
     "skin": 0,
-    "skinName": "별 관찰자 이바",
+    "skinName": "기본",
     "file": "HALF_Eva_000.png",
     "url": "essets/characters/HALF_Eva_000.png"
   },
@@ -6637,7 +6637,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Mini",
     "skin": 0,
-    "skinName": "별 관찰자 이바",
+    "skinName": "기본",
     "file": "MINI_Eva_000.png",
     "url": "essets/characters/MINI_Eva_000.png"
   },
@@ -6646,7 +6646,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Full",
     "skin": 1,
-    "skinName": "사관후보생 이바",
+    "skinName": "Celestial Clocktower Eva",
     "file": "FULL_Eva_001.png",
     "url": "essets/characters/FULL_Eva_001.png"
   },
@@ -6655,7 +6655,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Half",
     "skin": 1,
-    "skinName": "사관후보생 이바",
+    "skinName": "Celestial Clocktower Eva",
     "file": "HALF_Eva_001.png",
     "url": "essets/characters/HALF_Eva_001.png"
   },
@@ -6664,7 +6664,7 @@ window.CHARACTER_ASSETS = [
     "label": "이바",
     "variant": "Mini",
     "skin": 1,
-    "skinName": "사관후보생 이바",
+    "skinName": "Celestial Clocktower Eva",
     "file": "MINI_Eva_001.png",
     "url": "essets/characters/MINI_Eva_001.png"
   },

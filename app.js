@@ -30,7 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260529-characterpos1";
+const ASSET_CACHE_VERSION = "20260616-skinname1";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
