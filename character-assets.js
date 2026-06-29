@@ -3348,6 +3348,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Bianca_004.png"
   },
   {
+    "character": "Bianca",
+    "label": "비앙카",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "영겁의 푸른 망령 비앙카",
+    "file": "FULL_Bianca_005.png",
+    "url": "essets/characters/FULL_Bianca_005.png"
+  },
+  {
+    "character": "Bianca",
+    "label": "비앙카",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "영겁의 푸른 망령 비앙카",
+    "file": "HALF_Bianca_005.png",
+    "url": "essets/characters/HALF_Bianca_005.png"
+  },
+  {
+    "character": "Bianca",
+    "label": "비앙카",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "영겁의 푸른 망령 비앙카",
+    "file": "MINI_Bianca_005.png",
+    "url": "essets/characters/MINI_Bianca_005.png"
+  },
+  {
     "character": "Bihyung",
     "label": "비형",
     "variant": "Full",
