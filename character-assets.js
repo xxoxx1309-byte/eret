@@ -351,7 +351,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Nathapon_003.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Full",
     "skin": 0,
@@ -360,7 +360,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Nia_000.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Half",
     "skin": 0,
@@ -369,7 +369,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Nia_000.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Mini",
     "skin": 0,
@@ -378,7 +378,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Nia_000.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Full",
     "skin": 1,
@@ -387,7 +387,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Nia_001.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Half",
     "skin": 1,
@@ -396,7 +396,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Nia_001.png"
   },
   {
-    "character": "NiaH",
+    "character": "Niah",
     "label": "니아",
     "variant": "Mini",
     "skin": 1,
@@ -619,6 +619,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "역병의사 다니엘",
     "file": "MINI_Daniel_001.png",
     "url": "essets/characters/MINI_Daniel_001.png"
+  },
+  {
+    "character": "Daniel",
+    "label": "다니엘",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "마스커레이드 다니엘",
+    "file": "FULL_Daniel_002.png",
+    "url": "essets/characters/FULL_Daniel_002.png"
+  },
+  {
+    "character": "Daniel",
+    "label": "다니엘",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "마스커레이드 다니엘",
+    "file": "HALF_Daniel_002.png",
+    "url": "essets/characters/HALF_Daniel_002.png"
+  },
+  {
+    "character": "Daniel",
+    "label": "다니엘",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "마스커레이드 다니엘",
+    "file": "MINI_Daniel_002.png",
+    "url": "essets/characters/MINI_Daniel_002.png"
   },
   {
     "character": "Daniel",
@@ -1056,6 +1083,33 @@ window.CHARACTER_ASSETS = [
     "character": "Laura",
     "label": "라우라",
     "variant": "Full",
+    "skin": 2,
+    "skinName": "암흑가 라우라",
+    "file": "FULL_Laura_002.png",
+    "url": "essets/characters/FULL_Laura_002.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "암흑가 라우라",
+    "file": "HALF_Laura_002.png",
+    "url": "essets/characters/HALF_Laura_002.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "암흑가 라우라",
+    "file": "MINI_Laura_002.png",
+    "url": "essets/characters/MINI_Laura_002.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Full",
     "skin": 3,
     "skinName": "비터스윗 라우라",
     "file": "FULL_Laura_003.png",
@@ -1105,6 +1159,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "작전 교관 라우라",
     "file": "MINI_Laura_004.png",
     "url": "essets/characters/MINI_Laura_004.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "팬서 라우라",
+    "file": "FULL_Laura_005.png",
+    "url": "essets/characters/FULL_Laura_005.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "팬서 라우라",
+    "file": "HALF_Laura_005.png",
+    "url": "essets/characters/HALF_Laura_005.png"
+  },
+  {
+    "character": "Laura",
+    "label": "라우라",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "팬서 라우라",
+    "file": "MINI_Laura_005.png",
+    "url": "essets/characters/MINI_Laura_005.png"
   },
   {
     "character": "Lenox",
@@ -1647,6 +1728,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Rozzi_004.png"
   },
   {
+    "character": "Rozzi",
+    "label": "로지",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "파이널 랩 로지",
+    "file": "FULL_Rozzi_005.png",
+    "url": "essets/characters/FULL_Rozzi_005.png"
+  },
+  {
+    "character": "Rozzi",
+    "label": "로지",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "파이널 랩 로지",
+    "file": "HALF_Rozzi_005.png",
+    "url": "essets/characters/HALF_Rozzi_005.png"
+  },
+  {
+    "character": "Rozzi",
+    "label": "로지",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "파이널 랩 로지",
+    "file": "MINI_Rozzi_005.png",
+    "url": "essets/characters/MINI_Rozzi_005.png"
+  },
+  {
     "character": "Luke",
     "label": "루크",
     "variant": "Full",
@@ -1809,6 +1917,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Luke_005.png"
   },
   {
+    "character": "Luke",
+    "label": "루크",
+    "variant": "Full",
+    "skin": 6,
+    "skinName": "사신 루크",
+    "file": "FULL_Luke_006.png",
+    "url": "essets/characters/FULL_Luke_006.png"
+  },
+  {
+    "character": "Luke",
+    "label": "루크",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "사신 루크",
+    "file": "HALF_Luke_006.png",
+    "url": "essets/characters/HALF_Luke_006.png"
+  },
+  {
+    "character": "Luke",
+    "label": "루크",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "사신 루크",
+    "file": "MINI_Luke_006.png",
+    "url": "essets/characters/MINI_Luke_006.png"
+  },
+  {
     "character": "Lenore",
     "label": "르노어",
     "variant": "Full",
@@ -1890,7 +2025,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Lenore_002.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 0,
@@ -1899,7 +2034,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_000.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 0,
@@ -1908,7 +2043,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_000.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 0,
@@ -1917,7 +2052,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_000.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 1,
@@ -1926,7 +2061,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_001.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 1,
@@ -1935,7 +2070,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_001.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 1,
@@ -1944,7 +2079,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_001.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 2,
@@ -1953,7 +2088,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_002.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 2,
@@ -1962,7 +2097,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_002.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 2,
@@ -1971,7 +2106,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_002.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 3,
@@ -1980,7 +2115,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_003.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 3,
@@ -1989,7 +2124,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_003.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 3,
@@ -1998,7 +2133,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_003.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 4,
@@ -2007,7 +2142,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_004.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 4,
@@ -2016,7 +2151,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_004.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 4,
@@ -2025,7 +2160,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_004.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 5,
@@ -2034,7 +2169,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_005.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 5,
@@ -2043,7 +2178,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_005.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 5,
@@ -2052,7 +2187,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_005.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 6,
@@ -2061,7 +2196,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_006.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 6,
@@ -2070,7 +2205,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_006.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 6,
@@ -2079,7 +2214,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_LiDailin_006.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Full",
     "skin": 7,
@@ -2088,7 +2223,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_LiDailin_007.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Half",
     "skin": 7,
@@ -2097,7 +2232,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_LiDailin_007.png"
   },
   {
-    "character": "Li Dailin",
+    "character": "LiDailin",
     "label": "리 다이린",
     "variant": "Mini",
     "skin": 7,
@@ -2190,6 +2325,60 @@ window.CHARACTER_ASSETS = [
     "character": "Rio",
     "label": "리오",
     "variant": "Full",
+    "skin": 3,
+    "skinName": "사랑의 마법소녀 리오",
+    "file": "FULL_Rio_003.png",
+    "url": "essets/characters/FULL_Rio_003.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "사랑의 마법소녀 리오",
+    "file": "HALF_Rio_003.png",
+    "url": "essets/characters/HALF_Rio_003.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "사랑의 마법소녀 리오",
+    "file": "MINI_Rio_003.png",
+    "url": "essets/characters/MINI_Rio_003.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Full",
+    "skin": 4,
+    "skinName": "여름방학 리오",
+    "file": "FULL_Rio_004.png",
+    "url": "essets/characters/FULL_Rio_004.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "여름방학 리오",
+    "file": "HALF_Rio_004.png",
+    "url": "essets/characters/HALF_Rio_004.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "여름방학 리오",
+    "file": "MINI_Rio_004.png",
+    "url": "essets/characters/MINI_Rio_004.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Full",
     "skin": 5,
     "skinName": "미드나잇 오로라 리오",
     "file": "FULL_Rio_005.png",
@@ -2239,6 +2428,60 @@ window.CHARACTER_ASSETS = [
     "skinName": "퍼펙트 샷 바니 리오",
     "file": "MINI_Rio_006.png",
     "url": "essets/characters/MINI_Rio_006.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Full",
+    "skin": 7,
+    "skinName": "3rd Anniversary 리오",
+    "file": "FULL_Rio_007.png",
+    "url": "essets/characters/FULL_Rio_007.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Half",
+    "skin": 7,
+    "skinName": "3rd Anniversary 리오",
+    "file": "HALF_Rio_007.png",
+    "url": "essets/characters/HALF_Rio_007.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Mini",
+    "skin": 7,
+    "skinName": "3rd Anniversary 리오",
+    "file": "MINI_Rio_007.png",
+    "url": "essets/characters/MINI_Rio_007.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Full",
+    "skin": 8,
+    "skinName": "3rd Anniversary 리오 Dolce",
+    "file": "FULL_Rio_008.png",
+    "url": "essets/characters/FULL_Rio_008.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Half",
+    "skin": 8,
+    "skinName": "3rd Anniversary 리오 Dolce",
+    "file": "HALF_Rio_008.png",
+    "url": "essets/characters/HALF_Rio_008.png"
+  },
+  {
+    "character": "Rio",
+    "label": "리오",
+    "variant": "Mini",
+    "skin": 8,
+    "skinName": "3rd Anniversary 리오 Dolce",
+    "file": "MINI_Rio_008.png",
+    "url": "essets/characters/MINI_Rio_008.png"
   },
   {
     "character": "Martina",
@@ -2731,7 +2974,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Full",
     "skin": 5,
-    "skinName": "Mk.VIII Destroyer M.A.G",
+    "skinName": "Mk. VIII Destroyer M.A.G",
     "file": "FULL_Magnus_005.png",
     "url": "essets/characters/FULL_Magnus_005.png"
   },
@@ -2740,7 +2983,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Half",
     "skin": 5,
-    "skinName": "Mk.VIII Destroyer M.A.G",
+    "skinName": "Mk. VIII Destroyer M.A.G",
     "file": "HALF_Magnus_005.png",
     "url": "essets/characters/HALF_Magnus_005.png"
   },
@@ -2749,7 +2992,7 @@ window.CHARACTER_ASSETS = [
     "label": "매그너스",
     "variant": "Mini",
     "skin": 5,
-    "skinName": "Mk.VIII Destroyer M.A.G",
+    "skinName": "Mk. VIII Destroyer M.A.G",
     "file": "MINI_Magnus_005.png",
     "url": "essets/characters/MINI_Magnus_005.png"
   },
@@ -3051,7 +3294,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Barbara_003.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Full",
     "skin": 0,
@@ -3060,7 +3303,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Bernice_000.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Half",
     "skin": 0,
@@ -3069,7 +3312,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Bernice_000.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Mini",
     "skin": 0,
@@ -3078,7 +3321,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Bernice_000.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Full",
     "skin": 1,
@@ -3087,7 +3330,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Bernice_001.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Half",
     "skin": 1,
@@ -3096,7 +3339,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Bernice_001.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Mini",
     "skin": 1,
@@ -3105,7 +3348,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Bernice_001.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Full",
     "skin": 2,
@@ -3114,7 +3357,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Bernice_002.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Half",
     "skin": 2,
@@ -3123,7 +3366,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Bernice_002.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Mini",
     "skin": 2,
@@ -3132,7 +3375,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Bernice_002.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Full",
     "skin": 3,
@@ -3141,7 +3384,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Bernice_003.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Half",
     "skin": 3,
@@ -3150,7 +3393,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Bernice_003.png"
   },
   {
-    "character": "bERnice",
+    "character": "Bernice",
     "label": "버니스",
     "variant": "Mini",
     "skin": 3,
@@ -4026,6 +4269,33 @@ window.CHARACTER_ASSETS = [
     "character": "Sua",
     "label": "수아",
     "variant": "Full",
+    "skin": 4,
+    "skinName": "카페 알바 수아",
+    "file": "FULL_Sua_004.png",
+    "url": "essets/characters/FULL_Sua_004.png"
+  },
+  {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "카페 알바 수아",
+    "file": "HALF_Sua_004.png",
+    "url": "essets/characters/HALF_Sua_004.png"
+  },
+  {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "카페 알바 수아",
+    "file": "MINI_Sua_004.png",
+    "url": "essets/characters/MINI_Sua_004.png"
+  },
+  {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Full",
     "skin": 5,
     "skinName": "1st Anniversary 수아",
     "file": "FULL_Sua_005.png",
@@ -4377,6 +4647,33 @@ window.CHARACTER_ASSETS = [
     "character": "Silvia",
     "label": "실비아",
     "variant": "Full",
+    "skin": 2,
+    "skinName": "GeForce Now 실비아",
+    "file": "FULL_Silvia_002.png",
+    "url": "essets/characters/FULL_Silvia_002.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "GeForce Now 실비아",
+    "file": "HALF_Silvia_002.png",
+    "url": "essets/characters/HALF_Silvia_002.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "GeForce Now 실비아",
+    "file": "MINI_Silvia_002.png",
+    "url": "essets/characters/MINI_Silvia_002.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Full",
     "skin": 3,
     "skinName": "퍼펙트 딜리버리 실비아",
     "file": "FULL_Silvia_003.png",
@@ -4426,6 +4723,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "여행자 실비아",
     "file": "MINI_Silvia_004.png",
     "url": "essets/characters/MINI_Silvia_004.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "퀸 실비아",
+    "file": "FULL_Silvia_005.png",
+    "url": "essets/characters/FULL_Silvia_005.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "퀸 실비아",
+    "file": "HALF_Silvia_005.png",
+    "url": "essets/characters/HALF_Silvia_005.png"
+  },
+  {
+    "character": "Silvia",
+    "label": "실비아",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "퀸 실비아",
+    "file": "MINI_Silvia_005.png",
+    "url": "essets/characters/MINI_Silvia_005.png"
   },
   {
     "character": "Adela",
@@ -4615,6 +4939,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "해충박멸 아드리아나",
     "file": "MINI_Adriana_002.png",
     "url": "essets/characters/MINI_Adriana_002.png"
+  },
+  {
+    "character": "Adriana",
+    "label": "아드리아나",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "메이드 아드리아나",
+    "file": "FULL_Adriana_003.png",
+    "url": "essets/characters/FULL_Adriana_003.png"
+  },
+  {
+    "character": "Adriana",
+    "label": "아드리아나",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "메이드 아드리아나",
+    "file": "HALF_Adriana_003.png",
+    "url": "essets/characters/HALF_Adriana_003.png"
+  },
+  {
+    "character": "Adriana",
+    "label": "아드리아나",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "메이드 아드리아나",
+    "file": "MINI_Adriana_003.png",
+    "url": "essets/characters/MINI_Adriana_003.png"
   },
   {
     "character": "Adriana",
@@ -4831,6 +5182,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "고고학 연구원 아르다",
     "file": "MINI_Arda_001.png",
     "url": "essets/characters/MINI_Arda_001.png"
+  },
+  {
+    "character": "Arda",
+    "label": "아르다",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "고스트헌터 아르다",
+    "file": "FULL_Arda_002.png",
+    "url": "essets/characters/FULL_Arda_002.png"
+  },
+  {
+    "character": "Arda",
+    "label": "아르다",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "고스트헌터 아르다",
+    "file": "HALF_Arda_002.png",
+    "url": "essets/characters/HALF_Arda_002.png"
+  },
+  {
+    "character": "Arda",
+    "label": "아르다",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "고스트헌터 아르다",
+    "file": "MINI_Arda_002.png",
+    "url": "essets/characters/MINI_Arda_002.png"
   },
   {
     "character": "Abigail",
@@ -5074,6 +5452,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "사관후보생 아야",
     "file": "MINI_Aya_004.png",
     "url": "essets/characters/MINI_Aya_004.png"
+  },
+  {
+    "character": "Aya",
+    "label": "아야",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "엘페르트 아야",
+    "file": "FULL_Aya_005.png",
+    "url": "essets/characters/FULL_Aya_005.png"
+  },
+  {
+    "character": "Aya",
+    "label": "아야",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "엘페르트 아야",
+    "file": "HALF_Aya_005.png",
+    "url": "essets/characters/HALF_Aya_005.png"
+  },
+  {
+    "character": "Aya",
+    "label": "아야",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "엘페르트 아야",
+    "file": "MINI_Aya_005.png",
+    "url": "essets/characters/MINI_Aya_005.png"
   },
   {
     "character": "Isol",
@@ -5398,6 +5803,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "사립탐정 알렉스",
     "file": "MINI_Alex_002.png",
     "url": "essets/characters/MINI_Alex_002.png"
+  },
+  {
+    "character": "Alex",
+    "label": "알렉스",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "조커 알렉스",
+    "file": "FULL_Alex_003.png",
+    "url": "essets/characters/FULL_Alex_003.png"
+  },
+  {
+    "character": "Alex",
+    "label": "알렉스",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "조커 알렉스",
+    "file": "HALF_Alex_003.png",
+    "url": "essets/characters/HALF_Alex_003.png"
+  },
+  {
+    "character": "Alex",
+    "label": "알렉스",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "조커 알렉스",
+    "file": "MINI_Alex_003.png",
+    "url": "essets/characters/MINI_Alex_003.png"
   },
   {
     "character": "Alonso",
@@ -5832,6 +6264,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Aiden_003.png"
   },
   {
+    "character": "Aiden",
+    "label": "에이든",
+    "variant": "Full",
+    "skin": 4,
+    "skinName": "카이 에이든",
+    "file": "FULL_Aiden_004.png",
+    "url": "essets/characters/FULL_Aiden_004.png"
+  },
+  {
+    "character": "Aiden",
+    "label": "에이든",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "카이 에이든",
+    "file": "HALF_Aiden_004.png",
+    "url": "essets/characters/HALF_Aiden_004.png"
+  },
+  {
+    "character": "Aiden",
+    "label": "에이든",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "카이 에이든",
+    "file": "MINI_Aiden_004.png",
+    "url": "essets/characters/MINI_Aiden_004.png"
+  },
+  {
     "character": "Echion",
     "label": "에키온",
     "variant": "Full",
@@ -5862,6 +6321,33 @@ window.CHARACTER_ASSETS = [
     "character": "Echion",
     "label": "에키온",
     "variant": "Full",
+    "skin": 1,
+    "skinName": "뒷골목 에키온",
+    "file": "FULL_Echion_001.png",
+    "url": "essets/characters/FULL_Echion_001.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "뒷골목 에키온",
+    "file": "HALF_Echion_001.png",
+    "url": "essets/characters/HALF_Echion_001.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "뒷골목 에키온",
+    "file": "MINI_Echion_001.png",
+    "url": "essets/characters/MINI_Echion_001.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Full",
     "skin": 2,
     "skinName": "사관후보생 에키온",
     "file": "FULL_Echion_002.png",
@@ -5884,6 +6370,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "사관후보생 에키온",
     "file": "MINI_Echion_002.png",
     "url": "essets/characters/MINI_Echion_002.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "암흑가 에키온",
+    "file": "FULL_Echion_003.png",
+    "url": "essets/characters/FULL_Echion_003.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "암흑가 에키온",
+    "file": "HALF_Echion_003.png",
+    "url": "essets/characters/HALF_Echion_003.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "암흑가 에키온",
+    "file": "MINI_Echion_003.png",
+    "url": "essets/characters/MINI_Echion_003.png"
   },
   {
     "character": "Elena",
@@ -6073,6 +6586,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "2nd Anniversary 엘레나 Indigo",
     "file": "MINI_Elena_006.png",
     "url": "essets/characters/MINI_Elena_006.png"
+  },
+  {
+    "character": "Elena",
+    "label": "엘레나",
+    "variant": "Full",
+    "skin": 7,
+    "skinName": "바이올렛 엘레나",
+    "file": "FULL_Elena_007.png",
+    "url": "essets/characters/FULL_Elena_007.png"
+  },
+  {
+    "character": "Elena",
+    "label": "엘레나",
+    "variant": "Half",
+    "skin": 7,
+    "skinName": "바이올렛 엘레나",
+    "file": "HALF_Elena_007.png",
+    "url": "essets/characters/HALF_Elena_007.png"
+  },
+  {
+    "character": "Elena",
+    "label": "엘레나",
+    "variant": "Mini",
+    "skin": 7,
+    "skinName": "바이올렛 엘레나",
+    "file": "MINI_Elena_007.png",
+    "url": "essets/characters/MINI_Elena_007.png"
   },
   {
     "character": "Emma",
@@ -6289,6 +6829,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "대행자 요한",
     "file": "MINI_Johann_001.png",
     "url": "essets/characters/MINI_Johann_001.png"
+  },
+  {
+    "character": "Johann",
+    "label": "요한",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "악마사냥꾼 요한",
+    "file": "FULL_Johann_002.png",
+    "url": "essets/characters/FULL_Johann_002.png"
+  },
+  {
+    "character": "Johann",
+    "label": "요한",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "악마사냥꾼 요한",
+    "file": "HALF_Johann_002.png",
+    "url": "essets/characters/HALF_Johann_002.png"
+  },
+  {
+    "character": "Johann",
+    "label": "요한",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "악마사냥꾼 요한",
+    "file": "MINI_Johann_002.png",
+    "url": "essets/characters/MINI_Johann_002.png"
   },
   {
     "character": "William",
@@ -6672,6 +7239,33 @@ window.CHARACTER_ASSETS = [
     "character": "Yuki",
     "label": "유키",
     "variant": "Full",
+    "skin": 5,
+    "skinName": "고스트헌터 유키",
+    "file": "FULL_Yuki_005.png",
+    "url": "essets/characters/FULL_Yuki_005.png"
+  },
+  {
+    "character": "Yuki",
+    "label": "유키",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "고스트헌터 유키",
+    "file": "HALF_Yuki_005.png",
+    "url": "essets/characters/HALF_Yuki_005.png"
+  },
+  {
+    "character": "Yuki",
+    "label": "유키",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "고스트헌터 유키",
+    "file": "MINI_Yuki_005.png",
+    "url": "essets/characters/MINI_Yuki_005.png"
+  },
+  {
+    "character": "Yuki",
+    "label": "유키",
+    "variant": "Full",
     "skin": 6,
     "skinName": "단풍이 이끄는 발걸음 유키",
     "file": "FULL_Yuki_006.png",
@@ -6915,6 +7509,33 @@ window.CHARACTER_ASSETS = [
     "character": "Eva",
     "label": "이바",
     "variant": "Full",
+    "skin": 4,
+    "skinName": "한여름의 추억 이바",
+    "file": "FULL_Eva_004.png",
+    "url": "essets/characters/FULL_Eva_004.png"
+  },
+  {
+    "character": "Eva",
+    "label": "이바",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "한여름의 추억 이바",
+    "file": "HALF_Eva_004.png",
+    "url": "essets/characters/HALF_Eva_004.png"
+  },
+  {
+    "character": "Eva",
+    "label": "이바",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "한여름의 추억 이바",
+    "file": "MINI_Eva_004.png",
+    "url": "essets/characters/MINI_Eva_004.png"
+  },
+  {
+    "character": "Eva",
+    "label": "이바",
+    "variant": "Full",
     "skin": 5,
     "skinName": "2nd Anniversary 이바",
     "file": "FULL_Eva_005.png",
@@ -7020,7 +7641,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Istvan_001.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Full",
     "skin": 0,
@@ -7029,7 +7650,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Ian_000.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Half",
     "skin": 0,
@@ -7038,7 +7659,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Ian_000.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Mini",
     "skin": 0,
@@ -7047,7 +7668,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Ian_000.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Full",
     "skin": 1,
@@ -7056,7 +7677,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Ian_001.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Half",
     "skin": 1,
@@ -7065,7 +7686,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Ian_001.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Mini",
     "skin": 1,
@@ -7074,7 +7695,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Ian_001.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Full",
     "skin": 2,
@@ -7083,7 +7704,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Ian_002.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Half",
     "skin": 2,
@@ -7092,7 +7713,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Ian_002.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Mini",
     "skin": 2,
@@ -7101,7 +7722,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Ian_002.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Full",
     "skin": 3,
@@ -7110,7 +7731,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/FULL_Ian_003.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Half",
     "skin": 3,
@@ -7119,7 +7740,7 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/HALF_Ian_003.png"
   },
   {
-    "character": "Ian",
+    "character": "Lyanh",
     "label": "이안",
     "variant": "Mini",
     "skin": 3,
@@ -7504,6 +8125,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "사관후보생 재키",
     "file": "MINI_Jackie_004.png",
     "url": "essets/characters/MINI_Jackie_004.png"
+  },
+  {
+    "character": "Jackie",
+    "label": "재키",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "고스트헌터 재키",
+    "file": "FULL_Jackie_005.png",
+    "url": "essets/characters/FULL_Jackie_005.png"
+  },
+  {
+    "character": "Jackie",
+    "label": "재키",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "고스트헌터 재키",
+    "file": "HALF_Jackie_005.png",
+    "url": "essets/characters/HALF_Jackie_005.png"
+  },
+  {
+    "character": "Jackie",
+    "label": "재키",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "고스트헌터 재키",
+    "file": "MINI_Jackie_005.png",
+    "url": "essets/characters/MINI_Jackie_005.png"
   },
   {
     "character": "Jenny",
@@ -8289,6 +8937,60 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Coraline_000.png"
   },
   {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Full",
+    "skin": 1,
+    "skinName": "설렘 가득 코렐라인",
+    "file": "FULL_Coraline_001.png",
+    "url": "essets/characters/FULL_Coraline_001.png"
+  },
+  {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "설렘 가득 코렐라인",
+    "file": "HALF_Coraline_001.png",
+    "url": "essets/characters/HALF_Coraline_001.png"
+  },
+  {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "설렘 가득 코렐라인",
+    "file": "MINI_Coraline_001.png",
+    "url": "essets/characters/MINI_Coraline_001.png"
+  },
+  {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Full",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "FULL_Craver_000.png",
+    "url": "essets/characters/FULL_Craver_000.png"
+  },
+  {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Half",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "HALF_Craver_000.png",
+    "url": "essets/characters/HALF_Craver_000.png"
+  },
+  {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Mini",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "MINI_Craver_000.png",
+    "url": "essets/characters/MINI_Craver_000.png"
+  },
+  {
     "character": "Chloe",
     "label": "클로에",
     "variant": "Full",
@@ -8775,6 +9477,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Fenrir_000.png"
   },
   {
+    "character": "Fenrir",
+    "label": "펜리르",
+    "variant": "Full",
+    "skin": 1,
+    "skinName": "미드나잇 비스트 펜리르",
+    "file": "FULL_Fenrir_001.png",
+    "url": "essets/characters/FULL_Fenrir_001.png"
+  },
+  {
+    "character": "Fenrir",
+    "label": "펜리르",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "미드나잇 비스트 펜리르",
+    "file": "HALF_Fenrir_001.png",
+    "url": "essets/characters/HALF_Fenrir_001.png"
+  },
+  {
+    "character": "Fenrir",
+    "label": "펜리르",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "미드나잇 비스트 펜리르",
+    "file": "MINI_Fenrir_001.png",
+    "url": "essets/characters/MINI_Fenrir_001.png"
+  },
+  {
     "character": "Felix",
     "label": "펠릭스",
     "variant": "Full",
@@ -8827,6 +9556,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "놀이공원 펠릭스",
     "file": "MINI_Felix_001.png",
     "url": "essets/characters/MINI_Felix_001.png"
+  },
+  {
+    "character": "Felix",
+    "label": "펠릭스",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "OP.GG 펠릭스",
+    "file": "FULL_Felix_002.png",
+    "url": "essets/characters/FULL_Felix_002.png"
+  },
+  {
+    "character": "Felix",
+    "label": "펠릭스",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "OP.GG 펠릭스",
+    "file": "HALF_Felix_002.png",
+    "url": "essets/characters/HALF_Felix_002.png"
+  },
+  {
+    "character": "Felix",
+    "label": "펠릭스",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "OP.GG 펠릭스",
+    "file": "MINI_Felix_002.png",
+    "url": "essets/characters/MINI_Felix_002.png"
   },
   {
     "character": "Felix",
@@ -9396,6 +10152,60 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Hart_005.png"
   },
   {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Full",
+    "skin": 6,
+    "skinName": "3rd Anniversary 하트",
+    "file": "FULL_Hart_006.png",
+    "url": "essets/characters/FULL_Hart_006.png"
+  },
+  {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "3rd Anniversary 하트",
+    "file": "HALF_Hart_006.png",
+    "url": "essets/characters/HALF_Hart_006.png"
+  },
+  {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "3rd Anniversary 하트",
+    "file": "MINI_Hart_006.png",
+    "url": "essets/characters/MINI_Hart_006.png"
+  },
+  {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Full",
+    "skin": 7,
+    "skinName": "3rd Anniversary 하트 Vivace",
+    "file": "FULL_Hart_007.png",
+    "url": "essets/characters/FULL_Hart_007.png"
+  },
+  {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Half",
+    "skin": 7,
+    "skinName": "3rd Anniversary 하트 Vivace",
+    "file": "HALF_Hart_007.png",
+    "url": "essets/characters/HALF_Hart_007.png"
+  },
+  {
+    "character": "Hart",
+    "label": "하트",
+    "variant": "Mini",
+    "skin": 7,
+    "skinName": "3rd Anniversary 하트 Vivace",
+    "file": "MINI_Hart_007.png",
+    "url": "essets/characters/MINI_Hart_007.png"
+  },
+  {
     "character": "Haze",
     "label": "헤이즈",
     "variant": "Full",
@@ -9529,6 +10339,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "1st Anniversary 헤이즈",
     "file": "MINI_Haze_004.png",
     "url": "essets/characters/MINI_Haze_004.png"
+  },
+  {
+    "character": "Haze",
+    "label": "헤이즈",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "1st Anniversary Blanc 헤이즈",
+    "file": "FULL_Haze_005.png",
+    "url": "essets/characters/FULL_Haze_005.png"
+  },
+  {
+    "character": "Haze",
+    "label": "헤이즈",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "1st Anniversary Blanc 헤이즈",
+    "file": "HALF_Haze_005.png",
+    "url": "essets/characters/HALF_Haze_005.png"
+  },
+  {
+    "character": "Haze",
+    "label": "헤이즈",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "1st Anniversary Blanc 헤이즈",
+    "file": "MINI_Haze_005.png",
+    "url": "essets/characters/MINI_Haze_005.png"
   },
   {
     "character": "Haze",
@@ -9774,6 +10611,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Hyunwoo_005.png"
   },
   {
+    "character": "Hyunwoo",
+    "label": "현우",
+    "variant": "Full",
+    "skin": 6,
+    "skinName": "해변가 현우",
+    "file": "FULL_Hyunwoo_006.png",
+    "url": "essets/characters/FULL_Hyunwoo_006.png"
+  },
+  {
+    "character": "Hyunwoo",
+    "label": "현우",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "해변가 현우",
+    "file": "HALF_Hyunwoo_006.png",
+    "url": "essets/characters/HALF_Hyunwoo_006.png"
+  },
+  {
+    "character": "Hyunwoo",
+    "label": "현우",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "해변가 현우",
+    "file": "MINI_Hyunwoo_006.png",
+    "url": "essets/characters/MINI_Hyunwoo_006.png"
+  },
+  {
     "character": "Hyejin",
     "label": "혜진",
     "variant": "Full",
@@ -9853,6 +10717,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "사관후보생 혜진",
     "file": "MINI_Hyejin_002.png",
     "url": "essets/characters/MINI_Hyejin_002.png"
+  },
+  {
+    "character": "Hyejin",
+    "label": "혜진",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "고스트헌터 혜진",
+    "file": "FULL_Hyejin_003.png",
+    "url": "essets/characters/FULL_Hyejin_003.png"
+  },
+  {
+    "character": "Hyejin",
+    "label": "혜진",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "고스트헌터 혜진",
+    "file": "HALF_Hyejin_003.png",
+    "url": "essets/characters/HALF_Hyejin_003.png"
+  },
+  {
+    "character": "Hyejin",
+    "label": "혜진",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "고스트헌터 혜진",
+    "file": "MINI_Hyejin_003.png",
+    "url": "essets/characters/MINI_Hyejin_003.png"
   },
   {
     "character": "Hyejin",
