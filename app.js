@@ -30,7 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260713-skin-match";
+const ASSET_CACHE_VERSION = "20260713-skin-short";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
@@ -284,7 +284,7 @@ function populateCharacterAssetSelect(select, type, index, name) {
     assets.forEach((asset) => {
       const option = document.createElement("option");
       option.value = assetSelectionKey(asset);
-      option.textContent = skinLabel(asset);
+      option.textContent = displaySkinLabel(asset, 28);
       group.append(option);
     });
     select.append(group);
@@ -374,6 +374,24 @@ function assetLabel(asset) {
 
 function skinLabel(asset) {
   return asset?.skinName || (asset?.skin ? `스킨 ${asset.skin}` : "기본");
+}
+
+const SKIN_DISPLAY_ALIASES = new Map([
+  ["Mk. VIII Destroyer M.A.G", "Mk. VIII M.A.G"],
+  ["3rd Anniversary 하트 Vivace", "3rd Anniv. 하트 Vivace"],
+  ["3rd Anniversary 리오 Dolce", "3rd Anniv. 리오 Dolce"],
+  ["1st Anniversary Blanc 헤이즈", "1st Anniv. Blanc 헤이즈"],
+  ["1st Anniversary 헤이즈", "1st Anniv. 헤이즈"],
+  ["2nd Anniversary 이바 Blossom", "2nd Anniv. 이바 Blossom"],
+]);
+
+function displaySkinLabel(asset, maxLength = 18) {
+  const label = skinLabel(asset);
+  const alias = SKIN_DISPLAY_ALIASES.get(label) || label;
+  if (alias.length <= maxLength) return alias;
+  if (!/[A-Za-z]/.test(alias)) return alias;
+
+  return `${alias.slice(0, Math.max(4, maxLength - 1)).trim()}…`;
 }
 
 function assetSelectionKey(asset) {
@@ -1004,7 +1022,7 @@ function drawCharacterMiniSlot(name, asset, x, y, width, height, accent) {
   if (asset) {
     ctx.fillStyle = colorWithAlpha("#ffffff", 0.64);
     setCanvasFont(skinSize, 600);
-    fitText(skinLabel(asset), x + 8, textY + nameSize + 2, width - 16, skinSize, 8);
+    fitText(displaySkinLabel(asset), x + 8, textY + nameSize + 2, width - 16, skinSize, 8);
   }
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
