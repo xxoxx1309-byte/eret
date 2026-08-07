@@ -405,6 +405,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Nia_001.png"
   },
   {
+    "character": "Niah",
+    "label": "니아",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "니아 (물속성)",
+    "file": "FULL_Nia_002.png",
+    "url": "essets/characters/FULL_Nia_002.png"
+  },
+  {
+    "character": "Niah",
+    "label": "니아",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "니아 (물속성)",
+    "file": "HALF_Nia_002.png",
+    "url": "essets/characters/HALF_Nia_002.png"
+  },
+  {
+    "character": "Niah",
+    "label": "니아",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "니아 (물속성)",
+    "file": "MINI_Nia_002.png",
+    "url": "essets/characters/MINI_Nia_002.png"
+  },
+  {
     "character": "Nicky",
     "label": "니키",
     "variant": "Full",
@@ -4401,6 +4428,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Xuelin_001.png"
   },
   {
+    "character": "Xuelin",
+    "label": "슈린",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "벽파참랑 슈린",
+    "file": "FULL_Xuelin_002.png",
+    "url": "essets/characters/FULL_Xuelin_002.png"
+  },
+  {
+    "character": "Xuelin",
+    "label": "슈린",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "벽파참랑 슈린",
+    "file": "HALF_Xuelin_002.png",
+    "url": "essets/characters/HALF_Xuelin_002.png"
+  },
+  {
+    "character": "Xuelin",
+    "label": "슈린",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "벽파참랑 슈린",
+    "file": "MINI_Xuelin_002.png",
+    "url": "essets/characters/MINI_Xuelin_002.png"
+  },
+  {
     "character": "Sissela",
     "label": "시셀라",
     "variant": "Full",
@@ -7020,6 +7074,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_YuMin_001.png"
   },
   {
+    "character": "YuMin",
+    "label": "유민",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "풍랑 위의 이정표 유민",
+    "file": "FULL_YuMin_002.png",
+    "url": "essets/characters/FULL_YuMin_002.png"
+  },
+  {
+    "character": "YuMin",
+    "label": "유민",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "풍랑 위의 이정표 유민",
+    "file": "HALF_YuMin_002.png",
+    "url": "essets/characters/HALF_YuMin_002.png"
+  },
+  {
+    "character": "YuMin",
+    "label": "유민",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "풍랑 위의 이정표 유민",
+    "file": "MINI_YuMin_002.png",
+    "url": "essets/characters/MINI_YuMin_002.png"
+  },
+  {
     "character": "Justyna",
     "label": "유스티나",
     "variant": "Full",
@@ -7882,6 +7963,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "러블리 세레나데 일레븐",
     "file": "MINI_Eleven_004.png",
     "url": "essets/characters/MINI_Eleven_004.png"
+  },
+  {
+    "character": "Eleven",
+    "label": "일레븐",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "사관후보생 일레븐",
+    "file": "FULL_Eleven_005.png",
+    "url": "essets/characters/FULL_Eleven_005.png"
+  },
+  {
+    "character": "Eleven",
+    "label": "일레븐",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "사관후보생 일레븐",
+    "file": "HALF_Eleven_005.png",
+    "url": "essets/characters/HALF_Eleven_005.png"
+  },
+  {
+    "character": "Eleven",
+    "label": "일레븐",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "사관후보생 일레븐",
+    "file": "MINI_Eleven_005.png",
+    "url": "essets/characters/MINI_Eleven_005.png"
   },
   {
     "character": "Zahir",
@@ -9340,6 +9448,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "발렌타인 타지아",
     "file": "MINI_Tazia_002.png",
     "url": "essets/characters/MINI_Tazia_002.png"
+  },
+  {
+    "character": "Tazia",
+    "label": "타지아",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "유릿빛 물결 타지아",
+    "file": "FULL_Tazia_003.png",
+    "url": "essets/characters/FULL_Tazia_003.png"
+  },
+  {
+    "character": "Tazia",
+    "label": "타지아",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "유릿빛 물결 타지아",
+    "file": "HALF_Tazia_003.png",
+    "url": "essets/characters/HALF_Tazia_003.png"
+  },
+  {
+    "character": "Tazia",
+    "label": "타지아",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "유릿빛 물결 타지아",
+    "file": "MINI_Tazia_003.png",
+    "url": "essets/characters/MINI_Tazia_003.png"
   },
   {
     "character": "Theodore",
