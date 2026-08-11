@@ -14,23 +14,29 @@ const ETERNAL_RETURN_CHARACTERS = [
 ];
 
 const CANVAS_FONTS = [
-  { value: "NotGothicButGoding", label: "고딕 아니고 고딩" },
-  { value: "NanumSquare", label: "나눔스퀘어" },
-  { value: "Netmarble", label: "넷마블체" },
-  { value: "NexonLv2Gothic", label: "넥슨 Lv.2 고딕" },
-  { value: "JoseonGulim", label: "조선 굴림체" },
-  { value: "ChosunIlboMyungjo", label: "조선일보명조체" },
-  { value: "Paperozi", label: "페이퍼 로지" },
-  { value: "Pretendard", label: "프리텐다드" },
-  { value: "GMarketSans", label: "G마켓 산스" },
-  { value: "KoPubWorld Dotum", label: "KoPub 돋움" },
-  { value: "KoPubWorld Batang", label: "KoPub 바탕" },
-  { value: "Mona12", label: "Mona12" },
-  { value: "Wanted Sans Variable", label: "Wanted Sans" },
+  { value: "Galmuri9", label: "갈무리9", sortKey: "갈무리9" },
+  { value: "NotGothicButGoding", label: "고딕 아니고 고딩", sortKey: "고딕 아니고 고딩" },
+  { value: "DearFromsol", label: "그리운 프롬솔", sortKey: "그리운 프롬솔" },
+  { value: "GMarketSans", label: "G마켓 산스", sortKey: "지마켓 산스" },
+  { value: "NanumSquare", label: "나눔스퀘어", sortKey: "나눔스퀘어" },
+  { value: "NexonLv2Gothic", label: "넥슨 Lv.2 고딕", sortKey: "넥슨 Lv.2 고딕" },
+  { value: "Netmarble", label: "넷마블체", sortKey: "넷마블체" },
+  { value: "MitmiFont", label: "밑미 폰트", sortKey: "밑미 폰트" },
+  { value: "Mona12", label: "Mona12", sortKey: "모나12" },
+  { value: "OngleipParkDahyeon", label: "온글잎 박다현체", sortKey: "온글잎 박다현체" },
+  { value: "OngleipKonkon", label: "온글잎 콘콘체", sortKey: "온글잎 콘콘체" },
+  { value: "IsYun", label: "이서윤체", sortKey: "이서윤체" },
+  { value: "JoseonGulim", label: "조선 굴림체", sortKey: "조선 굴림체" },
+  { value: "ChosunIlboMyungjo", label: "조선일보명조체", sortKey: "조선일보명조체" },
+  { value: "KoPubWorld Dotum", label: "KoPub 돋움", sortKey: "코펍 돋움" },
+  { value: "KoPubWorld Batang", label: "KoPub 바탕", sortKey: "코펍 바탕" },
+  { value: "Paperozi", label: "페이퍼로지", sortKey: "페이퍼로지" },
+  { value: "Pretendard", label: "프리텐다드", sortKey: "프리텐다드" },
+  { value: "Wanted Sans Variable", label: "Wanted Sans", sortKey: "원티드 산스" },
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260807-latest-skins";
+const ASSET_CACHE_VERSION = "20260811-font-fit";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
@@ -205,13 +211,16 @@ function bindImageAdjustControls() {
 function populateCanvasFontSelect() {
   const select = $("#canvasFontSelect");
   select.innerHTML = "";
-  CANVAS_FONTS.forEach(({ value, label }) => {
-    const option = document.createElement("option");
-    option.value = value;
-    option.textContent = label;
-    option.style.fontFamily = `"${value}", "Paperozi", sans-serif`;
-    select.append(option);
-  });
+  const collator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
+  [...CANVAS_FONTS]
+    .sort((a, b) => collator.compare(a.sortKey || a.label, b.sortKey || b.label))
+    .forEach(({ value, label }) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      option.style.fontFamily = `"${value}", "Paperozi", sans-serif`;
+      select.append(option);
+    });
   select.value = state.canvasFont;
 }
 
@@ -1010,20 +1019,28 @@ function drawCharacterMiniSlot(name, asset, x, y, width, height, accent) {
     ctx.restore();
   }
 
+  const textY = imageY + imageH + 5;
+  const textBottom = y + height - 6;
+  const availableTextH = Math.max(18, textBottom - textY);
+  const nameSize = Math.max(9, Math.min(16 * state.fontScale, availableTextH * 0.52));
+  const skinSize = Math.max(7, Math.min(11 * state.fontScale, availableTextH * 0.34));
+  const lineGap = Math.max(1, Math.min(3, availableTextH - nameSize - skinSize));
+
+  ctx.save();
+  roundedRect(x + 2, textY - 1, width - 4, Math.max(1, textBottom - textY + 2), 4);
+  ctx.clip();
   ctx.textAlign = "left";
   ctx.textBaseline = "top";
   ctx.fillStyle = "#ffffff";
-  const nameSize = Math.min(16, textAreaH * 0.47) * state.fontScale;
-  const skinSize = Math.min(11, textAreaH * 0.34) * state.fontScale;
-  const textY = imageY + imageH + 5;
   setCanvasFont(nameSize, 800);
-  fitText(name || assetLabel(asset) || "", x + 8, textY, width - 16, nameSize, 10);
+  fitText(name || assetLabel(asset) || "", x + 8, textY, width - 16, nameSize, 8);
 
   if (asset) {
     ctx.fillStyle = colorWithAlpha("#ffffff", 0.64);
     setCanvasFont(skinSize, 600);
-    fitText(displaySkinLabel(asset), x + 8, textY + nameSize + 2, width - 16, skinSize, 8);
+    fitText(displaySkinLabel(asset), x + 8, textY + nameSize + lineGap, width - 16, skinSize, 7);
   }
+  ctx.restore();
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
 }
@@ -1099,23 +1116,47 @@ function drawWrappedText(text, x, y, width, lineHeight, maxLines, color) {
 function fitText(text, x, y, maxWidth, baseSize, minSize = 18) {
   const value = String(text || "");
   let size = baseSize;
-  ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+  applyCanvasFontSize(size);
   while (ctx.measureText(value).width > maxWidth && size > minSize) {
-    size -= 2;
-    ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+    size = Math.max(minSize, size - 1);
+    applyCanvasFontSize(size);
   }
-  ctx.fillText(value, x, y);
+  ctx.fillText(ellipsizeText(value, maxWidth), x, y);
 }
 
 function fitCenteredText(text, x, y, maxWidth, baseSize, minSize = 10) {
   const value = String(text || "");
   let size = baseSize;
-  ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+  applyCanvasFontSize(size);
   while (ctx.measureText(value).width > maxWidth && size > minSize) {
-    size -= 1;
-    ctx.font = ctx.font.replace(/\d+px/, `${Math.round(size)}px`);
+    size = Math.max(minSize, size - 1);
+    applyCanvasFontSize(size);
   }
-  ctx.fillText(value, x, y);
+  ctx.fillText(ellipsizeText(value, maxWidth), x, y);
+}
+
+function applyCanvasFontSize(size) {
+  ctx.font = ctx.font.replace(/\d+(?:\.\d+)?px/, `${Math.round(size)}px`);
+}
+
+function ellipsizeText(text, maxWidth) {
+  const value = String(text || "");
+  if (!value || maxWidth <= 0 || ctx.measureText(value).width <= maxWidth) return value;
+
+  const ellipsis = "…";
+  if (ctx.measureText(ellipsis).width > maxWidth) return "";
+
+  const chars = [...value];
+  let low = 0;
+  let high = chars.length;
+  while (low < high) {
+    const mid = Math.ceil((low + high) / 2);
+    const candidate = `${chars.slice(0, mid).join("").trimEnd()}${ellipsis}`;
+    if (ctx.measureText(candidate).width <= maxWidth) low = mid;
+    else high = mid - 1;
+  }
+
+  return `${chars.slice(0, low).join("").trimEnd()}${ellipsis}`;
 }
 
 function drawCoverImage(image, x, y, w, h, adjust = { x: 0, y: 0, zoom: 100 }) {
