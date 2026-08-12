@@ -1782,6 +1782,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Rozzi_005.png"
   },
   {
+    "character": "Lucia",
+    "label": "루치아",
+    "variant": "Full",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "FULL_Lucia_000.png",
+    "url": "essets/characters/FULL_Lucia_000.png"
+  },
+  {
+    "character": "Lucia",
+    "label": "루치아",
+    "variant": "Half",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "HALF_Lucia_000.png",
+    "url": "essets/characters/HALF_Lucia_000.png"
+  },
+  {
+    "character": "Lucia",
+    "label": "루치아",
+    "variant": "Mini",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "MINI_Lucia_000.png",
+    "url": "essets/characters/MINI_Lucia_000.png"
+  },
+  {
     "character": "Luke",
     "label": "루크",
     "variant": "Full",
@@ -3751,6 +3778,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "타락의 유열 샬럿",
     "file": "MINI_Charlotte_002.png",
     "url": "essets/characters/MINI_Charlotte_002.png"
+  },
+  {
+    "character": "Seres",
+    "label": "세레스",
+    "variant": "Full",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "FULL_Seres_000.png",
+    "url": "essets/characters/FULL_Seres_000.png"
+  },
+  {
+    "character": "Seres",
+    "label": "세레스",
+    "variant": "Half",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "HALF_Seres_000.png",
+    "url": "essets/characters/HALF_Seres_000.png"
+  },
+  {
+    "character": "Seres",
+    "label": "세레스",
+    "variant": "Mini",
+    "skin": 0,
+    "skinName": "기본",
+    "file": "MINI_Seres_000.png",
+    "url": "essets/characters/MINI_Seres_000.png"
   },
   {
     "character": "Celine",
