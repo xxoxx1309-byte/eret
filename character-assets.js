@@ -81,6 +81,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Garnet_002.png"
   },
   {
+    "character": "Garnet",
+    "label": "가넷",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "키치 러브 가넷",
+    "file": "FULL_Garnet_003.png",
+    "url": "essets/characters/FULL_Garnet_003.png"
+  },
+  {
+    "character": "Garnet",
+    "label": "가넷",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "키치 러브 가넷",
+    "file": "HALF_Garnet_003.png",
+    "url": "essets/characters/HALF_Garnet_003.png"
+  },
+  {
+    "character": "Garnet",
+    "label": "가넷",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "키치 러브 가넷",
+    "file": "MINI_Garnet_003.png",
+    "url": "essets/characters/MINI_Garnet_003.png"
+  },
+  {
     "character": "Nadine",
     "label": "나딘",
     "variant": "Full",
@@ -4237,6 +4264,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "뱀파이어 쇼이치",
     "file": "MINI_Shoichi_004.png",
     "url": "essets/characters/MINI_Shoichi_004.png"
+  },
+  {
+    "character": "Shoichi",
+    "label": "쇼이치",
+    "variant": "Full",
+    "skin": 5,
+    "skinName": "모란 뒤의 그림자 쇼이치",
+    "file": "FULL_Shoichi_005.png",
+    "url": "essets/characters/FULL_Shoichi_005.png"
+  },
+  {
+    "character": "Shoichi",
+    "label": "쇼이치",
+    "variant": "Half",
+    "skin": 5,
+    "skinName": "모란 뒤의 그림자 쇼이치",
+    "file": "HALF_Shoichi_005.png",
+    "url": "essets/characters/HALF_Shoichi_005.png"
+  },
+  {
+    "character": "Shoichi",
+    "label": "쇼이치",
+    "variant": "Mini",
+    "skin": 5,
+    "skinName": "모란 뒤의 그림자 쇼이치",
+    "file": "MINI_Shoichi_005.png",
+    "url": "essets/characters/MINI_Shoichi_005.png"
   },
   {
     "character": "Sua",
