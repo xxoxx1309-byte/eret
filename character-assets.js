@@ -621,6 +621,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Nicky_005.png"
   },
   {
+    "character": "Nicky",
+    "label": "니키",
+    "variant": "Full",
+    "skin": 6,
+    "skinName": "치어풀 펀치! 니키",
+    "file": "FULL_Nicky_006.png",
+    "url": "essets/characters/FULL_Nicky_006.png"
+  },
+  {
+    "character": "Nicky",
+    "label": "니키",
+    "variant": "Half",
+    "skin": 6,
+    "skinName": "치어풀 펀치! 니키",
+    "file": "HALF_Nicky_006.png",
+    "url": "essets/characters/HALF_Nicky_006.png"
+  },
+  {
+    "character": "Nicky",
+    "label": "니키",
+    "variant": "Mini",
+    "skin": 6,
+    "skinName": "치어풀 펀치! 니키",
+    "file": "MINI_Nicky_006.png",
+    "url": "essets/characters/MINI_Nicky_006.png"
+  },
+  {
     "character": "Daniel",
     "label": "다니엘",
     "variant": "Full",

@@ -30,7 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260820-garnet-shoichi-skins";
+const ASSET_CACHE_VERSION = "20260902-nicky-skin";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
