@@ -3753,6 +3753,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Bihyung_000.png"
   },
   {
+    "character": "Bihyung",
+    "label": "비형",
+    "variant": "Full",
+    "skin": 1,
+    "skinName": "청춘, 한 컷 비형",
+    "file": "FULL_Bihyung_001.png",
+    "url": "essets/characters/FULL_Bihyung_001.png"
+  },
+  {
+    "character": "Bihyung",
+    "label": "비형",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "청춘, 한 컷 비형",
+    "file": "HALF_Bihyung_001.png",
+    "url": "essets/characters/HALF_Bihyung_001.png"
+  },
+  {
+    "character": "Bihyung",
+    "label": "비형",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "청춘, 한 컷 비형",
+    "file": "MINI_Bihyung_001.png",
+    "url": "essets/characters/MINI_Bihyung_001.png"
+  },
+  {
     "character": "Charlotte",
     "label": "샬럿",
     "variant": "Full",

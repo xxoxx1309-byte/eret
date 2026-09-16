@@ -30,7 +30,7 @@ const CANVAS_FONTS = [
 ];
 
 const CHARACTER_ASSETS = Array.isArray(window.CHARACTER_ASSETS) ? window.CHARACTER_ASSETS : [];
-const ASSET_CACHE_VERSION = "20260902-mini-favicon";
+const ASSET_CACHE_VERSION = "20260916-bihyung-skin";
 const imageBoundsCache = new WeakMap();
 const characterHeadBoundsCache = new WeakMap();
 const CHARACTER_FACE_CROPS = {
