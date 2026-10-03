@@ -10044,6 +10044,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Priya_002.png"
   },
   {
+    "character": "Priya",
+    "label": "프리야",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "테니스부 프리야",
+    "file": "FULL_Priya_003.png",
+    "url": "essets/characters/FULL_Priya_003.png"
+  },
+  {
+    "character": "Priya",
+    "label": "프리야",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "테니스부 프리야",
+    "file": "HALF_Priya_003.png",
+    "url": "essets/characters/HALF_Priya_003.png"
+  },
+  {
+    "character": "Priya",
+    "label": "프리야",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "테니스부 프리야",
+    "file": "MINI_Priya_003.png",
+    "url": "essets/characters/MINI_Priya_003.png"
+  },
+  {
     "character": "Fiora",
     "label": "피오라",
     "variant": "Full",
