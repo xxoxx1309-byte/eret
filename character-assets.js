@@ -4536,6 +4536,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Sua_006.png"
   },
   {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Full",
+    "skin": 7,
+    "skinName": "미스틱 퓨어 바니 수아",
+    "file": "FULL_Sua_007.png",
+    "url": "essets/characters/FULL_Sua_007.png"
+  },
+  {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Half",
+    "skin": 7,
+    "skinName": "미스틱 퓨어 바니 수아",
+    "file": "HALF_Sua_007.png",
+    "url": "essets/characters/HALF_Sua_007.png"
+  },
+  {
+    "character": "Sua",
+    "label": "수아",
+    "variant": "Mini",
+    "skin": 7,
+    "skinName": "미스틱 퓨어 바니 수아",
+    "file": "MINI_Sua_007.png",
+    "url": "essets/characters/MINI_Sua_007.png"
+  },
+  {
     "character": "Xuelin",
     "label": "슈린",
     "variant": "Full",
@@ -6613,6 +6640,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "암흑가 에키온",
     "file": "MINI_Echion_003.png",
     "url": "essets/characters/MINI_Echion_003.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Full",
+    "skin": 4,
+    "skinName": "이단심판관 에키온",
+    "file": "FULL_Echion_004.png",
+    "url": "essets/characters/FULL_Echion_004.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "이단심판관 에키온",
+    "file": "HALF_Echion_004.png",
+    "url": "essets/characters/HALF_Echion_004.png"
+  },
+  {
+    "character": "Echion",
+    "label": "에키온",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "이단심판관 에키온",
+    "file": "MINI_Echion_004.png",
+    "url": "essets/characters/MINI_Echion_004.png"
   },
   {
     "character": "Elena",
