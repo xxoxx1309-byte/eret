@@ -9315,6 +9315,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Craver_000.png"
   },
   {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Full",
+    "skin": 1,
+    "skinName": "와일드 웨스트 크레이버",
+    "file": "FULL_Craver_001.png",
+    "url": "essets/characters/FULL_Craver_001.png"
+  },
+  {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Half",
+    "skin": 1,
+    "skinName": "와일드 웨스트 크레이버",
+    "file": "HALF_Craver_001.png",
+    "url": "essets/characters/HALF_Craver_001.png"
+  },
+  {
+    "character": "Craver",
+    "label": "크레이버",
+    "variant": "Mini",
+    "skin": 1,
+    "skinName": "와일드 웨스트 크레이버",
+    "file": "MINI_Craver_001.png",
+    "url": "essets/characters/MINI_Craver_001.png"
+  },
+  {
     "character": "Chloe",
     "label": "클로에",
     "variant": "Full",
