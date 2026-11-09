@@ -6264,6 +6264,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Jan_003.png"
   },
   {
+    "character": "Jan",
+    "label": "얀",
+    "variant": "Full",
+    "skin": 4,
+    "skinName": "사관후보생 얀",
+    "file": "FULL_Jan_004.png",
+    "url": "essets/characters/FULL_Jan_004.png"
+  },
+  {
+    "character": "Jan",
+    "label": "얀",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "사관후보생 얀",
+    "file": "HALF_Jan_004.png",
+    "url": "essets/characters/HALF_Jan_004.png"
+  },
+  {
+    "character": "Jan",
+    "label": "얀",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "사관후보생 얀",
+    "file": "MINI_Jan_004.png",
+    "url": "essets/characters/MINI_Jan_004.png"
+  },
+  {
     "character": "Estelle",
     "label": "에스텔",
     "variant": "Full",
