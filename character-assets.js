@@ -3564,6 +3564,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Blair_001.png"
   },
   {
+    "character": "Blair",
+    "label": "블레어",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "심판하는 검 블레어",
+    "file": "FULL_Blair_002.png",
+    "url": "essets/characters/FULL_Blair_002.png"
+  },
+  {
+    "character": "Blair",
+    "label": "블레어",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "심판하는 검 블레어",
+    "file": "HALF_Blair_002.png",
+    "url": "essets/characters/HALF_Blair_002.png"
+  },
+  {
+    "character": "Blair",
+    "label": "블레어",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "심판하는 검 블레어",
+    "file": "MINI_Blair_002.png",
+    "url": "essets/characters/MINI_Blair_002.png"
+  },
+  {
     "character": "Bianca",
     "label": "비앙카",
     "variant": "Full",
@@ -5560,6 +5587,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "트로피컬 디멘션 아비게일",
     "file": "MINI_Abigail_003.png",
     "url": "essets/characters/MINI_Abigail_003.png"
+  },
+  {
+    "character": "Abigail",
+    "label": "아비게일",
+    "variant": "Full",
+    "skin": 4,
+    "skinName": "헌신하는 빛 아비게일",
+    "file": "FULL_Abigail_004.png",
+    "url": "essets/characters/FULL_Abigail_004.png"
+  },
+  {
+    "character": "Abigail",
+    "label": "아비게일",
+    "variant": "Half",
+    "skin": 4,
+    "skinName": "헌신하는 빛 아비게일",
+    "file": "HALF_Abigail_004.png",
+    "url": "essets/characters/HALF_Abigail_004.png"
+  },
+  {
+    "character": "Abigail",
+    "label": "아비게일",
+    "variant": "Mini",
+    "skin": 4,
+    "skinName": "헌신하는 빛 아비게일",
+    "file": "MINI_Abigail_004.png",
+    "url": "essets/characters/MINI_Abigail_004.png"
   },
   {
     "character": "Aya",
@@ -7965,6 +8019,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Istvan_001.png"
   },
   {
+    "character": "Istvan",
+    "label": "이슈트반",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "신념의 창 이슈트반",
+    "file": "FULL_Istvan_002.png",
+    "url": "essets/characters/FULL_Istvan_002.png"
+  },
+  {
+    "character": "Istvan",
+    "label": "이슈트반",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "신념의 창 이슈트반",
+    "file": "HALF_Istvan_002.png",
+    "url": "essets/characters/HALF_Istvan_002.png"
+  },
+  {
+    "character": "Istvan",
+    "label": "이슈트반",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "신념의 창 이슈트반",
+    "file": "MINI_Istvan_002.png",
+    "url": "essets/characters/MINI_Istvan_002.png"
+  },
+  {
     "character": "Lyanh",
     "label": "이안",
     "variant": "Full",
@@ -9313,6 +9394,33 @@ window.CHARACTER_ASSETS = [
     "skinName": "설렘 가득 코렐라인",
     "file": "MINI_Coraline_001.png",
     "url": "essets/characters/MINI_Coraline_001.png"
+  },
+  {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Full",
+    "skin": 2,
+    "skinName": "성역의 구원 코렐라인",
+    "file": "FULL_Coraline_002.png",
+    "url": "essets/characters/FULL_Coraline_002.png"
+  },
+  {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Half",
+    "skin": 2,
+    "skinName": "성역의 구원 코렐라인",
+    "file": "HALF_Coraline_002.png",
+    "url": "essets/characters/HALF_Coraline_002.png"
+  },
+  {
+    "character": "Coraline",
+    "label": "코렐라인",
+    "variant": "Mini",
+    "skin": 2,
+    "skinName": "성역의 구원 코렐라인",
+    "file": "MINI_Coraline_002.png",
+    "url": "essets/characters/MINI_Coraline_002.png"
   },
   {
     "character": "Craver",
