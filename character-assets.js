@@ -9126,6 +9126,33 @@ window.CHARACTER_ASSETS = [
     "url": "essets/characters/MINI_Karla_002.png"
   },
   {
+    "character": "Karla",
+    "label": "칼라",
+    "variant": "Full",
+    "skin": 3,
+    "skinName": "하이틴 피스 칼라",
+    "file": "FULL_Karla_003.png",
+    "url": "essets/characters/FULL_Karla_003.png"
+  },
+  {
+    "character": "Karla",
+    "label": "칼라",
+    "variant": "Half",
+    "skin": 3,
+    "skinName": "하이틴 피스 칼라",
+    "file": "HALF_Karla_003.png",
+    "url": "essets/characters/HALF_Karla_003.png"
+  },
+  {
+    "character": "Karla",
+    "label": "칼라",
+    "variant": "Mini",
+    "skin": 3,
+    "skinName": "하이틴 피스 칼라",
+    "file": "MINI_Karla_003.png",
+    "url": "essets/characters/MINI_Karla_003.png"
+  },
+  {
     "character": "Cathy",
     "label": "캐시",
     "variant": "Full",
